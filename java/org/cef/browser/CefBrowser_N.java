@@ -5,7 +5,9 @@
 package org.cef.browser;
 
 import org.cef.CefApp;
+import org.cef.CefBrowserSettings;
 import org.cef.CefClient;
+import org.cef.browser.CefDevToolsClient.DevToolsException;
 import org.cef.callback.CefDragData;
 import org.cef.callback.CefNativeAdapter;
 import org.cef.callback.CefPdfPrintCallback;
@@ -31,6 +33,7 @@ import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+import java.util.concurrent.CompletableFuture;
 
 import javax.swing.SwingUtilities;
 
@@ -48,23 +51,29 @@ abstract class CefBrowser_N extends CefNativeAdapter implements CefBrowser, CefA
     private CefRequestContext request_context_;
     private volatile CefBrowser_N parent_ = null;
     private volatile Point inspectAt_ = null;
-    private volatile int frameRate_ = 0;
     private volatile CefBrowser_N devTools_ = null;
+    private volatile CefDevToolsClient devToolsClient_ = null;
     private boolean closeAllowed_ = false;
     private volatile boolean isClosed_ = false;
     private volatile boolean isClosing_ = false;
     private volatile boolean isCreating_ = false;
+    private final CefBrowserSettings settings_;
 
     private boolean isNativeCtxInitialized_ = false;
     private final List<Runnable> delayedActions_ = new ArrayList<>();
 
     protected CefBrowser_N(CefClient client, String url, CefRequestContext context,
-            CefBrowser_N parent, Point inspectAt) {
+            CefBrowser_N parent, Point inspectAt, CefBrowserSettings settings) {
         client_ = client;
         url_ = url;
         request_context_ = context;
         parent_ = parent;
         inspectAt_ = inspectAt;
+
+        if (settings != null)
+            settings_ = settings.clone();
+        else
+            settings_ = new CefBrowserSettings();
 
         CefApp.getInstance().onInitialization(this);
     }
@@ -79,10 +88,6 @@ abstract class CefBrowser_N extends CefNativeAdapter implements CefBrowser, CefA
 
     protected Point getInspectAt() {
         return inspectAt_;
-    }
-
-    protected int getFrameRate() {
-        return frameRate_;
     }
 
     @Override
@@ -170,6 +175,9 @@ abstract class CefBrowser_N extends CefNativeAdapter implements CefBrowser, CefA
             parent_.devTools_ = null;
             parent_ = null;
         }
+        if (devToolsClient_ != null) {
+            devToolsClient_.close();
+        }
     }
 
     @Override
@@ -190,9 +198,11 @@ abstract class CefBrowser_N extends CefNativeAdapter implements CefBrowser, CefA
 
     private void executeNative(Runnable nativeRunnable, String name) {
         synchronized (delayedActions_) {
-            if (isNativeCtxInitialized_)
+            if (isNativeCtxInitialized_) {
+                if (request_context_ == null)
+                    request_context_ = CefRequestContext.getGlobalContext();
                 nativeRunnable.run();
-            else {
+            } else {
                 CefLog.Debug("CefBrowser_N: %s: add delayed action %s", this, name);
                 delayedActions_.add(nativeRunnable);
             }
@@ -206,11 +216,48 @@ abstract class CefBrowser_N extends CefNativeAdapter implements CefBrowser, CefA
         }
     }
 
+    @Override
+    public synchronized CefDevToolsClient getDevToolsClient() {
+        if (!isPending_ || isClosing_ || isClosed_) {
+            return null;
+        }
+        if (devToolsClient_ == null || devToolsClient_.isClosed()) {
+            devToolsClient_ = new CefDevToolsClient(this);
+        }
+        return devToolsClient_;
+    }
+
+    CompletableFuture<Integer> executeDevToolsMethod(String method, String parametersAsJson) {
+        CompletableFuture<Integer> future = new CompletableFuture<>();
+
+        executeNative(() -> {
+            try {
+                N_ExecuteDevToolsMethod(method, parametersAsJson, generatedMessageId -> {
+                    if (generatedMessageId <= 0) {
+                        future.completeExceptionally(new DevToolsException(
+                                String.format("Failed to execute DevTools method %s", method)));
+                    } else {
+                        future.complete(generatedMessageId);
+                    }
+                });
+            } catch (UnsatisfiedLinkError error) {
+                future.completeExceptionally(new DevToolsException(
+                        String.format("Failed to execute DevTools method %s", method), parametersAsJson, error));
+            }
+        }, String.format("executeDevToolsMethod: %s(%s)", method, parametersAsJson));
+
+        return future;
+    }
+
+    CefRegistration addDevToolsMessageObserver(CefDevToolsMessageObserver observer) {
+        return N_AddDevToolsMessageObserver(observer);
+    }
+
     /**
      * Create a new browser.
      */
     protected void createBrowser(CefClientHandler clientHandler, long windowHandle, String url,
-            boolean osr, boolean transparent, Component canvas, int frameRate) {
+            boolean osr, boolean transparent, Component canvas) {
         if (isClosing_ || isClosed_ || isCreating_)
             return;
 
@@ -219,7 +266,8 @@ abstract class CefBrowser_N extends CefNativeAdapter implements CefBrowser, CefA
             executeNative(() -> {
                 try {
                     if (TRACE_LIFESPAN) CefLog.Debug("CefBrowser_N: %s: started native creation", this);
-                    N_CreateBrowser(clientHandler, windowHandle, url, osr, transparent, canvas, request_context_, frameRate);
+                    N_CreateBrowser(clientHandler, windowHandle, url, osr, transparent, canvas, request_context_,
+                            settings_);
                 } catch (UnsatisfiedLinkError err) {
                     err.printStackTrace();
                 }
@@ -406,7 +454,7 @@ abstract class CefBrowser_N extends CefNativeAdapter implements CefBrowser, CefA
     }
 
     @Override
-    public CefFrame getFrame(long identifier) {
+    public CefFrame getFrameByIdentifier(String identifier) {
         try {
             checkNativeCtxInitialized();
             if (isNativeCtxInitialized_)
@@ -418,7 +466,7 @@ abstract class CefBrowser_N extends CefNativeAdapter implements CefBrowser, CefA
     }
 
     @Override
-    public CefFrame getFrame(String name) {
+    public CefFrame getFrameByName(String name) {
         try {
             checkNativeCtxInitialized();
             if (isNativeCtxInitialized_)
@@ -430,7 +478,7 @@ abstract class CefBrowser_N extends CefNativeAdapter implements CefBrowser, CefA
     }
 
     @Override
-    public Vector<Long> getFrameIdentifiers() {
+    public Vector<String> getFrameIdentifiers() {
         try {
             checkNativeCtxInitialized();
             if (isNativeCtxInitialized_)
@@ -489,6 +537,7 @@ abstract class CefBrowser_N extends CefNativeAdapter implements CefBrowser, CefA
         return false;
     }
 
+    @Override
     public void viewSource() {
         try {
             checkNativeCtxInitialized();
@@ -499,6 +548,7 @@ abstract class CefBrowser_N extends CefNativeAdapter implements CefBrowser, CefA
         }
     }
 
+    @Override
     public void getSource(CefStringVisitor visitor) {
         try {
             checkNativeCtxInitialized();
@@ -509,6 +559,7 @@ abstract class CefBrowser_N extends CefNativeAdapter implements CefBrowser, CefA
         }
     }
 
+    @Override
     public void getText(CefStringVisitor visitor) {
         try {
             checkNativeCtxInitialized();
@@ -617,18 +668,6 @@ abstract class CefBrowser_N extends CefNativeAdapter implements CefBrowser, CefA
             checkNativeCtxInitialized();
             if (isNativeCtxInitialized_)
                 N_SetWindowVisibility(visible);
-        } catch (UnsatisfiedLinkError ule) {
-            ule.printStackTrace();
-        }
-    }
-
-    @Override
-    public void setWindowlessFrameRate(int frameRate) {
-        try {
-            checkNativeCtxInitialized();
-            if (isNativeCtxInitialized_)
-                N_SetWindowlessFrameRate(frameRate);
-            this.frameRate_ = frameRate;
         } catch (UnsatisfiedLinkError ule) {
             ule.printStackTrace();
         }
@@ -1031,11 +1070,46 @@ abstract class CefBrowser_N extends CefNativeAdapter implements CefBrowser, CefA
        }
    }
 
+    public void setWindowlessFrameRate(int frameRate) {
+        try {
+            checkNativeCtxInitialized();
+            if (isNativeCtxInitialized_)
+                N_SetWindowlessFrameRate(frameRate);
+        } catch (UnsatisfiedLinkError ule) {
+            ule.printStackTrace();
+        }
+    }
+
+    public CompletableFuture<Integer> getWindowlessFrameRate() {
+        final CompletableFuture<Integer> future = new CompletableFuture<>();
+        try {
+            checkNativeCtxInitialized();
+            if (isNativeCtxInitialized_) {
+                N_GetWindowlessFrameRate(future::complete);
+            } else {
+                future.completeExceptionally(new RuntimeException("The browser is not initialized yet"));
+            }
+        } catch (UnsatisfiedLinkError ule) {
+            ule.printStackTrace();
+            future.completeExceptionally(ule);
+        }
+
+        return future;
+    }
+
+    private interface IntCallback {
+        void onComplete(int value);
+    }
+
     private final native boolean N_CreateBrowser(CefClientHandler clientHandler, long windowHandle,
             String url, boolean osr, boolean transparent, Component canvas,
-            CefRequestContext context, int frameRate);
+            CefRequestContext context, CefBrowserSettings settings);
     private final native boolean N_CreateDevTools(CefBrowser parent, CefClientHandler clientHandler,
             long windowHandle, boolean osr, boolean transparent, Component canvas, Point inspectAt);
+    private final native void N_ExecuteDevToolsMethod(
+            String method, String parametersAsJson, IntCallback callback);
+    private final native CefRegistration N_AddDevToolsMessageObserver(
+            CefDevToolsMessageObserver observer);
     private final native long N_GetWindowHandle(long surfaceHandle);
     private final native boolean N_CanGoBack();
     private final native void N_GoBack();
@@ -1048,9 +1122,9 @@ abstract class CefBrowser_N extends CefNativeAdapter implements CefBrowser, CefA
     private final native int N_GetIdentifier();
     private final native CefFrame N_GetMainFrame();
     private final native CefFrame N_GetFocusedFrame();
-    private final native CefFrame N_GetFrame(long identifier);
+    private final native CefFrame N_GetFrame(String identifier);
     private final native CefFrame N_GetFrame2(String name);
-    private final native Vector<Long> N_GetFrameIdentifiers();
+    private final native Vector<String> N_GetFrameIdentifiers();
     private final native Vector<String> N_GetFrameNames();
     private final native int N_GetFrameCount();
     private final native boolean N_IsPopup();
@@ -1065,7 +1139,6 @@ abstract class CefBrowser_N extends CefNativeAdapter implements CefBrowser, CefA
     private final native void N_Close(boolean force);
     private final native void N_SetFocus(boolean enable);
     private final native void N_SetWindowVisibility(boolean visible);
-    private final native void N_SetWindowlessFrameRate(int framerate);
     private final native double N_GetZoomLevel();
     private final native void N_SetZoomLevel(double zoomLevel);
     private final native void N_RunFileDialog(FileDialogMode mode, String title,
@@ -1101,4 +1174,6 @@ abstract class CefBrowser_N extends CefNativeAdapter implements CefBrowser, CefA
     private final native void N_ImeCommitText(String text, CefRange replacementRange, int relativeCursorPos);
     private final native void N_ImeFinishComposingText(boolean keepSelection);
     private final native void N_ImeCancelComposing();
+    private final native void N_SetWindowlessFrameRate(int frameRate);
+    private final native void N_GetWindowlessFrameRate(IntCallback frameRateCallback);
 }

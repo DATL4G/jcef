@@ -16,6 +16,7 @@ import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.util.GLBuffers;
 
+import org.cef.CefBrowserSettings;
 import org.cef.CefClient;
 import org.cef.OS;
 import org.cef.callback.CefDragData;
@@ -62,9 +63,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.function.Consumer;
 
 import javax.swing.MenuSelectionManager;
 import javax.swing.SwingUtilities;
@@ -86,13 +89,18 @@ class CefBrowserOsr extends CefBrowser_N implements CefRenderHandler {
     private int depth_per_component = 8;
     private boolean isTransparent_;
 
-    CefBrowserOsr(CefClient client, String url, boolean transparent, CefRequestContext context) {
-        this(client, url, transparent, context, null, null);
+    private CopyOnWriteArrayList<Consumer<CefPaintEvent>> onPaintListeners =
+            new CopyOnWriteArrayList<>();
+
+    CefBrowserOsr(CefClient client, String url, boolean transparent, CefRequestContext context,
+            CefBrowserSettings settings) {
+        this(client, url, transparent, context, null, null, settings);
     }
 
     private CefBrowserOsr(CefClient client, String url, boolean transparent,
-            CefRequestContext context, CefBrowserOsr parent, Point inspectAt) {
-        super(client, url, context, parent, inspectAt);
+            CefRequestContext context, CefBrowserOsr parent, Point inspectAt,
+            CefBrowserSettings settings) {
+        super(client, url, context, parent, inspectAt, settings);
         isTransparent_ = transparent;
         renderer_ = new CefRenderer(transparent);
         createGLCanvas();
@@ -119,7 +127,7 @@ class CefBrowserOsr extends CefBrowser_N implements CefRenderHandler {
     protected CefBrowser createDevToolsBrowser(CefClient client, String url,
             CefRequestContext context, CefBrowser parent, Point inspectAt) {
         return new CefBrowserOsr(
-                client, url, isTransparent_, context, this, inspectAt);
+                client, url, isTransparent_, context, this, inspectAt, null);
     }
 
     private synchronized long getWindowHandle() {
@@ -352,6 +360,22 @@ class CefBrowserOsr extends CefBrowser_N implements CefRenderHandler {
     }
 
     @Override
+    public void addOnPaintListener(Consumer<CefPaintEvent> listener) {
+        onPaintListeners.add(listener);
+    }
+
+    @Override
+    public void setOnPaintListener(Consumer<CefPaintEvent> listener) {
+        onPaintListeners.clear();
+        onPaintListeners.add(listener);
+    }
+
+    @Override
+    public void removeOnPaintListener(Consumer<CefPaintEvent> listener) {
+        onPaintListeners.remove(listener);
+    }
+
+    @Override
     public void onPaint(CefBrowser browser, boolean popup, Rectangle[] dirtyRects,
             ByteBuffer buffer, int width, int height) {
         // if window is closing, canvas_ or opengl context could be null
@@ -373,6 +397,13 @@ class CefBrowserOsr extends CefBrowser_N implements CefRenderHandler {
                 canvas_.display();
             }
         });
+        if (!onPaintListeners.isEmpty()) {
+            CefPaintEvent paintEvent =
+                    new CefPaintEvent(browser, popup, dirtyRects, buffer, width, height);
+            for (Consumer<CefPaintEvent> l : onPaintListeners) {
+                l.accept(paintEvent);
+            }
+        }
     }
 
     @Override
@@ -451,7 +482,7 @@ class CefBrowserOsr extends CefBrowser_N implements CefRenderHandler {
                 createDevTools(getParentBrowser(), getClient(), windowHandle, true, isTransparent_,
                         null, getInspectAt());
             } else {
-                createBrowser(getClient(), windowHandle, getUrl(), true, isTransparent_, null, getFrameRate());
+                createBrowser(getClient(), windowHandle, getUrl(), true, isTransparent_, null);
             }
         } else if (hasParent && justCreated_) {
             notifyAfterParentChanged();

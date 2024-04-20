@@ -29,12 +29,12 @@ public class RemoteMessageRouterImpl extends RemoteServerObject {
         myCancel = cancel;
     }
 
-    public static RemoteMessageRouterImpl create(CefMessageRouter.CefMessageRouterConfig config) {
-        // TODO: check instance is ready (add delayed initialization)
-        RpcExecutor server = CefServer.instance().getService();
+    public static RemoteMessageRouterImpl create(RpcExecutor server, CefMessageRouter.CefMessageRouterConfig config) {
         RObject robj = server.execObj((s)->s.MessageRouter_Create(config.jsQueryFunction, config.jsCancelFunction));
-        if (robj.objId < 0)
+        if (robj.objId < 0) {
+            CefLog.Error("MessageRouter_Create returns invalid objId %d.", robj.objId);
             return null;
+        }
         return new RemoteMessageRouterImpl(server, robj, config.jsQueryFunction, config.jsCancelFunction);
     }
 
@@ -48,10 +48,6 @@ public class RemoteMessageRouterImpl extends RemoteServerObject {
 
     @Override
     public void flush() {}
-
-    public void dispose() {
-        disposeOnServer();
-    }
 
     @Override
     protected void disposeOnServerImpl() {
@@ -67,11 +63,11 @@ public class RemoteMessageRouterImpl extends RemoteServerObject {
     // Disposes handler ref in removeHandler (or when router finalizes, see disposeOnServerImpl)
     public boolean addHandler(CefMessageRouterHandler handler, boolean first) {
         RemoteMessageRouterHandler rhandler = RemoteMessageRouterHandler.create(handler);
-        CefLog.Debug("%s add handler %s [%d]", this, rhandler, rhandler.getId());
+        //CefLog.Debug("%s add handler %s [%d]", this, rhandler, rhandler.getId());
         synchronized (myHandlers) {
             myHandlers.add(rhandler);
         }
-        myServer.exec((s)->s.MessageRouter_AddHandler(thriftId(), rhandler.thriftId(true), first));
+        myServer.exec((s)->s.MessageRouter_AddHandler(thriftId(), rhandler.thriftId(), first));
         return true;
     }
 
@@ -85,7 +81,7 @@ public class RemoteMessageRouterImpl extends RemoteServerObject {
             boolean removed = myHandlers.remove(rhandler);
             if (!removed) CefLog.Error("RemoteMessageRouterHandler %s wasn't found in myHandlers list");
         }
-        myServer.exec((s)->s.MessageRouter_RemoveHandler(thriftId(), rhandler.thriftId(true)));
+        myServer.exec((s)->s.MessageRouter_RemoveHandler(thriftId(), rhandler.thriftId()));
         RemoteMessageRouterHandler.FACTORY.dispose(rhandler.getId());
         return true;
     }
@@ -99,7 +95,7 @@ public class RemoteMessageRouterImpl extends RemoteServerObject {
             CefLog.Error("Can't cancelPending on non-remote browser " + browser);
         else {
             int bid = browser == null ? -1 : ((RemoteBrowser)browser).getBid();
-            myServer.exec((s) -> s.MessageRouter_CancelPending(thriftId(), bid, rhandler.thriftId(true)));
+            myServer.exec((s) -> s.MessageRouter_CancelPending(thriftId(), bid, rhandler.thriftId()));
         }
     }
 

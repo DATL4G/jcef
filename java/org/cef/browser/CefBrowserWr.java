@@ -5,6 +5,7 @@
 package org.cef.browser;
 
 import com.jetbrains.cef.JCefAppConfig;
+import org.cef.CefBrowserSettings;
 import org.cef.CefClient;
 import org.cef.OS;
 import org.cef.handler.CefWindowHandler;
@@ -182,14 +183,15 @@ class CefBrowserWr extends CefBrowser_N {
         }
     };
 
-    CefBrowserWr(CefClient client, String url, CefRequestContext context) {
-        this(client, url, context, null, null);
+    CefBrowserWr(
+            CefClient client, String url, CefRequestContext context, CefBrowserSettings settings) {
+        this(client, url, context, null, null, settings);
     }
 
     @SuppressWarnings("serial")
     private CefBrowserWr(CefClient client, String url, CefRequestContext context,
-            CefBrowserWr parent, Point inspectAt) {
-        super(client, url, context, parent, inspectAt);
+            CefBrowserWr parent, Point inspectAt, CefBrowserSettings settings) {
+        super(client, url, context, parent, inspectAt, settings);
         delayedUpdate_.setRepeats(false);
         delayCreationUntilMs_ = Long.getLong("jcef.debug.cefbrowserwr.delay_creation", 0);
         if (delayCreationUntilMs_ > 0) delayCreationUntilMs_ += System.currentTimeMillis();
@@ -421,7 +423,7 @@ class CefBrowserWr extends CefBrowser_N {
     @Override
     protected CefBrowser createDevToolsBrowser(CefClient client, String url,
             CefRequestContext context, CefBrowser parent, Point inspectAt) {
-        return new CefBrowserWr(client, url, context, (CefBrowserWr) this, inspectAt);
+        return new CefBrowserWr(client, url, context, (CefBrowserWr) this, inspectAt, null);
     }
 
     private synchronized long getWindowHandle() {
@@ -518,7 +520,7 @@ class CefBrowserWr extends CefBrowser_N {
                         getInspectAt());
                 return true;
             } else {
-                createBrowser(getClient(), windowHandle, getUrl(), false, false, canvas, 0);
+                createBrowser(getClient(), windowHandle, getUrl(), false, false, canvas);
                 return true;
             }
         } else if (hasParent && justCreated_) {
@@ -537,5 +539,17 @@ class CefBrowserWr extends CefBrowser_N {
 
     private static boolean shouldUpscale() {
         return JCefAppConfig.getForceDeviceScaleFactor() == -1;
+    }
+
+    @Override
+    public void setWindowlessFrameRate(int frameRate) {
+        throw new UnsupportedOperationException(
+                "You can only set windowless framerate on OSR browser");
+    }
+
+    @Override
+    public CompletableFuture<Integer> getWindowlessFrameRate() {
+        throw new UnsupportedOperationException(
+                "You can only get windowless framerate on OSR browser");
     }
 }
