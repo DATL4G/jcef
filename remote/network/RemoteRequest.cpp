@@ -10,9 +10,6 @@ namespace {
   std::string ttype2str(cef_transition_type_t type);
 }
 
-RemoteRequest::RemoteRequest(std::shared_ptr<RpcExecutor> service, CefRefPtr<CefRequest> delegate, int id)
-    : RemoteServerObject(service, id, delegate) {}
-
 void RemoteRequest::updateImpl(const std::map<std::string, std::string>& requestInfo) {
   SET_STR(requestInfo, URL);
   SET_STR(requestInfo, Method);
@@ -38,10 +35,6 @@ std::map<std::string, std::string> RemoteRequest::toMapImpl() {
     result["ResourceType"] = type2str(myDelegate->GetResourceType());
     result["TransitionType"] = ttype2str(myDelegate->GetTransitionType());
     return result;
-}
-
-RemoteRequest * RemoteRequest::create(std::shared_ptr<RpcExecutor> service, CefRefPtr<CefRequest> delegate) {
-    return FACTORY.create([&](int id) -> RemoteRequest* {return new RemoteRequest(service, delegate, id);});
 }
 
 namespace {

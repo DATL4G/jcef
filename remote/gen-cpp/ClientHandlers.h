@@ -24,45 +24,60 @@ class ClientHandlersIf {
   virtual ~ClientHandlersIf() {}
   virtual int32_t connect() = 0;
   virtual void log(const std::string& msg) = 0;
-  virtual void AppHandler_GetRegisteredCustomSchemes(std::vector<CustomScheme> & _return) = 0;
   virtual void AppHandler_OnContextInitialized() = 0;
   virtual void RenderHandler_GetViewRect(Rect& _return, const int32_t bid) = 0;
   virtual void RenderHandler_GetScreenInfo(ScreenInfo& _return, const int32_t bid) = 0;
   virtual void RenderHandler_GetScreenPoint(Point& _return, const int32_t bid, const int32_t viewX, const int32_t viewY) = 0;
   virtual void RenderHandler_OnPaint(const int32_t bid, const bool popup, const int32_t dirtyRectsCount, const std::string& sharedMemName, const int64_t sharedMemHandle, const int32_t width, const int32_t height) = 0;
-  virtual bool LifeSpanHandler_OnBeforePopup(const int32_t bid, const std::string& url, const std::string& frameName, const bool gesture) = 0;
-  virtual void LifeSpanHandler_OnAfterCreated(const int32_t bid) = 0;
+  virtual bool LifeSpanHandler_OnBeforePopup(const int32_t bid, const  ::thrift_codegen::RObject& frame, const std::string& url, const std::string& frameName, const bool gesture) = 0;
+  virtual void LifeSpanHandler_OnAfterCreated(const int32_t bid, const int32_t nativeBrowserIdentifier) = 0;
   virtual bool LifeSpanHandler_DoClose(const int32_t bid) = 0;
   virtual void LifeSpanHandler_OnBeforeClose(const int32_t bid) = 0;
   virtual void LoadHandler_OnLoadingStateChange(const int32_t bid, const bool isLoading, const bool canGoBack, const bool canGoForward) = 0;
-  virtual void LoadHandler_OnLoadStart(const int32_t bid, const int32_t transition_type) = 0;
-  virtual void LoadHandler_OnLoadEnd(const int32_t bid, const int32_t httpStatusCode) = 0;
-  virtual void LoadHandler_OnLoadError(const int32_t bid, const int32_t errorCode, const std::string& errorText, const std::string& failedUrl) = 0;
-  virtual void DisplayHandler_OnAddressChange(const int32_t bid, const std::string& url) = 0;
+  virtual void LoadHandler_OnLoadStart(const int32_t bid, const  ::thrift_codegen::RObject& frame, const int32_t transition_type) = 0;
+  virtual void LoadHandler_OnLoadEnd(const int32_t bid, const  ::thrift_codegen::RObject& frame, const int32_t httpStatusCode) = 0;
+  virtual void LoadHandler_OnLoadError(const int32_t bid, const  ::thrift_codegen::RObject& frame, const int32_t errorCode, const std::string& errorText, const std::string& failedUrl) = 0;
+  virtual void DisplayHandler_OnAddressChange(const int32_t bid, const  ::thrift_codegen::RObject& frame, const std::string& url) = 0;
   virtual void DisplayHandler_OnTitleChange(const int32_t bid, const std::string& title) = 0;
   virtual bool DisplayHandler_OnTooltip(const int32_t bid, const std::string& text) = 0;
   virtual void DisplayHandler_OnStatusMessage(const int32_t bid, const std::string& value) = 0;
   virtual bool DisplayHandler_OnConsoleMessage(const int32_t bid, const int32_t level, const std::string& message, const std::string& source, const int32_t line) = 0;
-  virtual bool RequestHandler_OnBeforeBrowse(const int32_t bid, const  ::thrift_codegen::RObject& request, const bool user_gesture, const bool is_redirect) = 0;
-  virtual bool RequestHandler_OnOpenURLFromTab(const int32_t bid, const std::string& target_url, const bool user_gesture) = 0;
+  virtual bool KeyboardHandler_OnPreKeyEvent(const int32_t bid, const  ::thrift_codegen::KeyEvent& event) = 0;
+  virtual bool KeyboardHandler_OnKeyEvent(const int32_t bid, const  ::thrift_codegen::KeyEvent& event) = 0;
+  virtual void FocusHandler_OnTakeFocus(const int32_t bid, const bool next) = 0;
+  virtual bool FocusHandler_OnSetFocus(const int32_t bid, const std::string& source) = 0;
+  virtual void FocusHandler_OnGotFocus(const int32_t bid) = 0;
+  virtual bool RequestHandler_OnBeforeBrowse(const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const bool user_gesture, const bool is_redirect) = 0;
+  virtual bool RequestHandler_OnOpenURLFromTab(const int32_t bid, const  ::thrift_codegen::RObject& frame, const std::string& target_url, const bool user_gesture) = 0;
   virtual bool RequestHandler_GetAuthCredentials(const int32_t bid, const std::string& origin_url, const bool isProxy, const std::string& host, const int32_t port, const std::string& realm, const std::string& scheme, const  ::thrift_codegen::RObject& authCallback) = 0;
-  virtual bool RequestHandler_OnCertificateError(const int32_t bid, const std::string& cert_error, const std::string& request_url, const  ::thrift_codegen::RObject& sslInfo, const  ::thrift_codegen::RObject& callback) = 0;
+  virtual bool RequestHandler_OnCertificateError(const int32_t bid, const std::string& cert_error, const std::string& request_url, const std::string& sslInfo, const  ::thrift_codegen::RObject& callback) = 0;
   virtual void RequestHandler_OnRenderProcessTerminated(const int32_t bid, const std::string& status) = 0;
-  virtual void RequestHandler_GetResourceRequestHandler( ::thrift_codegen::RObject& _return, const int32_t bid, const  ::thrift_codegen::RObject& request, const bool isNavigation, const bool isDownload, const std::string& requestInitiator) = 0;
+  virtual void RequestHandler_GetResourceRequestHandler( ::thrift_codegen::RObject& _return, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const bool isNavigation, const bool isDownload, const std::string& requestInitiator) = 0;
   virtual void ResourceRequestHandler_Dispose(const int32_t rrHandler) = 0;
-  virtual void ResourceRequestHandler_GetCookieAccessFilter( ::thrift_codegen::RObject& _return, const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& request) = 0;
+  virtual void ResourceRequestHandler_GetCookieAccessFilter( ::thrift_codegen::RObject& _return, const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request) = 0;
   virtual void CookieAccessFilter_Dispose(const int32_t filter) = 0;
-  virtual bool CookieAccessFilter_CanSendCookie(const int32_t filter, const int32_t bid, const  ::thrift_codegen::RObject& request, const std::vector<std::string> & cookie) = 0;
-  virtual bool CookieAccessFilter_CanSaveCookie(const int32_t filter, const int32_t bid, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response, const std::vector<std::string> & cookie) = 0;
-  virtual bool ResourceRequestHandler_OnBeforeResourceLoad(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& request) = 0;
-  virtual void ResourceRequestHandler_GetResourceHandler( ::thrift_codegen::RObject& _return, const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& request) = 0;
+  virtual bool CookieAccessFilter_CanSendCookie(const int32_t filter, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const std::vector<std::string> & cookie) = 0;
+  virtual bool CookieAccessFilter_CanSaveCookie(const int32_t filter, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response, const std::vector<std::string> & cookie) = 0;
+  virtual bool ResourceRequestHandler_OnBeforeResourceLoad(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request) = 0;
+  virtual void ResourceRequestHandler_GetResourceHandler( ::thrift_codegen::RObject& _return, const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request) = 0;
   virtual void ResourceHandler_Dispose(const int32_t resourceHandler) = 0;
-  virtual void ResourceRequestHandler_OnResourceRedirect(std::string& _return, const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response, const std::string& new_url) = 0;
-  virtual bool ResourceRequestHandler_OnResourceResponse(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response) = 0;
-  virtual void ResourceRequestHandler_OnResourceLoadComplete(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response, const std::string& status, const int64_t receivedContentLength) = 0;
-  virtual bool ResourceRequestHandler_OnProtocolExecution(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& request, const bool allowOsExecution) = 0;
-  virtual bool MessageRouterHandler_onQuery(const  ::thrift_codegen::RObject& handler, const int32_t bid, const int64_t queryId, const std::string& request, const bool persistent, const  ::thrift_codegen::RObject& queryCallback) = 0;
-  virtual void MessageRouterHandler_onQueryCanceled(const  ::thrift_codegen::RObject& handler, const int32_t bid, const int64_t queryId) = 0;
+  virtual bool ResourceHandler_ProcessRequest(const int32_t resourceHandler, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& callback) = 0;
+  virtual void ResourceHandler_GetResponseHeaders( ::thrift_codegen::ResponseHeaders& _return, const int32_t resourceHandler, const  ::thrift_codegen::RObject& response) = 0;
+  virtual void ResourceHandler_ReadResponse( ::thrift_codegen::ResponseData& _return, const int32_t resourceHandler, const int32_t bytes_to_read, const  ::thrift_codegen::RObject& callback) = 0;
+  virtual void ResourceHandler_Cancel(const int32_t resourceHandler) = 0;
+  virtual void ResourceRequestHandler_OnResourceRedirect(std::string& _return, const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response, const std::string& new_url) = 0;
+  virtual bool ResourceRequestHandler_OnResourceResponse(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response) = 0;
+  virtual void ResourceRequestHandler_OnResourceLoadComplete(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response, const std::string& status, const int64_t receivedContentLength) = 0;
+  virtual bool ResourceRequestHandler_OnProtocolExecution(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const bool allowOsExecution) = 0;
+  virtual bool MessageRouterHandler_onQuery(const  ::thrift_codegen::RObject& handler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const int64_t queryId, const std::string& request, const bool persistent, const  ::thrift_codegen::RObject& queryCallback) = 0;
+  virtual void MessageRouterHandler_onQueryCanceled(const  ::thrift_codegen::RObject& handler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const int64_t queryId) = 0;
+  virtual void MessageRouterHandler_Dispose(const int32_t handler) = 0;
+  virtual void SchemeHandlerFactory_CreateHandler( ::thrift_codegen::RObject& _return, const int32_t schemeHandlerFactory, const int32_t bid, const  ::thrift_codegen::RObject& frame, const std::string& scheme_name, const  ::thrift_codegen::RObject& request) = 0;
+  virtual void SchemeHandlerFactory_Dispose(const int32_t schemeHandlerFactory) = 0;
+  virtual void CompletionCallback_OnComplete(const int32_t completionCallback) = 0;
+  virtual void RequestContextHandler_GetResourceRequestHandler( ::thrift_codegen::RObject& _return, const int32_t handler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const bool isNavigation, const bool isDownload, const std::string& requestInitiator) = 0;
+  virtual bool CookieVisitor_Visit(const int32_t visitor, const  ::thrift_codegen::Cookie& cookie, const int32_t count, const int32_t total) = 0;
+  virtual void CookieVisitor_Dispose(const int32_t visitor) = 0;
 };
 
 class ClientHandlersIfFactory {
@@ -99,9 +114,6 @@ class ClientHandlersNull : virtual public ClientHandlersIf {
   void log(const std::string& /* msg */) override {
     return;
   }
-  void AppHandler_GetRegisteredCustomSchemes(std::vector<CustomScheme> & /* _return */) override {
-    return;
-  }
   void AppHandler_OnContextInitialized() override {
     return;
   }
@@ -117,11 +129,11 @@ class ClientHandlersNull : virtual public ClientHandlersIf {
   void RenderHandler_OnPaint(const int32_t /* bid */, const bool /* popup */, const int32_t /* dirtyRectsCount */, const std::string& /* sharedMemName */, const int64_t /* sharedMemHandle */, const int32_t /* width */, const int32_t /* height */) override {
     return;
   }
-  bool LifeSpanHandler_OnBeforePopup(const int32_t /* bid */, const std::string& /* url */, const std::string& /* frameName */, const bool /* gesture */) override {
+  bool LifeSpanHandler_OnBeforePopup(const int32_t /* bid */, const  ::thrift_codegen::RObject& /* frame */, const std::string& /* url */, const std::string& /* frameName */, const bool /* gesture */) override {
     bool _return = false;
     return _return;
   }
-  void LifeSpanHandler_OnAfterCreated(const int32_t /* bid */) override {
+  void LifeSpanHandler_OnAfterCreated(const int32_t /* bid */, const int32_t /* nativeBrowserIdentifier */) override {
     return;
   }
   bool LifeSpanHandler_DoClose(const int32_t /* bid */) override {
@@ -134,16 +146,16 @@ class ClientHandlersNull : virtual public ClientHandlersIf {
   void LoadHandler_OnLoadingStateChange(const int32_t /* bid */, const bool /* isLoading */, const bool /* canGoBack */, const bool /* canGoForward */) override {
     return;
   }
-  void LoadHandler_OnLoadStart(const int32_t /* bid */, const int32_t /* transition_type */) override {
+  void LoadHandler_OnLoadStart(const int32_t /* bid */, const  ::thrift_codegen::RObject& /* frame */, const int32_t /* transition_type */) override {
     return;
   }
-  void LoadHandler_OnLoadEnd(const int32_t /* bid */, const int32_t /* httpStatusCode */) override {
+  void LoadHandler_OnLoadEnd(const int32_t /* bid */, const  ::thrift_codegen::RObject& /* frame */, const int32_t /* httpStatusCode */) override {
     return;
   }
-  void LoadHandler_OnLoadError(const int32_t /* bid */, const int32_t /* errorCode */, const std::string& /* errorText */, const std::string& /* failedUrl */) override {
+  void LoadHandler_OnLoadError(const int32_t /* bid */, const  ::thrift_codegen::RObject& /* frame */, const int32_t /* errorCode */, const std::string& /* errorText */, const std::string& /* failedUrl */) override {
     return;
   }
-  void DisplayHandler_OnAddressChange(const int32_t /* bid */, const std::string& /* url */) override {
+  void DisplayHandler_OnAddressChange(const int32_t /* bid */, const  ::thrift_codegen::RObject& /* frame */, const std::string& /* url */) override {
     return;
   }
   void DisplayHandler_OnTitleChange(const int32_t /* bid */, const std::string& /* title */) override {
@@ -160,11 +172,29 @@ class ClientHandlersNull : virtual public ClientHandlersIf {
     bool _return = false;
     return _return;
   }
-  bool RequestHandler_OnBeforeBrowse(const int32_t /* bid */, const  ::thrift_codegen::RObject& /* request */, const bool /* user_gesture */, const bool /* is_redirect */) override {
+  bool KeyboardHandler_OnPreKeyEvent(const int32_t /* bid */, const  ::thrift_codegen::KeyEvent& /* event */) override {
     bool _return = false;
     return _return;
   }
-  bool RequestHandler_OnOpenURLFromTab(const int32_t /* bid */, const std::string& /* target_url */, const bool /* user_gesture */) override {
+  bool KeyboardHandler_OnKeyEvent(const int32_t /* bid */, const  ::thrift_codegen::KeyEvent& /* event */) override {
+    bool _return = false;
+    return _return;
+  }
+  void FocusHandler_OnTakeFocus(const int32_t /* bid */, const bool /* next */) override {
+    return;
+  }
+  bool FocusHandler_OnSetFocus(const int32_t /* bid */, const std::string& /* source */) override {
+    bool _return = false;
+    return _return;
+  }
+  void FocusHandler_OnGotFocus(const int32_t /* bid */) override {
+    return;
+  }
+  bool RequestHandler_OnBeforeBrowse(const int32_t /* bid */, const  ::thrift_codegen::RObject& /* frame */, const  ::thrift_codegen::RObject& /* request */, const bool /* user_gesture */, const bool /* is_redirect */) override {
+    bool _return = false;
+    return _return;
+  }
+  bool RequestHandler_OnOpenURLFromTab(const int32_t /* bid */, const  ::thrift_codegen::RObject& /* frame */, const std::string& /* target_url */, const bool /* user_gesture */) override {
     bool _return = false;
     return _return;
   }
@@ -172,62 +202,97 @@ class ClientHandlersNull : virtual public ClientHandlersIf {
     bool _return = false;
     return _return;
   }
-  bool RequestHandler_OnCertificateError(const int32_t /* bid */, const std::string& /* cert_error */, const std::string& /* request_url */, const  ::thrift_codegen::RObject& /* sslInfo */, const  ::thrift_codegen::RObject& /* callback */) override {
+  bool RequestHandler_OnCertificateError(const int32_t /* bid */, const std::string& /* cert_error */, const std::string& /* request_url */, const std::string& /* sslInfo */, const  ::thrift_codegen::RObject& /* callback */) override {
     bool _return = false;
     return _return;
   }
   void RequestHandler_OnRenderProcessTerminated(const int32_t /* bid */, const std::string& /* status */) override {
     return;
   }
-  void RequestHandler_GetResourceRequestHandler( ::thrift_codegen::RObject& /* _return */, const int32_t /* bid */, const  ::thrift_codegen::RObject& /* request */, const bool /* isNavigation */, const bool /* isDownload */, const std::string& /* requestInitiator */) override {
+  void RequestHandler_GetResourceRequestHandler( ::thrift_codegen::RObject& /* _return */, const int32_t /* bid */, const  ::thrift_codegen::RObject& /* frame */, const  ::thrift_codegen::RObject& /* request */, const bool /* isNavigation */, const bool /* isDownload */, const std::string& /* requestInitiator */) override {
     return;
   }
   void ResourceRequestHandler_Dispose(const int32_t /* rrHandler */) override {
     return;
   }
-  void ResourceRequestHandler_GetCookieAccessFilter( ::thrift_codegen::RObject& /* _return */, const int32_t /* rrHandler */, const int32_t /* bid */, const  ::thrift_codegen::RObject& /* request */) override {
+  void ResourceRequestHandler_GetCookieAccessFilter( ::thrift_codegen::RObject& /* _return */, const int32_t /* rrHandler */, const int32_t /* bid */, const  ::thrift_codegen::RObject& /* frame */, const  ::thrift_codegen::RObject& /* request */) override {
     return;
   }
   void CookieAccessFilter_Dispose(const int32_t /* filter */) override {
     return;
   }
-  bool CookieAccessFilter_CanSendCookie(const int32_t /* filter */, const int32_t /* bid */, const  ::thrift_codegen::RObject& /* request */, const std::vector<std::string> & /* cookie */) override {
+  bool CookieAccessFilter_CanSendCookie(const int32_t /* filter */, const int32_t /* bid */, const  ::thrift_codegen::RObject& /* frame */, const  ::thrift_codegen::RObject& /* request */, const std::vector<std::string> & /* cookie */) override {
     bool _return = false;
     return _return;
   }
-  bool CookieAccessFilter_CanSaveCookie(const int32_t /* filter */, const int32_t /* bid */, const  ::thrift_codegen::RObject& /* request */, const  ::thrift_codegen::RObject& /* response */, const std::vector<std::string> & /* cookie */) override {
+  bool CookieAccessFilter_CanSaveCookie(const int32_t /* filter */, const int32_t /* bid */, const  ::thrift_codegen::RObject& /* frame */, const  ::thrift_codegen::RObject& /* request */, const  ::thrift_codegen::RObject& /* response */, const std::vector<std::string> & /* cookie */) override {
     bool _return = false;
     return _return;
   }
-  bool ResourceRequestHandler_OnBeforeResourceLoad(const int32_t /* rrHandler */, const int32_t /* bid */, const  ::thrift_codegen::RObject& /* request */) override {
+  bool ResourceRequestHandler_OnBeforeResourceLoad(const int32_t /* rrHandler */, const int32_t /* bid */, const  ::thrift_codegen::RObject& /* frame */, const  ::thrift_codegen::RObject& /* request */) override {
     bool _return = false;
     return _return;
   }
-  void ResourceRequestHandler_GetResourceHandler( ::thrift_codegen::RObject& /* _return */, const int32_t /* rrHandler */, const int32_t /* bid */, const  ::thrift_codegen::RObject& /* request */) override {
+  void ResourceRequestHandler_GetResourceHandler( ::thrift_codegen::RObject& /* _return */, const int32_t /* rrHandler */, const int32_t /* bid */, const  ::thrift_codegen::RObject& /* frame */, const  ::thrift_codegen::RObject& /* request */) override {
     return;
   }
   void ResourceHandler_Dispose(const int32_t /* resourceHandler */) override {
     return;
   }
-  void ResourceRequestHandler_OnResourceRedirect(std::string& /* _return */, const int32_t /* rrHandler */, const int32_t /* bid */, const  ::thrift_codegen::RObject& /* request */, const  ::thrift_codegen::RObject& /* response */, const std::string& /* new_url */) override {
+  bool ResourceHandler_ProcessRequest(const int32_t /* resourceHandler */, const  ::thrift_codegen::RObject& /* request */, const  ::thrift_codegen::RObject& /* callback */) override {
+    bool _return = false;
+    return _return;
+  }
+  void ResourceHandler_GetResponseHeaders( ::thrift_codegen::ResponseHeaders& /* _return */, const int32_t /* resourceHandler */, const  ::thrift_codegen::RObject& /* response */) override {
     return;
   }
-  bool ResourceRequestHandler_OnResourceResponse(const int32_t /* rrHandler */, const int32_t /* bid */, const  ::thrift_codegen::RObject& /* request */, const  ::thrift_codegen::RObject& /* response */) override {
-    bool _return = false;
-    return _return;
-  }
-  void ResourceRequestHandler_OnResourceLoadComplete(const int32_t /* rrHandler */, const int32_t /* bid */, const  ::thrift_codegen::RObject& /* request */, const  ::thrift_codegen::RObject& /* response */, const std::string& /* status */, const int64_t /* receivedContentLength */) override {
+  void ResourceHandler_ReadResponse( ::thrift_codegen::ResponseData& /* _return */, const int32_t /* resourceHandler */, const int32_t /* bytes_to_read */, const  ::thrift_codegen::RObject& /* callback */) override {
     return;
   }
-  bool ResourceRequestHandler_OnProtocolExecution(const int32_t /* rrHandler */, const int32_t /* bid */, const  ::thrift_codegen::RObject& /* request */, const bool /* allowOsExecution */) override {
+  void ResourceHandler_Cancel(const int32_t /* resourceHandler */) override {
+    return;
+  }
+  void ResourceRequestHandler_OnResourceRedirect(std::string& /* _return */, const int32_t /* rrHandler */, const int32_t /* bid */, const  ::thrift_codegen::RObject& /* frame */, const  ::thrift_codegen::RObject& /* request */, const  ::thrift_codegen::RObject& /* response */, const std::string& /* new_url */) override {
+    return;
+  }
+  bool ResourceRequestHandler_OnResourceResponse(const int32_t /* rrHandler */, const int32_t /* bid */, const  ::thrift_codegen::RObject& /* frame */, const  ::thrift_codegen::RObject& /* request */, const  ::thrift_codegen::RObject& /* response */) override {
     bool _return = false;
     return _return;
   }
-  bool MessageRouterHandler_onQuery(const  ::thrift_codegen::RObject& /* handler */, const int32_t /* bid */, const int64_t /* queryId */, const std::string& /* request */, const bool /* persistent */, const  ::thrift_codegen::RObject& /* queryCallback */) override {
+  void ResourceRequestHandler_OnResourceLoadComplete(const int32_t /* rrHandler */, const int32_t /* bid */, const  ::thrift_codegen::RObject& /* frame */, const  ::thrift_codegen::RObject& /* request */, const  ::thrift_codegen::RObject& /* response */, const std::string& /* status */, const int64_t /* receivedContentLength */) override {
+    return;
+  }
+  bool ResourceRequestHandler_OnProtocolExecution(const int32_t /* rrHandler */, const int32_t /* bid */, const  ::thrift_codegen::RObject& /* frame */, const  ::thrift_codegen::RObject& /* request */, const bool /* allowOsExecution */) override {
     bool _return = false;
     return _return;
   }
-  void MessageRouterHandler_onQueryCanceled(const  ::thrift_codegen::RObject& /* handler */, const int32_t /* bid */, const int64_t /* queryId */) override {
+  bool MessageRouterHandler_onQuery(const  ::thrift_codegen::RObject& /* handler */, const int32_t /* bid */, const  ::thrift_codegen::RObject& /* frame */, const int64_t /* queryId */, const std::string& /* request */, const bool /* persistent */, const  ::thrift_codegen::RObject& /* queryCallback */) override {
+    bool _return = false;
+    return _return;
+  }
+  void MessageRouterHandler_onQueryCanceled(const  ::thrift_codegen::RObject& /* handler */, const int32_t /* bid */, const  ::thrift_codegen::RObject& /* frame */, const int64_t /* queryId */) override {
+    return;
+  }
+  void MessageRouterHandler_Dispose(const int32_t /* handler */) override {
+    return;
+  }
+  void SchemeHandlerFactory_CreateHandler( ::thrift_codegen::RObject& /* _return */, const int32_t /* schemeHandlerFactory */, const int32_t /* bid */, const  ::thrift_codegen::RObject& /* frame */, const std::string& /* scheme_name */, const  ::thrift_codegen::RObject& /* request */) override {
+    return;
+  }
+  void SchemeHandlerFactory_Dispose(const int32_t /* schemeHandlerFactory */) override {
+    return;
+  }
+  void CompletionCallback_OnComplete(const int32_t /* completionCallback */) override {
+    return;
+  }
+  void RequestContextHandler_GetResourceRequestHandler( ::thrift_codegen::RObject& /* _return */, const int32_t /* handler */, const int32_t /* bid */, const  ::thrift_codegen::RObject& /* frame */, const  ::thrift_codegen::RObject& /* request */, const bool /* isNavigation */, const bool /* isDownload */, const std::string& /* requestInitiator */) override {
+    return;
+  }
+  bool CookieVisitor_Visit(const int32_t /* visitor */, const  ::thrift_codegen::Cookie& /* cookie */, const int32_t /* count */, const int32_t /* total */) override {
+    bool _return = false;
+    return _return;
+  }
+  void CookieVisitor_Dispose(const int32_t /* visitor */) override {
     return;
   }
 };
@@ -376,98 +441,6 @@ class ClientHandlers_log_pargs {
 };
 
 
-class ClientHandlers_AppHandler_GetRegisteredCustomSchemes_args {
- public:
-
-  ClientHandlers_AppHandler_GetRegisteredCustomSchemes_args(const ClientHandlers_AppHandler_GetRegisteredCustomSchemes_args&) noexcept;
-  ClientHandlers_AppHandler_GetRegisteredCustomSchemes_args& operator=(const ClientHandlers_AppHandler_GetRegisteredCustomSchemes_args&) noexcept;
-  ClientHandlers_AppHandler_GetRegisteredCustomSchemes_args() noexcept {
-  }
-
-  virtual ~ClientHandlers_AppHandler_GetRegisteredCustomSchemes_args() noexcept;
-
-  bool operator == (const ClientHandlers_AppHandler_GetRegisteredCustomSchemes_args & /* rhs */) const
-  {
-    return true;
-  }
-  bool operator != (const ClientHandlers_AppHandler_GetRegisteredCustomSchemes_args &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const ClientHandlers_AppHandler_GetRegisteredCustomSchemes_args & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-
-class ClientHandlers_AppHandler_GetRegisteredCustomSchemes_pargs {
- public:
-
-
-  virtual ~ClientHandlers_AppHandler_GetRegisteredCustomSchemes_pargs() noexcept;
-
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _ClientHandlers_AppHandler_GetRegisteredCustomSchemes_result__isset {
-  _ClientHandlers_AppHandler_GetRegisteredCustomSchemes_result__isset() : success(false) {}
-  bool success :1;
-} _ClientHandlers_AppHandler_GetRegisteredCustomSchemes_result__isset;
-
-class ClientHandlers_AppHandler_GetRegisteredCustomSchemes_result {
- public:
-
-  ClientHandlers_AppHandler_GetRegisteredCustomSchemes_result(const ClientHandlers_AppHandler_GetRegisteredCustomSchemes_result&);
-  ClientHandlers_AppHandler_GetRegisteredCustomSchemes_result& operator=(const ClientHandlers_AppHandler_GetRegisteredCustomSchemes_result&);
-  ClientHandlers_AppHandler_GetRegisteredCustomSchemes_result() noexcept {
-  }
-
-  virtual ~ClientHandlers_AppHandler_GetRegisteredCustomSchemes_result() noexcept;
-  std::vector<CustomScheme>  success;
-
-  _ClientHandlers_AppHandler_GetRegisteredCustomSchemes_result__isset __isset;
-
-  void __set_success(const std::vector<CustomScheme> & val);
-
-  bool operator == (const ClientHandlers_AppHandler_GetRegisteredCustomSchemes_result & rhs) const
-  {
-    if (!(success == rhs.success))
-      return false;
-    return true;
-  }
-  bool operator != (const ClientHandlers_AppHandler_GetRegisteredCustomSchemes_result &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const ClientHandlers_AppHandler_GetRegisteredCustomSchemes_result & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _ClientHandlers_AppHandler_GetRegisteredCustomSchemes_presult__isset {
-  _ClientHandlers_AppHandler_GetRegisteredCustomSchemes_presult__isset() : success(false) {}
-  bool success :1;
-} _ClientHandlers_AppHandler_GetRegisteredCustomSchemes_presult__isset;
-
-class ClientHandlers_AppHandler_GetRegisteredCustomSchemes_presult {
- public:
-
-
-  virtual ~ClientHandlers_AppHandler_GetRegisteredCustomSchemes_presult() noexcept;
-  std::vector<CustomScheme> * success;
-
-  _ClientHandlers_AppHandler_GetRegisteredCustomSchemes_presult__isset __isset;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-
-};
-
-
 class ClientHandlers_AppHandler_OnContextInitialized_args {
  public:
 
@@ -501,43 +474,6 @@ class ClientHandlers_AppHandler_OnContextInitialized_pargs {
   virtual ~ClientHandlers_AppHandler_OnContextInitialized_pargs() noexcept;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-
-class ClientHandlers_AppHandler_OnContextInitialized_result {
- public:
-
-  ClientHandlers_AppHandler_OnContextInitialized_result(const ClientHandlers_AppHandler_OnContextInitialized_result&) noexcept;
-  ClientHandlers_AppHandler_OnContextInitialized_result& operator=(const ClientHandlers_AppHandler_OnContextInitialized_result&) noexcept;
-  ClientHandlers_AppHandler_OnContextInitialized_result() noexcept {
-  }
-
-  virtual ~ClientHandlers_AppHandler_OnContextInitialized_result() noexcept;
-
-  bool operator == (const ClientHandlers_AppHandler_OnContextInitialized_result & /* rhs */) const
-  {
-    return true;
-  }
-  bool operator != (const ClientHandlers_AppHandler_OnContextInitialized_result &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const ClientHandlers_AppHandler_OnContextInitialized_result & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-
-class ClientHandlers_AppHandler_OnContextInitialized_presult {
- public:
-
-
-  virtual ~ClientHandlers_AppHandler_OnContextInitialized_presult() noexcept;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
 };
 
@@ -1008,8 +944,9 @@ class ClientHandlers_RenderHandler_OnPaint_presult {
 };
 
 typedef struct _ClientHandlers_LifeSpanHandler_OnBeforePopup_args__isset {
-  _ClientHandlers_LifeSpanHandler_OnBeforePopup_args__isset() : bid(false), url(false), frameName(false), gesture(false) {}
+  _ClientHandlers_LifeSpanHandler_OnBeforePopup_args__isset() : bid(false), frame(false), url(false), frameName(false), gesture(false) {}
   bool bid :1;
+  bool frame :1;
   bool url :1;
   bool frameName :1;
   bool gesture :1;
@@ -1029,6 +966,7 @@ class ClientHandlers_LifeSpanHandler_OnBeforePopup_args {
 
   virtual ~ClientHandlers_LifeSpanHandler_OnBeforePopup_args() noexcept;
   int32_t bid;
+   ::thrift_codegen::RObject frame;
   std::string url;
   std::string frameName;
   bool gesture;
@@ -1036,6 +974,8 @@ class ClientHandlers_LifeSpanHandler_OnBeforePopup_args {
   _ClientHandlers_LifeSpanHandler_OnBeforePopup_args__isset __isset;
 
   void __set_bid(const int32_t val);
+
+  void __set_frame(const  ::thrift_codegen::RObject& val);
 
   void __set_url(const std::string& val);
 
@@ -1046,6 +986,8 @@ class ClientHandlers_LifeSpanHandler_OnBeforePopup_args {
   bool operator == (const ClientHandlers_LifeSpanHandler_OnBeforePopup_args & rhs) const
   {
     if (!(bid == rhs.bid))
+      return false;
+    if (!(frame == rhs.frame))
       return false;
     if (!(url == rhs.url))
       return false;
@@ -1073,6 +1015,7 @@ class ClientHandlers_LifeSpanHandler_OnBeforePopup_pargs {
 
   virtual ~ClientHandlers_LifeSpanHandler_OnBeforePopup_pargs() noexcept;
   const int32_t* bid;
+  const  ::thrift_codegen::RObject* frame;
   const std::string* url;
   const std::string* frameName;
   const bool* gesture;
@@ -1138,8 +1081,9 @@ class ClientHandlers_LifeSpanHandler_OnBeforePopup_presult {
 };
 
 typedef struct _ClientHandlers_LifeSpanHandler_OnAfterCreated_args__isset {
-  _ClientHandlers_LifeSpanHandler_OnAfterCreated_args__isset() : bid(false) {}
+  _ClientHandlers_LifeSpanHandler_OnAfterCreated_args__isset() : bid(false), nativeBrowserIdentifier(false) {}
   bool bid :1;
+  bool nativeBrowserIdentifier :1;
 } _ClientHandlers_LifeSpanHandler_OnAfterCreated_args__isset;
 
 class ClientHandlers_LifeSpanHandler_OnAfterCreated_args {
@@ -1148,19 +1092,25 @@ class ClientHandlers_LifeSpanHandler_OnAfterCreated_args {
   ClientHandlers_LifeSpanHandler_OnAfterCreated_args(const ClientHandlers_LifeSpanHandler_OnAfterCreated_args&) noexcept;
   ClientHandlers_LifeSpanHandler_OnAfterCreated_args& operator=(const ClientHandlers_LifeSpanHandler_OnAfterCreated_args&) noexcept;
   ClientHandlers_LifeSpanHandler_OnAfterCreated_args() noexcept
-                                                     : bid(0) {
+                                                     : bid(0),
+                                                       nativeBrowserIdentifier(0) {
   }
 
   virtual ~ClientHandlers_LifeSpanHandler_OnAfterCreated_args() noexcept;
   int32_t bid;
+  int32_t nativeBrowserIdentifier;
 
   _ClientHandlers_LifeSpanHandler_OnAfterCreated_args__isset __isset;
 
   void __set_bid(const int32_t val);
 
+  void __set_nativeBrowserIdentifier(const int32_t val);
+
   bool operator == (const ClientHandlers_LifeSpanHandler_OnAfterCreated_args & rhs) const
   {
     if (!(bid == rhs.bid))
+      return false;
+    if (!(nativeBrowserIdentifier == rhs.nativeBrowserIdentifier))
       return false;
     return true;
   }
@@ -1182,6 +1132,7 @@ class ClientHandlers_LifeSpanHandler_OnAfterCreated_pargs {
 
   virtual ~ClientHandlers_LifeSpanHandler_OnAfterCreated_pargs() noexcept;
   const int32_t* bid;
+  const int32_t* nativeBrowserIdentifier;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -1418,16 +1369,17 @@ class ClientHandlers_LoadHandler_OnLoadingStateChange_pargs {
 };
 
 typedef struct _ClientHandlers_LoadHandler_OnLoadStart_args__isset {
-  _ClientHandlers_LoadHandler_OnLoadStart_args__isset() : bid(false), transition_type(false) {}
+  _ClientHandlers_LoadHandler_OnLoadStart_args__isset() : bid(false), frame(false), transition_type(false) {}
   bool bid :1;
+  bool frame :1;
   bool transition_type :1;
 } _ClientHandlers_LoadHandler_OnLoadStart_args__isset;
 
 class ClientHandlers_LoadHandler_OnLoadStart_args {
  public:
 
-  ClientHandlers_LoadHandler_OnLoadStart_args(const ClientHandlers_LoadHandler_OnLoadStart_args&) noexcept;
-  ClientHandlers_LoadHandler_OnLoadStart_args& operator=(const ClientHandlers_LoadHandler_OnLoadStart_args&) noexcept;
+  ClientHandlers_LoadHandler_OnLoadStart_args(const ClientHandlers_LoadHandler_OnLoadStart_args&);
+  ClientHandlers_LoadHandler_OnLoadStart_args& operator=(const ClientHandlers_LoadHandler_OnLoadStart_args&);
   ClientHandlers_LoadHandler_OnLoadStart_args() noexcept
                                               : bid(0),
                                                 transition_type(0) {
@@ -1435,17 +1387,22 @@ class ClientHandlers_LoadHandler_OnLoadStart_args {
 
   virtual ~ClientHandlers_LoadHandler_OnLoadStart_args() noexcept;
   int32_t bid;
+   ::thrift_codegen::RObject frame;
   int32_t transition_type;
 
   _ClientHandlers_LoadHandler_OnLoadStart_args__isset __isset;
 
   void __set_bid(const int32_t val);
 
+  void __set_frame(const  ::thrift_codegen::RObject& val);
+
   void __set_transition_type(const int32_t val);
 
   bool operator == (const ClientHandlers_LoadHandler_OnLoadStart_args & rhs) const
   {
     if (!(bid == rhs.bid))
+      return false;
+    if (!(frame == rhs.frame))
       return false;
     if (!(transition_type == rhs.transition_type))
       return false;
@@ -1469,6 +1426,7 @@ class ClientHandlers_LoadHandler_OnLoadStart_pargs {
 
   virtual ~ClientHandlers_LoadHandler_OnLoadStart_pargs() noexcept;
   const int32_t* bid;
+  const  ::thrift_codegen::RObject* frame;
   const int32_t* transition_type;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -1476,16 +1434,17 @@ class ClientHandlers_LoadHandler_OnLoadStart_pargs {
 };
 
 typedef struct _ClientHandlers_LoadHandler_OnLoadEnd_args__isset {
-  _ClientHandlers_LoadHandler_OnLoadEnd_args__isset() : bid(false), httpStatusCode(false) {}
+  _ClientHandlers_LoadHandler_OnLoadEnd_args__isset() : bid(false), frame(false), httpStatusCode(false) {}
   bool bid :1;
+  bool frame :1;
   bool httpStatusCode :1;
 } _ClientHandlers_LoadHandler_OnLoadEnd_args__isset;
 
 class ClientHandlers_LoadHandler_OnLoadEnd_args {
  public:
 
-  ClientHandlers_LoadHandler_OnLoadEnd_args(const ClientHandlers_LoadHandler_OnLoadEnd_args&) noexcept;
-  ClientHandlers_LoadHandler_OnLoadEnd_args& operator=(const ClientHandlers_LoadHandler_OnLoadEnd_args&) noexcept;
+  ClientHandlers_LoadHandler_OnLoadEnd_args(const ClientHandlers_LoadHandler_OnLoadEnd_args&);
+  ClientHandlers_LoadHandler_OnLoadEnd_args& operator=(const ClientHandlers_LoadHandler_OnLoadEnd_args&);
   ClientHandlers_LoadHandler_OnLoadEnd_args() noexcept
                                             : bid(0),
                                               httpStatusCode(0) {
@@ -1493,17 +1452,22 @@ class ClientHandlers_LoadHandler_OnLoadEnd_args {
 
   virtual ~ClientHandlers_LoadHandler_OnLoadEnd_args() noexcept;
   int32_t bid;
+   ::thrift_codegen::RObject frame;
   int32_t httpStatusCode;
 
   _ClientHandlers_LoadHandler_OnLoadEnd_args__isset __isset;
 
   void __set_bid(const int32_t val);
 
+  void __set_frame(const  ::thrift_codegen::RObject& val);
+
   void __set_httpStatusCode(const int32_t val);
 
   bool operator == (const ClientHandlers_LoadHandler_OnLoadEnd_args & rhs) const
   {
     if (!(bid == rhs.bid))
+      return false;
+    if (!(frame == rhs.frame))
       return false;
     if (!(httpStatusCode == rhs.httpStatusCode))
       return false;
@@ -1527,6 +1491,7 @@ class ClientHandlers_LoadHandler_OnLoadEnd_pargs {
 
   virtual ~ClientHandlers_LoadHandler_OnLoadEnd_pargs() noexcept;
   const int32_t* bid;
+  const  ::thrift_codegen::RObject* frame;
   const int32_t* httpStatusCode;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -1534,8 +1499,9 @@ class ClientHandlers_LoadHandler_OnLoadEnd_pargs {
 };
 
 typedef struct _ClientHandlers_LoadHandler_OnLoadError_args__isset {
-  _ClientHandlers_LoadHandler_OnLoadError_args__isset() : bid(false), errorCode(false), errorText(false), failedUrl(false) {}
+  _ClientHandlers_LoadHandler_OnLoadError_args__isset() : bid(false), frame(false), errorCode(false), errorText(false), failedUrl(false) {}
   bool bid :1;
+  bool frame :1;
   bool errorCode :1;
   bool errorText :1;
   bool failedUrl :1;
@@ -1555,6 +1521,7 @@ class ClientHandlers_LoadHandler_OnLoadError_args {
 
   virtual ~ClientHandlers_LoadHandler_OnLoadError_args() noexcept;
   int32_t bid;
+   ::thrift_codegen::RObject frame;
   int32_t errorCode;
   std::string errorText;
   std::string failedUrl;
@@ -1562,6 +1529,8 @@ class ClientHandlers_LoadHandler_OnLoadError_args {
   _ClientHandlers_LoadHandler_OnLoadError_args__isset __isset;
 
   void __set_bid(const int32_t val);
+
+  void __set_frame(const  ::thrift_codegen::RObject& val);
 
   void __set_errorCode(const int32_t val);
 
@@ -1572,6 +1541,8 @@ class ClientHandlers_LoadHandler_OnLoadError_args {
   bool operator == (const ClientHandlers_LoadHandler_OnLoadError_args & rhs) const
   {
     if (!(bid == rhs.bid))
+      return false;
+    if (!(frame == rhs.frame))
       return false;
     if (!(errorCode == rhs.errorCode))
       return false;
@@ -1599,6 +1570,7 @@ class ClientHandlers_LoadHandler_OnLoadError_pargs {
 
   virtual ~ClientHandlers_LoadHandler_OnLoadError_pargs() noexcept;
   const int32_t* bid;
+  const  ::thrift_codegen::RObject* frame;
   const int32_t* errorCode;
   const std::string* errorText;
   const std::string* failedUrl;
@@ -1608,8 +1580,9 @@ class ClientHandlers_LoadHandler_OnLoadError_pargs {
 };
 
 typedef struct _ClientHandlers_DisplayHandler_OnAddressChange_args__isset {
-  _ClientHandlers_DisplayHandler_OnAddressChange_args__isset() : bid(false), url(false) {}
+  _ClientHandlers_DisplayHandler_OnAddressChange_args__isset() : bid(false), frame(false), url(false) {}
   bool bid :1;
+  bool frame :1;
   bool url :1;
 } _ClientHandlers_DisplayHandler_OnAddressChange_args__isset;
 
@@ -1625,17 +1598,22 @@ class ClientHandlers_DisplayHandler_OnAddressChange_args {
 
   virtual ~ClientHandlers_DisplayHandler_OnAddressChange_args() noexcept;
   int32_t bid;
+   ::thrift_codegen::RObject frame;
   std::string url;
 
   _ClientHandlers_DisplayHandler_OnAddressChange_args__isset __isset;
 
   void __set_bid(const int32_t val);
 
+  void __set_frame(const  ::thrift_codegen::RObject& val);
+
   void __set_url(const std::string& val);
 
   bool operator == (const ClientHandlers_DisplayHandler_OnAddressChange_args & rhs) const
   {
     if (!(bid == rhs.bid))
+      return false;
+    if (!(frame == rhs.frame))
       return false;
     if (!(url == rhs.url))
       return false;
@@ -1659,6 +1637,7 @@ class ClientHandlers_DisplayHandler_OnAddressChange_pargs {
 
   virtual ~ClientHandlers_DisplayHandler_OnAddressChange_pargs() noexcept;
   const int32_t* bid;
+  const  ::thrift_codegen::RObject* frame;
   const std::string* url;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -2033,9 +2012,458 @@ class ClientHandlers_DisplayHandler_OnConsoleMessage_presult {
 
 };
 
-typedef struct _ClientHandlers_RequestHandler_OnBeforeBrowse_args__isset {
-  _ClientHandlers_RequestHandler_OnBeforeBrowse_args__isset() : bid(false), request(false), user_gesture(false), is_redirect(false) {}
+typedef struct _ClientHandlers_KeyboardHandler_OnPreKeyEvent_args__isset {
+  _ClientHandlers_KeyboardHandler_OnPreKeyEvent_args__isset() : bid(false), event(false) {}
   bool bid :1;
+  bool event :1;
+} _ClientHandlers_KeyboardHandler_OnPreKeyEvent_args__isset;
+
+class ClientHandlers_KeyboardHandler_OnPreKeyEvent_args {
+ public:
+
+  ClientHandlers_KeyboardHandler_OnPreKeyEvent_args(const ClientHandlers_KeyboardHandler_OnPreKeyEvent_args&);
+  ClientHandlers_KeyboardHandler_OnPreKeyEvent_args& operator=(const ClientHandlers_KeyboardHandler_OnPreKeyEvent_args&);
+  ClientHandlers_KeyboardHandler_OnPreKeyEvent_args() noexcept
+                                                    : bid(0) {
+  }
+
+  virtual ~ClientHandlers_KeyboardHandler_OnPreKeyEvent_args() noexcept;
+  int32_t bid;
+   ::thrift_codegen::KeyEvent event;
+
+  _ClientHandlers_KeyboardHandler_OnPreKeyEvent_args__isset __isset;
+
+  void __set_bid(const int32_t val);
+
+  void __set_event(const  ::thrift_codegen::KeyEvent& val);
+
+  bool operator == (const ClientHandlers_KeyboardHandler_OnPreKeyEvent_args & rhs) const
+  {
+    if (!(bid == rhs.bid))
+      return false;
+    if (!(event == rhs.event))
+      return false;
+    return true;
+  }
+  bool operator != (const ClientHandlers_KeyboardHandler_OnPreKeyEvent_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ClientHandlers_KeyboardHandler_OnPreKeyEvent_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class ClientHandlers_KeyboardHandler_OnPreKeyEvent_pargs {
+ public:
+
+
+  virtual ~ClientHandlers_KeyboardHandler_OnPreKeyEvent_pargs() noexcept;
+  const int32_t* bid;
+  const  ::thrift_codegen::KeyEvent* event;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ClientHandlers_KeyboardHandler_OnPreKeyEvent_result__isset {
+  _ClientHandlers_KeyboardHandler_OnPreKeyEvent_result__isset() : success(false) {}
+  bool success :1;
+} _ClientHandlers_KeyboardHandler_OnPreKeyEvent_result__isset;
+
+class ClientHandlers_KeyboardHandler_OnPreKeyEvent_result {
+ public:
+
+  ClientHandlers_KeyboardHandler_OnPreKeyEvent_result(const ClientHandlers_KeyboardHandler_OnPreKeyEvent_result&) noexcept;
+  ClientHandlers_KeyboardHandler_OnPreKeyEvent_result& operator=(const ClientHandlers_KeyboardHandler_OnPreKeyEvent_result&) noexcept;
+  ClientHandlers_KeyboardHandler_OnPreKeyEvent_result() noexcept
+                                                      : success(0) {
+  }
+
+  virtual ~ClientHandlers_KeyboardHandler_OnPreKeyEvent_result() noexcept;
+  bool success;
+
+  _ClientHandlers_KeyboardHandler_OnPreKeyEvent_result__isset __isset;
+
+  void __set_success(const bool val);
+
+  bool operator == (const ClientHandlers_KeyboardHandler_OnPreKeyEvent_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    return true;
+  }
+  bool operator != (const ClientHandlers_KeyboardHandler_OnPreKeyEvent_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ClientHandlers_KeyboardHandler_OnPreKeyEvent_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ClientHandlers_KeyboardHandler_OnPreKeyEvent_presult__isset {
+  _ClientHandlers_KeyboardHandler_OnPreKeyEvent_presult__isset() : success(false) {}
+  bool success :1;
+} _ClientHandlers_KeyboardHandler_OnPreKeyEvent_presult__isset;
+
+class ClientHandlers_KeyboardHandler_OnPreKeyEvent_presult {
+ public:
+
+
+  virtual ~ClientHandlers_KeyboardHandler_OnPreKeyEvent_presult() noexcept;
+  bool* success;
+
+  _ClientHandlers_KeyboardHandler_OnPreKeyEvent_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _ClientHandlers_KeyboardHandler_OnKeyEvent_args__isset {
+  _ClientHandlers_KeyboardHandler_OnKeyEvent_args__isset() : bid(false), event(false) {}
+  bool bid :1;
+  bool event :1;
+} _ClientHandlers_KeyboardHandler_OnKeyEvent_args__isset;
+
+class ClientHandlers_KeyboardHandler_OnKeyEvent_args {
+ public:
+
+  ClientHandlers_KeyboardHandler_OnKeyEvent_args(const ClientHandlers_KeyboardHandler_OnKeyEvent_args&);
+  ClientHandlers_KeyboardHandler_OnKeyEvent_args& operator=(const ClientHandlers_KeyboardHandler_OnKeyEvent_args&);
+  ClientHandlers_KeyboardHandler_OnKeyEvent_args() noexcept
+                                                 : bid(0) {
+  }
+
+  virtual ~ClientHandlers_KeyboardHandler_OnKeyEvent_args() noexcept;
+  int32_t bid;
+   ::thrift_codegen::KeyEvent event;
+
+  _ClientHandlers_KeyboardHandler_OnKeyEvent_args__isset __isset;
+
+  void __set_bid(const int32_t val);
+
+  void __set_event(const  ::thrift_codegen::KeyEvent& val);
+
+  bool operator == (const ClientHandlers_KeyboardHandler_OnKeyEvent_args & rhs) const
+  {
+    if (!(bid == rhs.bid))
+      return false;
+    if (!(event == rhs.event))
+      return false;
+    return true;
+  }
+  bool operator != (const ClientHandlers_KeyboardHandler_OnKeyEvent_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ClientHandlers_KeyboardHandler_OnKeyEvent_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class ClientHandlers_KeyboardHandler_OnKeyEvent_pargs {
+ public:
+
+
+  virtual ~ClientHandlers_KeyboardHandler_OnKeyEvent_pargs() noexcept;
+  const int32_t* bid;
+  const  ::thrift_codegen::KeyEvent* event;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ClientHandlers_KeyboardHandler_OnKeyEvent_result__isset {
+  _ClientHandlers_KeyboardHandler_OnKeyEvent_result__isset() : success(false) {}
+  bool success :1;
+} _ClientHandlers_KeyboardHandler_OnKeyEvent_result__isset;
+
+class ClientHandlers_KeyboardHandler_OnKeyEvent_result {
+ public:
+
+  ClientHandlers_KeyboardHandler_OnKeyEvent_result(const ClientHandlers_KeyboardHandler_OnKeyEvent_result&) noexcept;
+  ClientHandlers_KeyboardHandler_OnKeyEvent_result& operator=(const ClientHandlers_KeyboardHandler_OnKeyEvent_result&) noexcept;
+  ClientHandlers_KeyboardHandler_OnKeyEvent_result() noexcept
+                                                   : success(0) {
+  }
+
+  virtual ~ClientHandlers_KeyboardHandler_OnKeyEvent_result() noexcept;
+  bool success;
+
+  _ClientHandlers_KeyboardHandler_OnKeyEvent_result__isset __isset;
+
+  void __set_success(const bool val);
+
+  bool operator == (const ClientHandlers_KeyboardHandler_OnKeyEvent_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    return true;
+  }
+  bool operator != (const ClientHandlers_KeyboardHandler_OnKeyEvent_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ClientHandlers_KeyboardHandler_OnKeyEvent_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ClientHandlers_KeyboardHandler_OnKeyEvent_presult__isset {
+  _ClientHandlers_KeyboardHandler_OnKeyEvent_presult__isset() : success(false) {}
+  bool success :1;
+} _ClientHandlers_KeyboardHandler_OnKeyEvent_presult__isset;
+
+class ClientHandlers_KeyboardHandler_OnKeyEvent_presult {
+ public:
+
+
+  virtual ~ClientHandlers_KeyboardHandler_OnKeyEvent_presult() noexcept;
+  bool* success;
+
+  _ClientHandlers_KeyboardHandler_OnKeyEvent_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _ClientHandlers_FocusHandler_OnTakeFocus_args__isset {
+  _ClientHandlers_FocusHandler_OnTakeFocus_args__isset() : bid(false), next(false) {}
+  bool bid :1;
+  bool next :1;
+} _ClientHandlers_FocusHandler_OnTakeFocus_args__isset;
+
+class ClientHandlers_FocusHandler_OnTakeFocus_args {
+ public:
+
+  ClientHandlers_FocusHandler_OnTakeFocus_args(const ClientHandlers_FocusHandler_OnTakeFocus_args&) noexcept;
+  ClientHandlers_FocusHandler_OnTakeFocus_args& operator=(const ClientHandlers_FocusHandler_OnTakeFocus_args&) noexcept;
+  ClientHandlers_FocusHandler_OnTakeFocus_args() noexcept
+                                               : bid(0),
+                                                 next(0) {
+  }
+
+  virtual ~ClientHandlers_FocusHandler_OnTakeFocus_args() noexcept;
+  int32_t bid;
+  bool next;
+
+  _ClientHandlers_FocusHandler_OnTakeFocus_args__isset __isset;
+
+  void __set_bid(const int32_t val);
+
+  void __set_next(const bool val);
+
+  bool operator == (const ClientHandlers_FocusHandler_OnTakeFocus_args & rhs) const
+  {
+    if (!(bid == rhs.bid))
+      return false;
+    if (!(next == rhs.next))
+      return false;
+    return true;
+  }
+  bool operator != (const ClientHandlers_FocusHandler_OnTakeFocus_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ClientHandlers_FocusHandler_OnTakeFocus_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class ClientHandlers_FocusHandler_OnTakeFocus_pargs {
+ public:
+
+
+  virtual ~ClientHandlers_FocusHandler_OnTakeFocus_pargs() noexcept;
+  const int32_t* bid;
+  const bool* next;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ClientHandlers_FocusHandler_OnSetFocus_args__isset {
+  _ClientHandlers_FocusHandler_OnSetFocus_args__isset() : bid(false), source(false) {}
+  bool bid :1;
+  bool source :1;
+} _ClientHandlers_FocusHandler_OnSetFocus_args__isset;
+
+class ClientHandlers_FocusHandler_OnSetFocus_args {
+ public:
+
+  ClientHandlers_FocusHandler_OnSetFocus_args(const ClientHandlers_FocusHandler_OnSetFocus_args&);
+  ClientHandlers_FocusHandler_OnSetFocus_args& operator=(const ClientHandlers_FocusHandler_OnSetFocus_args&);
+  ClientHandlers_FocusHandler_OnSetFocus_args() noexcept
+                                              : bid(0),
+                                                source() {
+  }
+
+  virtual ~ClientHandlers_FocusHandler_OnSetFocus_args() noexcept;
+  int32_t bid;
+  std::string source;
+
+  _ClientHandlers_FocusHandler_OnSetFocus_args__isset __isset;
+
+  void __set_bid(const int32_t val);
+
+  void __set_source(const std::string& val);
+
+  bool operator == (const ClientHandlers_FocusHandler_OnSetFocus_args & rhs) const
+  {
+    if (!(bid == rhs.bid))
+      return false;
+    if (!(source == rhs.source))
+      return false;
+    return true;
+  }
+  bool operator != (const ClientHandlers_FocusHandler_OnSetFocus_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ClientHandlers_FocusHandler_OnSetFocus_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class ClientHandlers_FocusHandler_OnSetFocus_pargs {
+ public:
+
+
+  virtual ~ClientHandlers_FocusHandler_OnSetFocus_pargs() noexcept;
+  const int32_t* bid;
+  const std::string* source;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ClientHandlers_FocusHandler_OnSetFocus_result__isset {
+  _ClientHandlers_FocusHandler_OnSetFocus_result__isset() : success(false) {}
+  bool success :1;
+} _ClientHandlers_FocusHandler_OnSetFocus_result__isset;
+
+class ClientHandlers_FocusHandler_OnSetFocus_result {
+ public:
+
+  ClientHandlers_FocusHandler_OnSetFocus_result(const ClientHandlers_FocusHandler_OnSetFocus_result&) noexcept;
+  ClientHandlers_FocusHandler_OnSetFocus_result& operator=(const ClientHandlers_FocusHandler_OnSetFocus_result&) noexcept;
+  ClientHandlers_FocusHandler_OnSetFocus_result() noexcept
+                                                : success(0) {
+  }
+
+  virtual ~ClientHandlers_FocusHandler_OnSetFocus_result() noexcept;
+  bool success;
+
+  _ClientHandlers_FocusHandler_OnSetFocus_result__isset __isset;
+
+  void __set_success(const bool val);
+
+  bool operator == (const ClientHandlers_FocusHandler_OnSetFocus_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    return true;
+  }
+  bool operator != (const ClientHandlers_FocusHandler_OnSetFocus_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ClientHandlers_FocusHandler_OnSetFocus_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ClientHandlers_FocusHandler_OnSetFocus_presult__isset {
+  _ClientHandlers_FocusHandler_OnSetFocus_presult__isset() : success(false) {}
+  bool success :1;
+} _ClientHandlers_FocusHandler_OnSetFocus_presult__isset;
+
+class ClientHandlers_FocusHandler_OnSetFocus_presult {
+ public:
+
+
+  virtual ~ClientHandlers_FocusHandler_OnSetFocus_presult() noexcept;
+  bool* success;
+
+  _ClientHandlers_FocusHandler_OnSetFocus_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _ClientHandlers_FocusHandler_OnGotFocus_args__isset {
+  _ClientHandlers_FocusHandler_OnGotFocus_args__isset() : bid(false) {}
+  bool bid :1;
+} _ClientHandlers_FocusHandler_OnGotFocus_args__isset;
+
+class ClientHandlers_FocusHandler_OnGotFocus_args {
+ public:
+
+  ClientHandlers_FocusHandler_OnGotFocus_args(const ClientHandlers_FocusHandler_OnGotFocus_args&) noexcept;
+  ClientHandlers_FocusHandler_OnGotFocus_args& operator=(const ClientHandlers_FocusHandler_OnGotFocus_args&) noexcept;
+  ClientHandlers_FocusHandler_OnGotFocus_args() noexcept
+                                              : bid(0) {
+  }
+
+  virtual ~ClientHandlers_FocusHandler_OnGotFocus_args() noexcept;
+  int32_t bid;
+
+  _ClientHandlers_FocusHandler_OnGotFocus_args__isset __isset;
+
+  void __set_bid(const int32_t val);
+
+  bool operator == (const ClientHandlers_FocusHandler_OnGotFocus_args & rhs) const
+  {
+    if (!(bid == rhs.bid))
+      return false;
+    return true;
+  }
+  bool operator != (const ClientHandlers_FocusHandler_OnGotFocus_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ClientHandlers_FocusHandler_OnGotFocus_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class ClientHandlers_FocusHandler_OnGotFocus_pargs {
+ public:
+
+
+  virtual ~ClientHandlers_FocusHandler_OnGotFocus_pargs() noexcept;
+  const int32_t* bid;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ClientHandlers_RequestHandler_OnBeforeBrowse_args__isset {
+  _ClientHandlers_RequestHandler_OnBeforeBrowse_args__isset() : bid(false), frame(false), request(false), user_gesture(false), is_redirect(false) {}
+  bool bid :1;
+  bool frame :1;
   bool request :1;
   bool user_gesture :1;
   bool is_redirect :1;
@@ -2054,6 +2482,7 @@ class ClientHandlers_RequestHandler_OnBeforeBrowse_args {
 
   virtual ~ClientHandlers_RequestHandler_OnBeforeBrowse_args() noexcept;
   int32_t bid;
+   ::thrift_codegen::RObject frame;
    ::thrift_codegen::RObject request;
   bool user_gesture;
   bool is_redirect;
@@ -2061,6 +2490,8 @@ class ClientHandlers_RequestHandler_OnBeforeBrowse_args {
   _ClientHandlers_RequestHandler_OnBeforeBrowse_args__isset __isset;
 
   void __set_bid(const int32_t val);
+
+  void __set_frame(const  ::thrift_codegen::RObject& val);
 
   void __set_request(const  ::thrift_codegen::RObject& val);
 
@@ -2071,6 +2502,8 @@ class ClientHandlers_RequestHandler_OnBeforeBrowse_args {
   bool operator == (const ClientHandlers_RequestHandler_OnBeforeBrowse_args & rhs) const
   {
     if (!(bid == rhs.bid))
+      return false;
+    if (!(frame == rhs.frame))
       return false;
     if (!(request == rhs.request))
       return false;
@@ -2098,6 +2531,7 @@ class ClientHandlers_RequestHandler_OnBeforeBrowse_pargs {
 
   virtual ~ClientHandlers_RequestHandler_OnBeforeBrowse_pargs() noexcept;
   const int32_t* bid;
+  const  ::thrift_codegen::RObject* frame;
   const  ::thrift_codegen::RObject* request;
   const bool* user_gesture;
   const bool* is_redirect;
@@ -2163,8 +2597,9 @@ class ClientHandlers_RequestHandler_OnBeforeBrowse_presult {
 };
 
 typedef struct _ClientHandlers_RequestHandler_OnOpenURLFromTab_args__isset {
-  _ClientHandlers_RequestHandler_OnOpenURLFromTab_args__isset() : bid(false), target_url(false), user_gesture(false) {}
+  _ClientHandlers_RequestHandler_OnOpenURLFromTab_args__isset() : bid(false), frame(false), target_url(false), user_gesture(false) {}
   bool bid :1;
+  bool frame :1;
   bool target_url :1;
   bool user_gesture :1;
 } _ClientHandlers_RequestHandler_OnOpenURLFromTab_args__isset;
@@ -2182,12 +2617,15 @@ class ClientHandlers_RequestHandler_OnOpenURLFromTab_args {
 
   virtual ~ClientHandlers_RequestHandler_OnOpenURLFromTab_args() noexcept;
   int32_t bid;
+   ::thrift_codegen::RObject frame;
   std::string target_url;
   bool user_gesture;
 
   _ClientHandlers_RequestHandler_OnOpenURLFromTab_args__isset __isset;
 
   void __set_bid(const int32_t val);
+
+  void __set_frame(const  ::thrift_codegen::RObject& val);
 
   void __set_target_url(const std::string& val);
 
@@ -2196,6 +2634,8 @@ class ClientHandlers_RequestHandler_OnOpenURLFromTab_args {
   bool operator == (const ClientHandlers_RequestHandler_OnOpenURLFromTab_args & rhs) const
   {
     if (!(bid == rhs.bid))
+      return false;
+    if (!(frame == rhs.frame))
       return false;
     if (!(target_url == rhs.target_url))
       return false;
@@ -2221,6 +2661,7 @@ class ClientHandlers_RequestHandler_OnOpenURLFromTab_pargs {
 
   virtual ~ClientHandlers_RequestHandler_OnOpenURLFromTab_pargs() noexcept;
   const int32_t* bid;
+  const  ::thrift_codegen::RObject* frame;
   const std::string* target_url;
   const bool* user_gesture;
 
@@ -2462,14 +2903,15 @@ class ClientHandlers_RequestHandler_OnCertificateError_args {
   ClientHandlers_RequestHandler_OnCertificateError_args() noexcept
                                                         : bid(0),
                                                           cert_error(),
-                                                          request_url() {
+                                                          request_url(),
+                                                          sslInfo() {
   }
 
   virtual ~ClientHandlers_RequestHandler_OnCertificateError_args() noexcept;
   int32_t bid;
   std::string cert_error;
   std::string request_url;
-   ::thrift_codegen::RObject sslInfo;
+  std::string sslInfo;
    ::thrift_codegen::RObject callback;
 
   _ClientHandlers_RequestHandler_OnCertificateError_args__isset __isset;
@@ -2480,7 +2922,7 @@ class ClientHandlers_RequestHandler_OnCertificateError_args {
 
   void __set_request_url(const std::string& val);
 
-  void __set_sslInfo(const  ::thrift_codegen::RObject& val);
+  void __set_sslInfo(const std::string& val);
 
   void __set_callback(const  ::thrift_codegen::RObject& val);
 
@@ -2518,7 +2960,7 @@ class ClientHandlers_RequestHandler_OnCertificateError_pargs {
   const int32_t* bid;
   const std::string* cert_error;
   const std::string* request_url;
-  const  ::thrift_codegen::RObject* sslInfo;
+  const std::string* sslInfo;
   const  ::thrift_codegen::RObject* callback;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -2640,8 +3082,9 @@ class ClientHandlers_RequestHandler_OnRenderProcessTerminated_pargs {
 };
 
 typedef struct _ClientHandlers_RequestHandler_GetResourceRequestHandler_args__isset {
-  _ClientHandlers_RequestHandler_GetResourceRequestHandler_args__isset() : bid(false), request(false), isNavigation(false), isDownload(false), requestInitiator(false) {}
+  _ClientHandlers_RequestHandler_GetResourceRequestHandler_args__isset() : bid(false), frame(false), request(false), isNavigation(false), isDownload(false), requestInitiator(false) {}
   bool bid :1;
+  bool frame :1;
   bool request :1;
   bool isNavigation :1;
   bool isDownload :1;
@@ -2662,6 +3105,7 @@ class ClientHandlers_RequestHandler_GetResourceRequestHandler_args {
 
   virtual ~ClientHandlers_RequestHandler_GetResourceRequestHandler_args() noexcept;
   int32_t bid;
+   ::thrift_codegen::RObject frame;
    ::thrift_codegen::RObject request;
   bool isNavigation;
   bool isDownload;
@@ -2670,6 +3114,8 @@ class ClientHandlers_RequestHandler_GetResourceRequestHandler_args {
   _ClientHandlers_RequestHandler_GetResourceRequestHandler_args__isset __isset;
 
   void __set_bid(const int32_t val);
+
+  void __set_frame(const  ::thrift_codegen::RObject& val);
 
   void __set_request(const  ::thrift_codegen::RObject& val);
 
@@ -2682,6 +3128,8 @@ class ClientHandlers_RequestHandler_GetResourceRequestHandler_args {
   bool operator == (const ClientHandlers_RequestHandler_GetResourceRequestHandler_args & rhs) const
   {
     if (!(bid == rhs.bid))
+      return false;
+    if (!(frame == rhs.frame))
       return false;
     if (!(request == rhs.request))
       return false;
@@ -2711,6 +3159,7 @@ class ClientHandlers_RequestHandler_GetResourceRequestHandler_pargs {
 
   virtual ~ClientHandlers_RequestHandler_GetResourceRequestHandler_pargs() noexcept;
   const int32_t* bid;
+  const  ::thrift_codegen::RObject* frame;
   const  ::thrift_codegen::RObject* request;
   const bool* isNavigation;
   const bool* isDownload;
@@ -2826,9 +3275,10 @@ class ClientHandlers_ResourceRequestHandler_Dispose_pargs {
 };
 
 typedef struct _ClientHandlers_ResourceRequestHandler_GetCookieAccessFilter_args__isset {
-  _ClientHandlers_ResourceRequestHandler_GetCookieAccessFilter_args__isset() : rrHandler(false), bid(false), request(false) {}
+  _ClientHandlers_ResourceRequestHandler_GetCookieAccessFilter_args__isset() : rrHandler(false), bid(false), frame(false), request(false) {}
   bool rrHandler :1;
   bool bid :1;
+  bool frame :1;
   bool request :1;
 } _ClientHandlers_ResourceRequestHandler_GetCookieAccessFilter_args__isset;
 
@@ -2845,6 +3295,7 @@ class ClientHandlers_ResourceRequestHandler_GetCookieAccessFilter_args {
   virtual ~ClientHandlers_ResourceRequestHandler_GetCookieAccessFilter_args() noexcept;
   int32_t rrHandler;
   int32_t bid;
+   ::thrift_codegen::RObject frame;
    ::thrift_codegen::RObject request;
 
   _ClientHandlers_ResourceRequestHandler_GetCookieAccessFilter_args__isset __isset;
@@ -2853,6 +3304,8 @@ class ClientHandlers_ResourceRequestHandler_GetCookieAccessFilter_args {
 
   void __set_bid(const int32_t val);
 
+  void __set_frame(const  ::thrift_codegen::RObject& val);
+
   void __set_request(const  ::thrift_codegen::RObject& val);
 
   bool operator == (const ClientHandlers_ResourceRequestHandler_GetCookieAccessFilter_args & rhs) const
@@ -2860,6 +3313,8 @@ class ClientHandlers_ResourceRequestHandler_GetCookieAccessFilter_args {
     if (!(rrHandler == rhs.rrHandler))
       return false;
     if (!(bid == rhs.bid))
+      return false;
+    if (!(frame == rhs.frame))
       return false;
     if (!(request == rhs.request))
       return false;
@@ -2884,6 +3339,7 @@ class ClientHandlers_ResourceRequestHandler_GetCookieAccessFilter_pargs {
   virtual ~ClientHandlers_ResourceRequestHandler_GetCookieAccessFilter_pargs() noexcept;
   const int32_t* rrHandler;
   const int32_t* bid;
+  const  ::thrift_codegen::RObject* frame;
   const  ::thrift_codegen::RObject* request;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -2996,9 +3452,10 @@ class ClientHandlers_CookieAccessFilter_Dispose_pargs {
 };
 
 typedef struct _ClientHandlers_CookieAccessFilter_CanSendCookie_args__isset {
-  _ClientHandlers_CookieAccessFilter_CanSendCookie_args__isset() : filter(false), bid(false), request(false), cookie(false) {}
+  _ClientHandlers_CookieAccessFilter_CanSendCookie_args__isset() : filter(false), bid(false), frame(false), request(false), cookie(false) {}
   bool filter :1;
   bool bid :1;
+  bool frame :1;
   bool request :1;
   bool cookie :1;
 } _ClientHandlers_CookieAccessFilter_CanSendCookie_args__isset;
@@ -3016,6 +3473,7 @@ class ClientHandlers_CookieAccessFilter_CanSendCookie_args {
   virtual ~ClientHandlers_CookieAccessFilter_CanSendCookie_args() noexcept;
   int32_t filter;
   int32_t bid;
+   ::thrift_codegen::RObject frame;
    ::thrift_codegen::RObject request;
   std::vector<std::string>  cookie;
 
@@ -3024,6 +3482,8 @@ class ClientHandlers_CookieAccessFilter_CanSendCookie_args {
   void __set_filter(const int32_t val);
 
   void __set_bid(const int32_t val);
+
+  void __set_frame(const  ::thrift_codegen::RObject& val);
 
   void __set_request(const  ::thrift_codegen::RObject& val);
 
@@ -3034,6 +3494,8 @@ class ClientHandlers_CookieAccessFilter_CanSendCookie_args {
     if (!(filter == rhs.filter))
       return false;
     if (!(bid == rhs.bid))
+      return false;
+    if (!(frame == rhs.frame))
       return false;
     if (!(request == rhs.request))
       return false;
@@ -3060,6 +3522,7 @@ class ClientHandlers_CookieAccessFilter_CanSendCookie_pargs {
   virtual ~ClientHandlers_CookieAccessFilter_CanSendCookie_pargs() noexcept;
   const int32_t* filter;
   const int32_t* bid;
+  const  ::thrift_codegen::RObject* frame;
   const  ::thrift_codegen::RObject* request;
   const std::vector<std::string> * cookie;
 
@@ -3124,9 +3587,10 @@ class ClientHandlers_CookieAccessFilter_CanSendCookie_presult {
 };
 
 typedef struct _ClientHandlers_CookieAccessFilter_CanSaveCookie_args__isset {
-  _ClientHandlers_CookieAccessFilter_CanSaveCookie_args__isset() : filter(false), bid(false), request(false), response(false), cookie(false) {}
+  _ClientHandlers_CookieAccessFilter_CanSaveCookie_args__isset() : filter(false), bid(false), frame(false), request(false), response(false), cookie(false) {}
   bool filter :1;
   bool bid :1;
+  bool frame :1;
   bool request :1;
   bool response :1;
   bool cookie :1;
@@ -3145,6 +3609,7 @@ class ClientHandlers_CookieAccessFilter_CanSaveCookie_args {
   virtual ~ClientHandlers_CookieAccessFilter_CanSaveCookie_args() noexcept;
   int32_t filter;
   int32_t bid;
+   ::thrift_codegen::RObject frame;
    ::thrift_codegen::RObject request;
    ::thrift_codegen::RObject response;
   std::vector<std::string>  cookie;
@@ -3154,6 +3619,8 @@ class ClientHandlers_CookieAccessFilter_CanSaveCookie_args {
   void __set_filter(const int32_t val);
 
   void __set_bid(const int32_t val);
+
+  void __set_frame(const  ::thrift_codegen::RObject& val);
 
   void __set_request(const  ::thrift_codegen::RObject& val);
 
@@ -3166,6 +3633,8 @@ class ClientHandlers_CookieAccessFilter_CanSaveCookie_args {
     if (!(filter == rhs.filter))
       return false;
     if (!(bid == rhs.bid))
+      return false;
+    if (!(frame == rhs.frame))
       return false;
     if (!(request == rhs.request))
       return false;
@@ -3194,6 +3663,7 @@ class ClientHandlers_CookieAccessFilter_CanSaveCookie_pargs {
   virtual ~ClientHandlers_CookieAccessFilter_CanSaveCookie_pargs() noexcept;
   const int32_t* filter;
   const int32_t* bid;
+  const  ::thrift_codegen::RObject* frame;
   const  ::thrift_codegen::RObject* request;
   const  ::thrift_codegen::RObject* response;
   const std::vector<std::string> * cookie;
@@ -3259,9 +3729,10 @@ class ClientHandlers_CookieAccessFilter_CanSaveCookie_presult {
 };
 
 typedef struct _ClientHandlers_ResourceRequestHandler_OnBeforeResourceLoad_args__isset {
-  _ClientHandlers_ResourceRequestHandler_OnBeforeResourceLoad_args__isset() : rrHandler(false), bid(false), request(false) {}
+  _ClientHandlers_ResourceRequestHandler_OnBeforeResourceLoad_args__isset() : rrHandler(false), bid(false), frame(false), request(false) {}
   bool rrHandler :1;
   bool bid :1;
+  bool frame :1;
   bool request :1;
 } _ClientHandlers_ResourceRequestHandler_OnBeforeResourceLoad_args__isset;
 
@@ -3278,6 +3749,7 @@ class ClientHandlers_ResourceRequestHandler_OnBeforeResourceLoad_args {
   virtual ~ClientHandlers_ResourceRequestHandler_OnBeforeResourceLoad_args() noexcept;
   int32_t rrHandler;
   int32_t bid;
+   ::thrift_codegen::RObject frame;
    ::thrift_codegen::RObject request;
 
   _ClientHandlers_ResourceRequestHandler_OnBeforeResourceLoad_args__isset __isset;
@@ -3286,6 +3758,8 @@ class ClientHandlers_ResourceRequestHandler_OnBeforeResourceLoad_args {
 
   void __set_bid(const int32_t val);
 
+  void __set_frame(const  ::thrift_codegen::RObject& val);
+
   void __set_request(const  ::thrift_codegen::RObject& val);
 
   bool operator == (const ClientHandlers_ResourceRequestHandler_OnBeforeResourceLoad_args & rhs) const
@@ -3293,6 +3767,8 @@ class ClientHandlers_ResourceRequestHandler_OnBeforeResourceLoad_args {
     if (!(rrHandler == rhs.rrHandler))
       return false;
     if (!(bid == rhs.bid))
+      return false;
+    if (!(frame == rhs.frame))
       return false;
     if (!(request == rhs.request))
       return false;
@@ -3317,6 +3793,7 @@ class ClientHandlers_ResourceRequestHandler_OnBeforeResourceLoad_pargs {
   virtual ~ClientHandlers_ResourceRequestHandler_OnBeforeResourceLoad_pargs() noexcept;
   const int32_t* rrHandler;
   const int32_t* bid;
+  const  ::thrift_codegen::RObject* frame;
   const  ::thrift_codegen::RObject* request;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -3380,9 +3857,10 @@ class ClientHandlers_ResourceRequestHandler_OnBeforeResourceLoad_presult {
 };
 
 typedef struct _ClientHandlers_ResourceRequestHandler_GetResourceHandler_args__isset {
-  _ClientHandlers_ResourceRequestHandler_GetResourceHandler_args__isset() : rrHandler(false), bid(false), request(false) {}
+  _ClientHandlers_ResourceRequestHandler_GetResourceHandler_args__isset() : rrHandler(false), bid(false), frame(false), request(false) {}
   bool rrHandler :1;
   bool bid :1;
+  bool frame :1;
   bool request :1;
 } _ClientHandlers_ResourceRequestHandler_GetResourceHandler_args__isset;
 
@@ -3399,6 +3877,7 @@ class ClientHandlers_ResourceRequestHandler_GetResourceHandler_args {
   virtual ~ClientHandlers_ResourceRequestHandler_GetResourceHandler_args() noexcept;
   int32_t rrHandler;
   int32_t bid;
+   ::thrift_codegen::RObject frame;
    ::thrift_codegen::RObject request;
 
   _ClientHandlers_ResourceRequestHandler_GetResourceHandler_args__isset __isset;
@@ -3407,6 +3886,8 @@ class ClientHandlers_ResourceRequestHandler_GetResourceHandler_args {
 
   void __set_bid(const int32_t val);
 
+  void __set_frame(const  ::thrift_codegen::RObject& val);
+
   void __set_request(const  ::thrift_codegen::RObject& val);
 
   bool operator == (const ClientHandlers_ResourceRequestHandler_GetResourceHandler_args & rhs) const
@@ -3414,6 +3895,8 @@ class ClientHandlers_ResourceRequestHandler_GetResourceHandler_args {
     if (!(rrHandler == rhs.rrHandler))
       return false;
     if (!(bid == rhs.bid))
+      return false;
+    if (!(frame == rhs.frame))
       return false;
     if (!(request == rhs.request))
       return false;
@@ -3438,6 +3921,7 @@ class ClientHandlers_ResourceRequestHandler_GetResourceHandler_pargs {
   virtual ~ClientHandlers_ResourceRequestHandler_GetResourceHandler_pargs() noexcept;
   const int32_t* rrHandler;
   const int32_t* bid;
+  const  ::thrift_codegen::RObject* frame;
   const  ::thrift_codegen::RObject* request;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -3549,10 +4033,413 @@ class ClientHandlers_ResourceHandler_Dispose_pargs {
 
 };
 
+typedef struct _ClientHandlers_ResourceHandler_ProcessRequest_args__isset {
+  _ClientHandlers_ResourceHandler_ProcessRequest_args__isset() : resourceHandler(false), request(false), callback(false) {}
+  bool resourceHandler :1;
+  bool request :1;
+  bool callback :1;
+} _ClientHandlers_ResourceHandler_ProcessRequest_args__isset;
+
+class ClientHandlers_ResourceHandler_ProcessRequest_args {
+ public:
+
+  ClientHandlers_ResourceHandler_ProcessRequest_args(const ClientHandlers_ResourceHandler_ProcessRequest_args&);
+  ClientHandlers_ResourceHandler_ProcessRequest_args& operator=(const ClientHandlers_ResourceHandler_ProcessRequest_args&);
+  ClientHandlers_ResourceHandler_ProcessRequest_args() noexcept
+                                                     : resourceHandler(0) {
+  }
+
+  virtual ~ClientHandlers_ResourceHandler_ProcessRequest_args() noexcept;
+  int32_t resourceHandler;
+   ::thrift_codegen::RObject request;
+   ::thrift_codegen::RObject callback;
+
+  _ClientHandlers_ResourceHandler_ProcessRequest_args__isset __isset;
+
+  void __set_resourceHandler(const int32_t val);
+
+  void __set_request(const  ::thrift_codegen::RObject& val);
+
+  void __set_callback(const  ::thrift_codegen::RObject& val);
+
+  bool operator == (const ClientHandlers_ResourceHandler_ProcessRequest_args & rhs) const
+  {
+    if (!(resourceHandler == rhs.resourceHandler))
+      return false;
+    if (!(request == rhs.request))
+      return false;
+    if (!(callback == rhs.callback))
+      return false;
+    return true;
+  }
+  bool operator != (const ClientHandlers_ResourceHandler_ProcessRequest_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ClientHandlers_ResourceHandler_ProcessRequest_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class ClientHandlers_ResourceHandler_ProcessRequest_pargs {
+ public:
+
+
+  virtual ~ClientHandlers_ResourceHandler_ProcessRequest_pargs() noexcept;
+  const int32_t* resourceHandler;
+  const  ::thrift_codegen::RObject* request;
+  const  ::thrift_codegen::RObject* callback;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ClientHandlers_ResourceHandler_ProcessRequest_result__isset {
+  _ClientHandlers_ResourceHandler_ProcessRequest_result__isset() : success(false) {}
+  bool success :1;
+} _ClientHandlers_ResourceHandler_ProcessRequest_result__isset;
+
+class ClientHandlers_ResourceHandler_ProcessRequest_result {
+ public:
+
+  ClientHandlers_ResourceHandler_ProcessRequest_result(const ClientHandlers_ResourceHandler_ProcessRequest_result&) noexcept;
+  ClientHandlers_ResourceHandler_ProcessRequest_result& operator=(const ClientHandlers_ResourceHandler_ProcessRequest_result&) noexcept;
+  ClientHandlers_ResourceHandler_ProcessRequest_result() noexcept
+                                                       : success(0) {
+  }
+
+  virtual ~ClientHandlers_ResourceHandler_ProcessRequest_result() noexcept;
+  bool success;
+
+  _ClientHandlers_ResourceHandler_ProcessRequest_result__isset __isset;
+
+  void __set_success(const bool val);
+
+  bool operator == (const ClientHandlers_ResourceHandler_ProcessRequest_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    return true;
+  }
+  bool operator != (const ClientHandlers_ResourceHandler_ProcessRequest_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ClientHandlers_ResourceHandler_ProcessRequest_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ClientHandlers_ResourceHandler_ProcessRequest_presult__isset {
+  _ClientHandlers_ResourceHandler_ProcessRequest_presult__isset() : success(false) {}
+  bool success :1;
+} _ClientHandlers_ResourceHandler_ProcessRequest_presult__isset;
+
+class ClientHandlers_ResourceHandler_ProcessRequest_presult {
+ public:
+
+
+  virtual ~ClientHandlers_ResourceHandler_ProcessRequest_presult() noexcept;
+  bool* success;
+
+  _ClientHandlers_ResourceHandler_ProcessRequest_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _ClientHandlers_ResourceHandler_GetResponseHeaders_args__isset {
+  _ClientHandlers_ResourceHandler_GetResponseHeaders_args__isset() : resourceHandler(false), response(false) {}
+  bool resourceHandler :1;
+  bool response :1;
+} _ClientHandlers_ResourceHandler_GetResponseHeaders_args__isset;
+
+class ClientHandlers_ResourceHandler_GetResponseHeaders_args {
+ public:
+
+  ClientHandlers_ResourceHandler_GetResponseHeaders_args(const ClientHandlers_ResourceHandler_GetResponseHeaders_args&);
+  ClientHandlers_ResourceHandler_GetResponseHeaders_args& operator=(const ClientHandlers_ResourceHandler_GetResponseHeaders_args&);
+  ClientHandlers_ResourceHandler_GetResponseHeaders_args() noexcept
+                                                         : resourceHandler(0) {
+  }
+
+  virtual ~ClientHandlers_ResourceHandler_GetResponseHeaders_args() noexcept;
+  int32_t resourceHandler;
+   ::thrift_codegen::RObject response;
+
+  _ClientHandlers_ResourceHandler_GetResponseHeaders_args__isset __isset;
+
+  void __set_resourceHandler(const int32_t val);
+
+  void __set_response(const  ::thrift_codegen::RObject& val);
+
+  bool operator == (const ClientHandlers_ResourceHandler_GetResponseHeaders_args & rhs) const
+  {
+    if (!(resourceHandler == rhs.resourceHandler))
+      return false;
+    if (!(response == rhs.response))
+      return false;
+    return true;
+  }
+  bool operator != (const ClientHandlers_ResourceHandler_GetResponseHeaders_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ClientHandlers_ResourceHandler_GetResponseHeaders_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class ClientHandlers_ResourceHandler_GetResponseHeaders_pargs {
+ public:
+
+
+  virtual ~ClientHandlers_ResourceHandler_GetResponseHeaders_pargs() noexcept;
+  const int32_t* resourceHandler;
+  const  ::thrift_codegen::RObject* response;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ClientHandlers_ResourceHandler_GetResponseHeaders_result__isset {
+  _ClientHandlers_ResourceHandler_GetResponseHeaders_result__isset() : success(false) {}
+  bool success :1;
+} _ClientHandlers_ResourceHandler_GetResponseHeaders_result__isset;
+
+class ClientHandlers_ResourceHandler_GetResponseHeaders_result {
+ public:
+
+  ClientHandlers_ResourceHandler_GetResponseHeaders_result(const ClientHandlers_ResourceHandler_GetResponseHeaders_result&);
+  ClientHandlers_ResourceHandler_GetResponseHeaders_result& operator=(const ClientHandlers_ResourceHandler_GetResponseHeaders_result&);
+  ClientHandlers_ResourceHandler_GetResponseHeaders_result() noexcept {
+  }
+
+  virtual ~ClientHandlers_ResourceHandler_GetResponseHeaders_result() noexcept;
+   ::thrift_codegen::ResponseHeaders success;
+
+  _ClientHandlers_ResourceHandler_GetResponseHeaders_result__isset __isset;
+
+  void __set_success(const  ::thrift_codegen::ResponseHeaders& val);
+
+  bool operator == (const ClientHandlers_ResourceHandler_GetResponseHeaders_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    return true;
+  }
+  bool operator != (const ClientHandlers_ResourceHandler_GetResponseHeaders_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ClientHandlers_ResourceHandler_GetResponseHeaders_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ClientHandlers_ResourceHandler_GetResponseHeaders_presult__isset {
+  _ClientHandlers_ResourceHandler_GetResponseHeaders_presult__isset() : success(false) {}
+  bool success :1;
+} _ClientHandlers_ResourceHandler_GetResponseHeaders_presult__isset;
+
+class ClientHandlers_ResourceHandler_GetResponseHeaders_presult {
+ public:
+
+
+  virtual ~ClientHandlers_ResourceHandler_GetResponseHeaders_presult() noexcept;
+   ::thrift_codegen::ResponseHeaders* success;
+
+  _ClientHandlers_ResourceHandler_GetResponseHeaders_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _ClientHandlers_ResourceHandler_ReadResponse_args__isset {
+  _ClientHandlers_ResourceHandler_ReadResponse_args__isset() : resourceHandler(false), bytes_to_read(false), callback(false) {}
+  bool resourceHandler :1;
+  bool bytes_to_read :1;
+  bool callback :1;
+} _ClientHandlers_ResourceHandler_ReadResponse_args__isset;
+
+class ClientHandlers_ResourceHandler_ReadResponse_args {
+ public:
+
+  ClientHandlers_ResourceHandler_ReadResponse_args(const ClientHandlers_ResourceHandler_ReadResponse_args&);
+  ClientHandlers_ResourceHandler_ReadResponse_args& operator=(const ClientHandlers_ResourceHandler_ReadResponse_args&);
+  ClientHandlers_ResourceHandler_ReadResponse_args() noexcept
+                                                   : resourceHandler(0),
+                                                     bytes_to_read(0) {
+  }
+
+  virtual ~ClientHandlers_ResourceHandler_ReadResponse_args() noexcept;
+  int32_t resourceHandler;
+  int32_t bytes_to_read;
+   ::thrift_codegen::RObject callback;
+
+  _ClientHandlers_ResourceHandler_ReadResponse_args__isset __isset;
+
+  void __set_resourceHandler(const int32_t val);
+
+  void __set_bytes_to_read(const int32_t val);
+
+  void __set_callback(const  ::thrift_codegen::RObject& val);
+
+  bool operator == (const ClientHandlers_ResourceHandler_ReadResponse_args & rhs) const
+  {
+    if (!(resourceHandler == rhs.resourceHandler))
+      return false;
+    if (!(bytes_to_read == rhs.bytes_to_read))
+      return false;
+    if (!(callback == rhs.callback))
+      return false;
+    return true;
+  }
+  bool operator != (const ClientHandlers_ResourceHandler_ReadResponse_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ClientHandlers_ResourceHandler_ReadResponse_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class ClientHandlers_ResourceHandler_ReadResponse_pargs {
+ public:
+
+
+  virtual ~ClientHandlers_ResourceHandler_ReadResponse_pargs() noexcept;
+  const int32_t* resourceHandler;
+  const int32_t* bytes_to_read;
+  const  ::thrift_codegen::RObject* callback;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ClientHandlers_ResourceHandler_ReadResponse_result__isset {
+  _ClientHandlers_ResourceHandler_ReadResponse_result__isset() : success(false) {}
+  bool success :1;
+} _ClientHandlers_ResourceHandler_ReadResponse_result__isset;
+
+class ClientHandlers_ResourceHandler_ReadResponse_result {
+ public:
+
+  ClientHandlers_ResourceHandler_ReadResponse_result(const ClientHandlers_ResourceHandler_ReadResponse_result&);
+  ClientHandlers_ResourceHandler_ReadResponse_result& operator=(const ClientHandlers_ResourceHandler_ReadResponse_result&);
+  ClientHandlers_ResourceHandler_ReadResponse_result() noexcept {
+  }
+
+  virtual ~ClientHandlers_ResourceHandler_ReadResponse_result() noexcept;
+   ::thrift_codegen::ResponseData success;
+
+  _ClientHandlers_ResourceHandler_ReadResponse_result__isset __isset;
+
+  void __set_success(const  ::thrift_codegen::ResponseData& val);
+
+  bool operator == (const ClientHandlers_ResourceHandler_ReadResponse_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    return true;
+  }
+  bool operator != (const ClientHandlers_ResourceHandler_ReadResponse_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ClientHandlers_ResourceHandler_ReadResponse_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ClientHandlers_ResourceHandler_ReadResponse_presult__isset {
+  _ClientHandlers_ResourceHandler_ReadResponse_presult__isset() : success(false) {}
+  bool success :1;
+} _ClientHandlers_ResourceHandler_ReadResponse_presult__isset;
+
+class ClientHandlers_ResourceHandler_ReadResponse_presult {
+ public:
+
+
+  virtual ~ClientHandlers_ResourceHandler_ReadResponse_presult() noexcept;
+   ::thrift_codegen::ResponseData* success;
+
+  _ClientHandlers_ResourceHandler_ReadResponse_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _ClientHandlers_ResourceHandler_Cancel_args__isset {
+  _ClientHandlers_ResourceHandler_Cancel_args__isset() : resourceHandler(false) {}
+  bool resourceHandler :1;
+} _ClientHandlers_ResourceHandler_Cancel_args__isset;
+
+class ClientHandlers_ResourceHandler_Cancel_args {
+ public:
+
+  ClientHandlers_ResourceHandler_Cancel_args(const ClientHandlers_ResourceHandler_Cancel_args&) noexcept;
+  ClientHandlers_ResourceHandler_Cancel_args& operator=(const ClientHandlers_ResourceHandler_Cancel_args&) noexcept;
+  ClientHandlers_ResourceHandler_Cancel_args() noexcept
+                                             : resourceHandler(0) {
+  }
+
+  virtual ~ClientHandlers_ResourceHandler_Cancel_args() noexcept;
+  int32_t resourceHandler;
+
+  _ClientHandlers_ResourceHandler_Cancel_args__isset __isset;
+
+  void __set_resourceHandler(const int32_t val);
+
+  bool operator == (const ClientHandlers_ResourceHandler_Cancel_args & rhs) const
+  {
+    if (!(resourceHandler == rhs.resourceHandler))
+      return false;
+    return true;
+  }
+  bool operator != (const ClientHandlers_ResourceHandler_Cancel_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ClientHandlers_ResourceHandler_Cancel_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class ClientHandlers_ResourceHandler_Cancel_pargs {
+ public:
+
+
+  virtual ~ClientHandlers_ResourceHandler_Cancel_pargs() noexcept;
+  const int32_t* resourceHandler;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
 typedef struct _ClientHandlers_ResourceRequestHandler_OnResourceRedirect_args__isset {
-  _ClientHandlers_ResourceRequestHandler_OnResourceRedirect_args__isset() : rrHandler(false), bid(false), request(false), response(false), new_url(false) {}
+  _ClientHandlers_ResourceRequestHandler_OnResourceRedirect_args__isset() : rrHandler(false), bid(false), frame(false), request(false), response(false), new_url(false) {}
   bool rrHandler :1;
   bool bid :1;
+  bool frame :1;
   bool request :1;
   bool response :1;
   bool new_url :1;
@@ -3572,6 +4459,7 @@ class ClientHandlers_ResourceRequestHandler_OnResourceRedirect_args {
   virtual ~ClientHandlers_ResourceRequestHandler_OnResourceRedirect_args() noexcept;
   int32_t rrHandler;
   int32_t bid;
+   ::thrift_codegen::RObject frame;
    ::thrift_codegen::RObject request;
    ::thrift_codegen::RObject response;
   std::string new_url;
@@ -3581,6 +4469,8 @@ class ClientHandlers_ResourceRequestHandler_OnResourceRedirect_args {
   void __set_rrHandler(const int32_t val);
 
   void __set_bid(const int32_t val);
+
+  void __set_frame(const  ::thrift_codegen::RObject& val);
 
   void __set_request(const  ::thrift_codegen::RObject& val);
 
@@ -3593,6 +4483,8 @@ class ClientHandlers_ResourceRequestHandler_OnResourceRedirect_args {
     if (!(rrHandler == rhs.rrHandler))
       return false;
     if (!(bid == rhs.bid))
+      return false;
+    if (!(frame == rhs.frame))
       return false;
     if (!(request == rhs.request))
       return false;
@@ -3621,6 +4513,7 @@ class ClientHandlers_ResourceRequestHandler_OnResourceRedirect_pargs {
   virtual ~ClientHandlers_ResourceRequestHandler_OnResourceRedirect_pargs() noexcept;
   const int32_t* rrHandler;
   const int32_t* bid;
+  const  ::thrift_codegen::RObject* frame;
   const  ::thrift_codegen::RObject* request;
   const  ::thrift_codegen::RObject* response;
   const std::string* new_url;
@@ -3686,9 +4579,10 @@ class ClientHandlers_ResourceRequestHandler_OnResourceRedirect_presult {
 };
 
 typedef struct _ClientHandlers_ResourceRequestHandler_OnResourceResponse_args__isset {
-  _ClientHandlers_ResourceRequestHandler_OnResourceResponse_args__isset() : rrHandler(false), bid(false), request(false), response(false) {}
+  _ClientHandlers_ResourceRequestHandler_OnResourceResponse_args__isset() : rrHandler(false), bid(false), frame(false), request(false), response(false) {}
   bool rrHandler :1;
   bool bid :1;
+  bool frame :1;
   bool request :1;
   bool response :1;
 } _ClientHandlers_ResourceRequestHandler_OnResourceResponse_args__isset;
@@ -3706,6 +4600,7 @@ class ClientHandlers_ResourceRequestHandler_OnResourceResponse_args {
   virtual ~ClientHandlers_ResourceRequestHandler_OnResourceResponse_args() noexcept;
   int32_t rrHandler;
   int32_t bid;
+   ::thrift_codegen::RObject frame;
    ::thrift_codegen::RObject request;
    ::thrift_codegen::RObject response;
 
@@ -3714,6 +4609,8 @@ class ClientHandlers_ResourceRequestHandler_OnResourceResponse_args {
   void __set_rrHandler(const int32_t val);
 
   void __set_bid(const int32_t val);
+
+  void __set_frame(const  ::thrift_codegen::RObject& val);
 
   void __set_request(const  ::thrift_codegen::RObject& val);
 
@@ -3724,6 +4621,8 @@ class ClientHandlers_ResourceRequestHandler_OnResourceResponse_args {
     if (!(rrHandler == rhs.rrHandler))
       return false;
     if (!(bid == rhs.bid))
+      return false;
+    if (!(frame == rhs.frame))
       return false;
     if (!(request == rhs.request))
       return false;
@@ -3750,6 +4649,7 @@ class ClientHandlers_ResourceRequestHandler_OnResourceResponse_pargs {
   virtual ~ClientHandlers_ResourceRequestHandler_OnResourceResponse_pargs() noexcept;
   const int32_t* rrHandler;
   const int32_t* bid;
+  const  ::thrift_codegen::RObject* frame;
   const  ::thrift_codegen::RObject* request;
   const  ::thrift_codegen::RObject* response;
 
@@ -3814,9 +4714,10 @@ class ClientHandlers_ResourceRequestHandler_OnResourceResponse_presult {
 };
 
 typedef struct _ClientHandlers_ResourceRequestHandler_OnResourceLoadComplete_args__isset {
-  _ClientHandlers_ResourceRequestHandler_OnResourceLoadComplete_args__isset() : rrHandler(false), bid(false), request(false), response(false), status(false), receivedContentLength(false) {}
+  _ClientHandlers_ResourceRequestHandler_OnResourceLoadComplete_args__isset() : rrHandler(false), bid(false), frame(false), request(false), response(false), status(false), receivedContentLength(false) {}
   bool rrHandler :1;
   bool bid :1;
+  bool frame :1;
   bool request :1;
   bool response :1;
   bool status :1;
@@ -3838,6 +4739,7 @@ class ClientHandlers_ResourceRequestHandler_OnResourceLoadComplete_args {
   virtual ~ClientHandlers_ResourceRequestHandler_OnResourceLoadComplete_args() noexcept;
   int32_t rrHandler;
   int32_t bid;
+   ::thrift_codegen::RObject frame;
    ::thrift_codegen::RObject request;
    ::thrift_codegen::RObject response;
   std::string status;
@@ -3848,6 +4750,8 @@ class ClientHandlers_ResourceRequestHandler_OnResourceLoadComplete_args {
   void __set_rrHandler(const int32_t val);
 
   void __set_bid(const int32_t val);
+
+  void __set_frame(const  ::thrift_codegen::RObject& val);
 
   void __set_request(const  ::thrift_codegen::RObject& val);
 
@@ -3862,6 +4766,8 @@ class ClientHandlers_ResourceRequestHandler_OnResourceLoadComplete_args {
     if (!(rrHandler == rhs.rrHandler))
       return false;
     if (!(bid == rhs.bid))
+      return false;
+    if (!(frame == rhs.frame))
       return false;
     if (!(request == rhs.request))
       return false;
@@ -3892,6 +4798,7 @@ class ClientHandlers_ResourceRequestHandler_OnResourceLoadComplete_pargs {
   virtual ~ClientHandlers_ResourceRequestHandler_OnResourceLoadComplete_pargs() noexcept;
   const int32_t* rrHandler;
   const int32_t* bid;
+  const  ::thrift_codegen::RObject* frame;
   const  ::thrift_codegen::RObject* request;
   const  ::thrift_codegen::RObject* response;
   const std::string* status;
@@ -3939,9 +4846,10 @@ class ClientHandlers_ResourceRequestHandler_OnResourceLoadComplete_presult {
 };
 
 typedef struct _ClientHandlers_ResourceRequestHandler_OnProtocolExecution_args__isset {
-  _ClientHandlers_ResourceRequestHandler_OnProtocolExecution_args__isset() : rrHandler(false), bid(false), request(false), allowOsExecution(false) {}
+  _ClientHandlers_ResourceRequestHandler_OnProtocolExecution_args__isset() : rrHandler(false), bid(false), frame(false), request(false), allowOsExecution(false) {}
   bool rrHandler :1;
   bool bid :1;
+  bool frame :1;
   bool request :1;
   bool allowOsExecution :1;
 } _ClientHandlers_ResourceRequestHandler_OnProtocolExecution_args__isset;
@@ -3960,6 +4868,7 @@ class ClientHandlers_ResourceRequestHandler_OnProtocolExecution_args {
   virtual ~ClientHandlers_ResourceRequestHandler_OnProtocolExecution_args() noexcept;
   int32_t rrHandler;
   int32_t bid;
+   ::thrift_codegen::RObject frame;
    ::thrift_codegen::RObject request;
   bool allowOsExecution;
 
@@ -3968,6 +4877,8 @@ class ClientHandlers_ResourceRequestHandler_OnProtocolExecution_args {
   void __set_rrHandler(const int32_t val);
 
   void __set_bid(const int32_t val);
+
+  void __set_frame(const  ::thrift_codegen::RObject& val);
 
   void __set_request(const  ::thrift_codegen::RObject& val);
 
@@ -3978,6 +4889,8 @@ class ClientHandlers_ResourceRequestHandler_OnProtocolExecution_args {
     if (!(rrHandler == rhs.rrHandler))
       return false;
     if (!(bid == rhs.bid))
+      return false;
+    if (!(frame == rhs.frame))
       return false;
     if (!(request == rhs.request))
       return false;
@@ -4004,6 +4917,7 @@ class ClientHandlers_ResourceRequestHandler_OnProtocolExecution_pargs {
   virtual ~ClientHandlers_ResourceRequestHandler_OnProtocolExecution_pargs() noexcept;
   const int32_t* rrHandler;
   const int32_t* bid;
+  const  ::thrift_codegen::RObject* frame;
   const  ::thrift_codegen::RObject* request;
   const bool* allowOsExecution;
 
@@ -4068,9 +4982,10 @@ class ClientHandlers_ResourceRequestHandler_OnProtocolExecution_presult {
 };
 
 typedef struct _ClientHandlers_MessageRouterHandler_onQuery_args__isset {
-  _ClientHandlers_MessageRouterHandler_onQuery_args__isset() : handler(false), bid(false), queryId(false), request(false), persistent(false), queryCallback(false) {}
+  _ClientHandlers_MessageRouterHandler_onQuery_args__isset() : handler(false), bid(false), frame(false), queryId(false), request(false), persistent(false), queryCallback(false) {}
   bool handler :1;
   bool bid :1;
+  bool frame :1;
   bool queryId :1;
   bool request :1;
   bool persistent :1;
@@ -4092,6 +5007,7 @@ class ClientHandlers_MessageRouterHandler_onQuery_args {
   virtual ~ClientHandlers_MessageRouterHandler_onQuery_args() noexcept;
    ::thrift_codegen::RObject handler;
   int32_t bid;
+   ::thrift_codegen::RObject frame;
   int64_t queryId;
   std::string request;
   bool persistent;
@@ -4102,6 +5018,8 @@ class ClientHandlers_MessageRouterHandler_onQuery_args {
   void __set_handler(const  ::thrift_codegen::RObject& val);
 
   void __set_bid(const int32_t val);
+
+  void __set_frame(const  ::thrift_codegen::RObject& val);
 
   void __set_queryId(const int64_t val);
 
@@ -4116,6 +5034,8 @@ class ClientHandlers_MessageRouterHandler_onQuery_args {
     if (!(handler == rhs.handler))
       return false;
     if (!(bid == rhs.bid))
+      return false;
+    if (!(frame == rhs.frame))
       return false;
     if (!(queryId == rhs.queryId))
       return false;
@@ -4146,6 +5066,7 @@ class ClientHandlers_MessageRouterHandler_onQuery_pargs {
   virtual ~ClientHandlers_MessageRouterHandler_onQuery_pargs() noexcept;
   const  ::thrift_codegen::RObject* handler;
   const int32_t* bid;
+  const  ::thrift_codegen::RObject* frame;
   const int64_t* queryId;
   const std::string* request;
   const bool* persistent;
@@ -4212,9 +5133,10 @@ class ClientHandlers_MessageRouterHandler_onQuery_presult {
 };
 
 typedef struct _ClientHandlers_MessageRouterHandler_onQueryCanceled_args__isset {
-  _ClientHandlers_MessageRouterHandler_onQueryCanceled_args__isset() : handler(false), bid(false), queryId(false) {}
+  _ClientHandlers_MessageRouterHandler_onQueryCanceled_args__isset() : handler(false), bid(false), frame(false), queryId(false) {}
   bool handler :1;
   bool bid :1;
+  bool frame :1;
   bool queryId :1;
 } _ClientHandlers_MessageRouterHandler_onQueryCanceled_args__isset;
 
@@ -4231,6 +5153,7 @@ class ClientHandlers_MessageRouterHandler_onQueryCanceled_args {
   virtual ~ClientHandlers_MessageRouterHandler_onQueryCanceled_args() noexcept;
    ::thrift_codegen::RObject handler;
   int32_t bid;
+   ::thrift_codegen::RObject frame;
   int64_t queryId;
 
   _ClientHandlers_MessageRouterHandler_onQueryCanceled_args__isset __isset;
@@ -4239,6 +5162,8 @@ class ClientHandlers_MessageRouterHandler_onQueryCanceled_args {
 
   void __set_bid(const int32_t val);
 
+  void __set_frame(const  ::thrift_codegen::RObject& val);
+
   void __set_queryId(const int64_t val);
 
   bool operator == (const ClientHandlers_MessageRouterHandler_onQueryCanceled_args & rhs) const
@@ -4246,6 +5171,8 @@ class ClientHandlers_MessageRouterHandler_onQueryCanceled_args {
     if (!(handler == rhs.handler))
       return false;
     if (!(bid == rhs.bid))
+      return false;
+    if (!(frame == rhs.frame))
       return false;
     if (!(queryId == rhs.queryId))
       return false;
@@ -4270,7 +5197,623 @@ class ClientHandlers_MessageRouterHandler_onQueryCanceled_pargs {
   virtual ~ClientHandlers_MessageRouterHandler_onQueryCanceled_pargs() noexcept;
   const  ::thrift_codegen::RObject* handler;
   const int32_t* bid;
+  const  ::thrift_codegen::RObject* frame;
   const int64_t* queryId;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ClientHandlers_MessageRouterHandler_Dispose_args__isset {
+  _ClientHandlers_MessageRouterHandler_Dispose_args__isset() : handler(false) {}
+  bool handler :1;
+} _ClientHandlers_MessageRouterHandler_Dispose_args__isset;
+
+class ClientHandlers_MessageRouterHandler_Dispose_args {
+ public:
+
+  ClientHandlers_MessageRouterHandler_Dispose_args(const ClientHandlers_MessageRouterHandler_Dispose_args&) noexcept;
+  ClientHandlers_MessageRouterHandler_Dispose_args& operator=(const ClientHandlers_MessageRouterHandler_Dispose_args&) noexcept;
+  ClientHandlers_MessageRouterHandler_Dispose_args() noexcept
+                                                   : handler(0) {
+  }
+
+  virtual ~ClientHandlers_MessageRouterHandler_Dispose_args() noexcept;
+  int32_t handler;
+
+  _ClientHandlers_MessageRouterHandler_Dispose_args__isset __isset;
+
+  void __set_handler(const int32_t val);
+
+  bool operator == (const ClientHandlers_MessageRouterHandler_Dispose_args & rhs) const
+  {
+    if (!(handler == rhs.handler))
+      return false;
+    return true;
+  }
+  bool operator != (const ClientHandlers_MessageRouterHandler_Dispose_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ClientHandlers_MessageRouterHandler_Dispose_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class ClientHandlers_MessageRouterHandler_Dispose_pargs {
+ public:
+
+
+  virtual ~ClientHandlers_MessageRouterHandler_Dispose_pargs() noexcept;
+  const int32_t* handler;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ClientHandlers_SchemeHandlerFactory_CreateHandler_args__isset {
+  _ClientHandlers_SchemeHandlerFactory_CreateHandler_args__isset() : schemeHandlerFactory(false), bid(false), frame(false), scheme_name(false), request(false) {}
+  bool schemeHandlerFactory :1;
+  bool bid :1;
+  bool frame :1;
+  bool scheme_name :1;
+  bool request :1;
+} _ClientHandlers_SchemeHandlerFactory_CreateHandler_args__isset;
+
+class ClientHandlers_SchemeHandlerFactory_CreateHandler_args {
+ public:
+
+  ClientHandlers_SchemeHandlerFactory_CreateHandler_args(const ClientHandlers_SchemeHandlerFactory_CreateHandler_args&);
+  ClientHandlers_SchemeHandlerFactory_CreateHandler_args& operator=(const ClientHandlers_SchemeHandlerFactory_CreateHandler_args&);
+  ClientHandlers_SchemeHandlerFactory_CreateHandler_args() noexcept
+                                                         : schemeHandlerFactory(0),
+                                                           bid(0),
+                                                           scheme_name() {
+  }
+
+  virtual ~ClientHandlers_SchemeHandlerFactory_CreateHandler_args() noexcept;
+  int32_t schemeHandlerFactory;
+  int32_t bid;
+   ::thrift_codegen::RObject frame;
+  std::string scheme_name;
+   ::thrift_codegen::RObject request;
+
+  _ClientHandlers_SchemeHandlerFactory_CreateHandler_args__isset __isset;
+
+  void __set_schemeHandlerFactory(const int32_t val);
+
+  void __set_bid(const int32_t val);
+
+  void __set_frame(const  ::thrift_codegen::RObject& val);
+
+  void __set_scheme_name(const std::string& val);
+
+  void __set_request(const  ::thrift_codegen::RObject& val);
+
+  bool operator == (const ClientHandlers_SchemeHandlerFactory_CreateHandler_args & rhs) const
+  {
+    if (!(schemeHandlerFactory == rhs.schemeHandlerFactory))
+      return false;
+    if (!(bid == rhs.bid))
+      return false;
+    if (!(frame == rhs.frame))
+      return false;
+    if (!(scheme_name == rhs.scheme_name))
+      return false;
+    if (!(request == rhs.request))
+      return false;
+    return true;
+  }
+  bool operator != (const ClientHandlers_SchemeHandlerFactory_CreateHandler_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ClientHandlers_SchemeHandlerFactory_CreateHandler_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class ClientHandlers_SchemeHandlerFactory_CreateHandler_pargs {
+ public:
+
+
+  virtual ~ClientHandlers_SchemeHandlerFactory_CreateHandler_pargs() noexcept;
+  const int32_t* schemeHandlerFactory;
+  const int32_t* bid;
+  const  ::thrift_codegen::RObject* frame;
+  const std::string* scheme_name;
+  const  ::thrift_codegen::RObject* request;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ClientHandlers_SchemeHandlerFactory_CreateHandler_result__isset {
+  _ClientHandlers_SchemeHandlerFactory_CreateHandler_result__isset() : success(false) {}
+  bool success :1;
+} _ClientHandlers_SchemeHandlerFactory_CreateHandler_result__isset;
+
+class ClientHandlers_SchemeHandlerFactory_CreateHandler_result {
+ public:
+
+  ClientHandlers_SchemeHandlerFactory_CreateHandler_result(const ClientHandlers_SchemeHandlerFactory_CreateHandler_result&);
+  ClientHandlers_SchemeHandlerFactory_CreateHandler_result& operator=(const ClientHandlers_SchemeHandlerFactory_CreateHandler_result&);
+  ClientHandlers_SchemeHandlerFactory_CreateHandler_result() noexcept {
+  }
+
+  virtual ~ClientHandlers_SchemeHandlerFactory_CreateHandler_result() noexcept;
+   ::thrift_codegen::RObject success;
+
+  _ClientHandlers_SchemeHandlerFactory_CreateHandler_result__isset __isset;
+
+  void __set_success(const  ::thrift_codegen::RObject& val);
+
+  bool operator == (const ClientHandlers_SchemeHandlerFactory_CreateHandler_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    return true;
+  }
+  bool operator != (const ClientHandlers_SchemeHandlerFactory_CreateHandler_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ClientHandlers_SchemeHandlerFactory_CreateHandler_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ClientHandlers_SchemeHandlerFactory_CreateHandler_presult__isset {
+  _ClientHandlers_SchemeHandlerFactory_CreateHandler_presult__isset() : success(false) {}
+  bool success :1;
+} _ClientHandlers_SchemeHandlerFactory_CreateHandler_presult__isset;
+
+class ClientHandlers_SchemeHandlerFactory_CreateHandler_presult {
+ public:
+
+
+  virtual ~ClientHandlers_SchemeHandlerFactory_CreateHandler_presult() noexcept;
+   ::thrift_codegen::RObject* success;
+
+  _ClientHandlers_SchemeHandlerFactory_CreateHandler_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _ClientHandlers_SchemeHandlerFactory_Dispose_args__isset {
+  _ClientHandlers_SchemeHandlerFactory_Dispose_args__isset() : schemeHandlerFactory(false) {}
+  bool schemeHandlerFactory :1;
+} _ClientHandlers_SchemeHandlerFactory_Dispose_args__isset;
+
+class ClientHandlers_SchemeHandlerFactory_Dispose_args {
+ public:
+
+  ClientHandlers_SchemeHandlerFactory_Dispose_args(const ClientHandlers_SchemeHandlerFactory_Dispose_args&) noexcept;
+  ClientHandlers_SchemeHandlerFactory_Dispose_args& operator=(const ClientHandlers_SchemeHandlerFactory_Dispose_args&) noexcept;
+  ClientHandlers_SchemeHandlerFactory_Dispose_args() noexcept
+                                                   : schemeHandlerFactory(0) {
+  }
+
+  virtual ~ClientHandlers_SchemeHandlerFactory_Dispose_args() noexcept;
+  int32_t schemeHandlerFactory;
+
+  _ClientHandlers_SchemeHandlerFactory_Dispose_args__isset __isset;
+
+  void __set_schemeHandlerFactory(const int32_t val);
+
+  bool operator == (const ClientHandlers_SchemeHandlerFactory_Dispose_args & rhs) const
+  {
+    if (!(schemeHandlerFactory == rhs.schemeHandlerFactory))
+      return false;
+    return true;
+  }
+  bool operator != (const ClientHandlers_SchemeHandlerFactory_Dispose_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ClientHandlers_SchemeHandlerFactory_Dispose_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class ClientHandlers_SchemeHandlerFactory_Dispose_pargs {
+ public:
+
+
+  virtual ~ClientHandlers_SchemeHandlerFactory_Dispose_pargs() noexcept;
+  const int32_t* schemeHandlerFactory;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ClientHandlers_CompletionCallback_OnComplete_args__isset {
+  _ClientHandlers_CompletionCallback_OnComplete_args__isset() : completionCallback(false) {}
+  bool completionCallback :1;
+} _ClientHandlers_CompletionCallback_OnComplete_args__isset;
+
+class ClientHandlers_CompletionCallback_OnComplete_args {
+ public:
+
+  ClientHandlers_CompletionCallback_OnComplete_args(const ClientHandlers_CompletionCallback_OnComplete_args&) noexcept;
+  ClientHandlers_CompletionCallback_OnComplete_args& operator=(const ClientHandlers_CompletionCallback_OnComplete_args&) noexcept;
+  ClientHandlers_CompletionCallback_OnComplete_args() noexcept
+                                                    : completionCallback(0) {
+  }
+
+  virtual ~ClientHandlers_CompletionCallback_OnComplete_args() noexcept;
+  int32_t completionCallback;
+
+  _ClientHandlers_CompletionCallback_OnComplete_args__isset __isset;
+
+  void __set_completionCallback(const int32_t val);
+
+  bool operator == (const ClientHandlers_CompletionCallback_OnComplete_args & rhs) const
+  {
+    if (!(completionCallback == rhs.completionCallback))
+      return false;
+    return true;
+  }
+  bool operator != (const ClientHandlers_CompletionCallback_OnComplete_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ClientHandlers_CompletionCallback_OnComplete_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class ClientHandlers_CompletionCallback_OnComplete_pargs {
+ public:
+
+
+  virtual ~ClientHandlers_CompletionCallback_OnComplete_pargs() noexcept;
+  const int32_t* completionCallback;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ClientHandlers_RequestContextHandler_GetResourceRequestHandler_args__isset {
+  _ClientHandlers_RequestContextHandler_GetResourceRequestHandler_args__isset() : handler(false), bid(false), frame(false), request(false), isNavigation(false), isDownload(false), requestInitiator(false) {}
+  bool handler :1;
+  bool bid :1;
+  bool frame :1;
+  bool request :1;
+  bool isNavigation :1;
+  bool isDownload :1;
+  bool requestInitiator :1;
+} _ClientHandlers_RequestContextHandler_GetResourceRequestHandler_args__isset;
+
+class ClientHandlers_RequestContextHandler_GetResourceRequestHandler_args {
+ public:
+
+  ClientHandlers_RequestContextHandler_GetResourceRequestHandler_args(const ClientHandlers_RequestContextHandler_GetResourceRequestHandler_args&);
+  ClientHandlers_RequestContextHandler_GetResourceRequestHandler_args& operator=(const ClientHandlers_RequestContextHandler_GetResourceRequestHandler_args&);
+  ClientHandlers_RequestContextHandler_GetResourceRequestHandler_args() noexcept
+                                                                      : handler(0),
+                                                                        bid(0),
+                                                                        isNavigation(0),
+                                                                        isDownload(0),
+                                                                        requestInitiator() {
+  }
+
+  virtual ~ClientHandlers_RequestContextHandler_GetResourceRequestHandler_args() noexcept;
+  int32_t handler;
+  int32_t bid;
+   ::thrift_codegen::RObject frame;
+   ::thrift_codegen::RObject request;
+  bool isNavigation;
+  bool isDownload;
+  std::string requestInitiator;
+
+  _ClientHandlers_RequestContextHandler_GetResourceRequestHandler_args__isset __isset;
+
+  void __set_handler(const int32_t val);
+
+  void __set_bid(const int32_t val);
+
+  void __set_frame(const  ::thrift_codegen::RObject& val);
+
+  void __set_request(const  ::thrift_codegen::RObject& val);
+
+  void __set_isNavigation(const bool val);
+
+  void __set_isDownload(const bool val);
+
+  void __set_requestInitiator(const std::string& val);
+
+  bool operator == (const ClientHandlers_RequestContextHandler_GetResourceRequestHandler_args & rhs) const
+  {
+    if (!(handler == rhs.handler))
+      return false;
+    if (!(bid == rhs.bid))
+      return false;
+    if (!(frame == rhs.frame))
+      return false;
+    if (!(request == rhs.request))
+      return false;
+    if (!(isNavigation == rhs.isNavigation))
+      return false;
+    if (!(isDownload == rhs.isDownload))
+      return false;
+    if (!(requestInitiator == rhs.requestInitiator))
+      return false;
+    return true;
+  }
+  bool operator != (const ClientHandlers_RequestContextHandler_GetResourceRequestHandler_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ClientHandlers_RequestContextHandler_GetResourceRequestHandler_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class ClientHandlers_RequestContextHandler_GetResourceRequestHandler_pargs {
+ public:
+
+
+  virtual ~ClientHandlers_RequestContextHandler_GetResourceRequestHandler_pargs() noexcept;
+  const int32_t* handler;
+  const int32_t* bid;
+  const  ::thrift_codegen::RObject* frame;
+  const  ::thrift_codegen::RObject* request;
+  const bool* isNavigation;
+  const bool* isDownload;
+  const std::string* requestInitiator;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ClientHandlers_RequestContextHandler_GetResourceRequestHandler_result__isset {
+  _ClientHandlers_RequestContextHandler_GetResourceRequestHandler_result__isset() : success(false) {}
+  bool success :1;
+} _ClientHandlers_RequestContextHandler_GetResourceRequestHandler_result__isset;
+
+class ClientHandlers_RequestContextHandler_GetResourceRequestHandler_result {
+ public:
+
+  ClientHandlers_RequestContextHandler_GetResourceRequestHandler_result(const ClientHandlers_RequestContextHandler_GetResourceRequestHandler_result&);
+  ClientHandlers_RequestContextHandler_GetResourceRequestHandler_result& operator=(const ClientHandlers_RequestContextHandler_GetResourceRequestHandler_result&);
+  ClientHandlers_RequestContextHandler_GetResourceRequestHandler_result() noexcept {
+  }
+
+  virtual ~ClientHandlers_RequestContextHandler_GetResourceRequestHandler_result() noexcept;
+   ::thrift_codegen::RObject success;
+
+  _ClientHandlers_RequestContextHandler_GetResourceRequestHandler_result__isset __isset;
+
+  void __set_success(const  ::thrift_codegen::RObject& val);
+
+  bool operator == (const ClientHandlers_RequestContextHandler_GetResourceRequestHandler_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    return true;
+  }
+  bool operator != (const ClientHandlers_RequestContextHandler_GetResourceRequestHandler_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ClientHandlers_RequestContextHandler_GetResourceRequestHandler_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ClientHandlers_RequestContextHandler_GetResourceRequestHandler_presult__isset {
+  _ClientHandlers_RequestContextHandler_GetResourceRequestHandler_presult__isset() : success(false) {}
+  bool success :1;
+} _ClientHandlers_RequestContextHandler_GetResourceRequestHandler_presult__isset;
+
+class ClientHandlers_RequestContextHandler_GetResourceRequestHandler_presult {
+ public:
+
+
+  virtual ~ClientHandlers_RequestContextHandler_GetResourceRequestHandler_presult() noexcept;
+   ::thrift_codegen::RObject* success;
+
+  _ClientHandlers_RequestContextHandler_GetResourceRequestHandler_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _ClientHandlers_CookieVisitor_Visit_args__isset {
+  _ClientHandlers_CookieVisitor_Visit_args__isset() : visitor(false), cookie(false), count(false), total(false) {}
+  bool visitor :1;
+  bool cookie :1;
+  bool count :1;
+  bool total :1;
+} _ClientHandlers_CookieVisitor_Visit_args__isset;
+
+class ClientHandlers_CookieVisitor_Visit_args {
+ public:
+
+  ClientHandlers_CookieVisitor_Visit_args(const ClientHandlers_CookieVisitor_Visit_args&);
+  ClientHandlers_CookieVisitor_Visit_args& operator=(const ClientHandlers_CookieVisitor_Visit_args&);
+  ClientHandlers_CookieVisitor_Visit_args() noexcept
+                                          : visitor(0),
+                                            count(0),
+                                            total(0) {
+  }
+
+  virtual ~ClientHandlers_CookieVisitor_Visit_args() noexcept;
+  int32_t visitor;
+   ::thrift_codegen::Cookie cookie;
+  int32_t count;
+  int32_t total;
+
+  _ClientHandlers_CookieVisitor_Visit_args__isset __isset;
+
+  void __set_visitor(const int32_t val);
+
+  void __set_cookie(const  ::thrift_codegen::Cookie& val);
+
+  void __set_count(const int32_t val);
+
+  void __set_total(const int32_t val);
+
+  bool operator == (const ClientHandlers_CookieVisitor_Visit_args & rhs) const
+  {
+    if (!(visitor == rhs.visitor))
+      return false;
+    if (!(cookie == rhs.cookie))
+      return false;
+    if (!(count == rhs.count))
+      return false;
+    if (!(total == rhs.total))
+      return false;
+    return true;
+  }
+  bool operator != (const ClientHandlers_CookieVisitor_Visit_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ClientHandlers_CookieVisitor_Visit_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class ClientHandlers_CookieVisitor_Visit_pargs {
+ public:
+
+
+  virtual ~ClientHandlers_CookieVisitor_Visit_pargs() noexcept;
+  const int32_t* visitor;
+  const  ::thrift_codegen::Cookie* cookie;
+  const int32_t* count;
+  const int32_t* total;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ClientHandlers_CookieVisitor_Visit_result__isset {
+  _ClientHandlers_CookieVisitor_Visit_result__isset() : success(false) {}
+  bool success :1;
+} _ClientHandlers_CookieVisitor_Visit_result__isset;
+
+class ClientHandlers_CookieVisitor_Visit_result {
+ public:
+
+  ClientHandlers_CookieVisitor_Visit_result(const ClientHandlers_CookieVisitor_Visit_result&) noexcept;
+  ClientHandlers_CookieVisitor_Visit_result& operator=(const ClientHandlers_CookieVisitor_Visit_result&) noexcept;
+  ClientHandlers_CookieVisitor_Visit_result() noexcept
+                                            : success(0) {
+  }
+
+  virtual ~ClientHandlers_CookieVisitor_Visit_result() noexcept;
+  bool success;
+
+  _ClientHandlers_CookieVisitor_Visit_result__isset __isset;
+
+  void __set_success(const bool val);
+
+  bool operator == (const ClientHandlers_CookieVisitor_Visit_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    return true;
+  }
+  bool operator != (const ClientHandlers_CookieVisitor_Visit_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ClientHandlers_CookieVisitor_Visit_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ClientHandlers_CookieVisitor_Visit_presult__isset {
+  _ClientHandlers_CookieVisitor_Visit_presult__isset() : success(false) {}
+  bool success :1;
+} _ClientHandlers_CookieVisitor_Visit_presult__isset;
+
+class ClientHandlers_CookieVisitor_Visit_presult {
+ public:
+
+
+  virtual ~ClientHandlers_CookieVisitor_Visit_presult() noexcept;
+  bool* success;
+
+  _ClientHandlers_CookieVisitor_Visit_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _ClientHandlers_CookieVisitor_Dispose_args__isset {
+  _ClientHandlers_CookieVisitor_Dispose_args__isset() : visitor(false) {}
+  bool visitor :1;
+} _ClientHandlers_CookieVisitor_Dispose_args__isset;
+
+class ClientHandlers_CookieVisitor_Dispose_args {
+ public:
+
+  ClientHandlers_CookieVisitor_Dispose_args(const ClientHandlers_CookieVisitor_Dispose_args&) noexcept;
+  ClientHandlers_CookieVisitor_Dispose_args& operator=(const ClientHandlers_CookieVisitor_Dispose_args&) noexcept;
+  ClientHandlers_CookieVisitor_Dispose_args() noexcept
+                                            : visitor(0) {
+  }
+
+  virtual ~ClientHandlers_CookieVisitor_Dispose_args() noexcept;
+  int32_t visitor;
+
+  _ClientHandlers_CookieVisitor_Dispose_args__isset __isset;
+
+  void __set_visitor(const int32_t val);
+
+  bool operator == (const ClientHandlers_CookieVisitor_Dispose_args & rhs) const
+  {
+    if (!(visitor == rhs.visitor))
+      return false;
+    return true;
+  }
+  bool operator != (const ClientHandlers_CookieVisitor_Dispose_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ClientHandlers_CookieVisitor_Dispose_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class ClientHandlers_CookieVisitor_Dispose_pargs {
+ public:
+
+
+  virtual ~ClientHandlers_CookieVisitor_Dispose_pargs() noexcept;
+  const int32_t* visitor;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -4306,12 +5849,8 @@ class ClientHandlersClient : virtual public ClientHandlersIf {
   int32_t recv_connect();
   void log(const std::string& msg) override;
   void send_log(const std::string& msg);
-  void AppHandler_GetRegisteredCustomSchemes(std::vector<CustomScheme> & _return) override;
-  void send_AppHandler_GetRegisteredCustomSchemes();
-  void recv_AppHandler_GetRegisteredCustomSchemes(std::vector<CustomScheme> & _return);
   void AppHandler_OnContextInitialized() override;
   void send_AppHandler_OnContextInitialized();
-  void recv_AppHandler_OnContextInitialized();
   void RenderHandler_GetViewRect(Rect& _return, const int32_t bid) override;
   void send_RenderHandler_GetViewRect(const int32_t bid);
   void recv_RenderHandler_GetViewRect(Rect& _return);
@@ -4324,11 +5863,11 @@ class ClientHandlersClient : virtual public ClientHandlersIf {
   void RenderHandler_OnPaint(const int32_t bid, const bool popup, const int32_t dirtyRectsCount, const std::string& sharedMemName, const int64_t sharedMemHandle, const int32_t width, const int32_t height) override;
   void send_RenderHandler_OnPaint(const int32_t bid, const bool popup, const int32_t dirtyRectsCount, const std::string& sharedMemName, const int64_t sharedMemHandle, const int32_t width, const int32_t height);
   void recv_RenderHandler_OnPaint();
-  bool LifeSpanHandler_OnBeforePopup(const int32_t bid, const std::string& url, const std::string& frameName, const bool gesture) override;
-  void send_LifeSpanHandler_OnBeforePopup(const int32_t bid, const std::string& url, const std::string& frameName, const bool gesture);
+  bool LifeSpanHandler_OnBeforePopup(const int32_t bid, const  ::thrift_codegen::RObject& frame, const std::string& url, const std::string& frameName, const bool gesture) override;
+  void send_LifeSpanHandler_OnBeforePopup(const int32_t bid, const  ::thrift_codegen::RObject& frame, const std::string& url, const std::string& frameName, const bool gesture);
   bool recv_LifeSpanHandler_OnBeforePopup();
-  void LifeSpanHandler_OnAfterCreated(const int32_t bid) override;
-  void send_LifeSpanHandler_OnAfterCreated(const int32_t bid);
+  void LifeSpanHandler_OnAfterCreated(const int32_t bid, const int32_t nativeBrowserIdentifier) override;
+  void send_LifeSpanHandler_OnAfterCreated(const int32_t bid, const int32_t nativeBrowserIdentifier);
   bool LifeSpanHandler_DoClose(const int32_t bid) override;
   void send_LifeSpanHandler_DoClose(const int32_t bid);
   bool recv_LifeSpanHandler_DoClose();
@@ -4336,14 +5875,14 @@ class ClientHandlersClient : virtual public ClientHandlersIf {
   void send_LifeSpanHandler_OnBeforeClose(const int32_t bid);
   void LoadHandler_OnLoadingStateChange(const int32_t bid, const bool isLoading, const bool canGoBack, const bool canGoForward) override;
   void send_LoadHandler_OnLoadingStateChange(const int32_t bid, const bool isLoading, const bool canGoBack, const bool canGoForward);
-  void LoadHandler_OnLoadStart(const int32_t bid, const int32_t transition_type) override;
-  void send_LoadHandler_OnLoadStart(const int32_t bid, const int32_t transition_type);
-  void LoadHandler_OnLoadEnd(const int32_t bid, const int32_t httpStatusCode) override;
-  void send_LoadHandler_OnLoadEnd(const int32_t bid, const int32_t httpStatusCode);
-  void LoadHandler_OnLoadError(const int32_t bid, const int32_t errorCode, const std::string& errorText, const std::string& failedUrl) override;
-  void send_LoadHandler_OnLoadError(const int32_t bid, const int32_t errorCode, const std::string& errorText, const std::string& failedUrl);
-  void DisplayHandler_OnAddressChange(const int32_t bid, const std::string& url) override;
-  void send_DisplayHandler_OnAddressChange(const int32_t bid, const std::string& url);
+  void LoadHandler_OnLoadStart(const int32_t bid, const  ::thrift_codegen::RObject& frame, const int32_t transition_type) override;
+  void send_LoadHandler_OnLoadStart(const int32_t bid, const  ::thrift_codegen::RObject& frame, const int32_t transition_type);
+  void LoadHandler_OnLoadEnd(const int32_t bid, const  ::thrift_codegen::RObject& frame, const int32_t httpStatusCode) override;
+  void send_LoadHandler_OnLoadEnd(const int32_t bid, const  ::thrift_codegen::RObject& frame, const int32_t httpStatusCode);
+  void LoadHandler_OnLoadError(const int32_t bid, const  ::thrift_codegen::RObject& frame, const int32_t errorCode, const std::string& errorText, const std::string& failedUrl) override;
+  void send_LoadHandler_OnLoadError(const int32_t bid, const  ::thrift_codegen::RObject& frame, const int32_t errorCode, const std::string& errorText, const std::string& failedUrl);
+  void DisplayHandler_OnAddressChange(const int32_t bid, const  ::thrift_codegen::RObject& frame, const std::string& url) override;
+  void send_DisplayHandler_OnAddressChange(const int32_t bid, const  ::thrift_codegen::RObject& frame, const std::string& url);
   void DisplayHandler_OnTitleChange(const int32_t bid, const std::string& title) override;
   void send_DisplayHandler_OnTitleChange(const int32_t bid, const std::string& title);
   bool DisplayHandler_OnTooltip(const int32_t bid, const std::string& text) override;
@@ -4354,61 +5893,102 @@ class ClientHandlersClient : virtual public ClientHandlersIf {
   bool DisplayHandler_OnConsoleMessage(const int32_t bid, const int32_t level, const std::string& message, const std::string& source, const int32_t line) override;
   void send_DisplayHandler_OnConsoleMessage(const int32_t bid, const int32_t level, const std::string& message, const std::string& source, const int32_t line);
   bool recv_DisplayHandler_OnConsoleMessage();
-  bool RequestHandler_OnBeforeBrowse(const int32_t bid, const  ::thrift_codegen::RObject& request, const bool user_gesture, const bool is_redirect) override;
-  void send_RequestHandler_OnBeforeBrowse(const int32_t bid, const  ::thrift_codegen::RObject& request, const bool user_gesture, const bool is_redirect);
+  bool KeyboardHandler_OnPreKeyEvent(const int32_t bid, const  ::thrift_codegen::KeyEvent& event) override;
+  void send_KeyboardHandler_OnPreKeyEvent(const int32_t bid, const  ::thrift_codegen::KeyEvent& event);
+  bool recv_KeyboardHandler_OnPreKeyEvent();
+  bool KeyboardHandler_OnKeyEvent(const int32_t bid, const  ::thrift_codegen::KeyEvent& event) override;
+  void send_KeyboardHandler_OnKeyEvent(const int32_t bid, const  ::thrift_codegen::KeyEvent& event);
+  bool recv_KeyboardHandler_OnKeyEvent();
+  void FocusHandler_OnTakeFocus(const int32_t bid, const bool next) override;
+  void send_FocusHandler_OnTakeFocus(const int32_t bid, const bool next);
+  bool FocusHandler_OnSetFocus(const int32_t bid, const std::string& source) override;
+  void send_FocusHandler_OnSetFocus(const int32_t bid, const std::string& source);
+  bool recv_FocusHandler_OnSetFocus();
+  void FocusHandler_OnGotFocus(const int32_t bid) override;
+  void send_FocusHandler_OnGotFocus(const int32_t bid);
+  bool RequestHandler_OnBeforeBrowse(const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const bool user_gesture, const bool is_redirect) override;
+  void send_RequestHandler_OnBeforeBrowse(const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const bool user_gesture, const bool is_redirect);
   bool recv_RequestHandler_OnBeforeBrowse();
-  bool RequestHandler_OnOpenURLFromTab(const int32_t bid, const std::string& target_url, const bool user_gesture) override;
-  void send_RequestHandler_OnOpenURLFromTab(const int32_t bid, const std::string& target_url, const bool user_gesture);
+  bool RequestHandler_OnOpenURLFromTab(const int32_t bid, const  ::thrift_codegen::RObject& frame, const std::string& target_url, const bool user_gesture) override;
+  void send_RequestHandler_OnOpenURLFromTab(const int32_t bid, const  ::thrift_codegen::RObject& frame, const std::string& target_url, const bool user_gesture);
   bool recv_RequestHandler_OnOpenURLFromTab();
   bool RequestHandler_GetAuthCredentials(const int32_t bid, const std::string& origin_url, const bool isProxy, const std::string& host, const int32_t port, const std::string& realm, const std::string& scheme, const  ::thrift_codegen::RObject& authCallback) override;
   void send_RequestHandler_GetAuthCredentials(const int32_t bid, const std::string& origin_url, const bool isProxy, const std::string& host, const int32_t port, const std::string& realm, const std::string& scheme, const  ::thrift_codegen::RObject& authCallback);
   bool recv_RequestHandler_GetAuthCredentials();
-  bool RequestHandler_OnCertificateError(const int32_t bid, const std::string& cert_error, const std::string& request_url, const  ::thrift_codegen::RObject& sslInfo, const  ::thrift_codegen::RObject& callback) override;
-  void send_RequestHandler_OnCertificateError(const int32_t bid, const std::string& cert_error, const std::string& request_url, const  ::thrift_codegen::RObject& sslInfo, const  ::thrift_codegen::RObject& callback);
+  bool RequestHandler_OnCertificateError(const int32_t bid, const std::string& cert_error, const std::string& request_url, const std::string& sslInfo, const  ::thrift_codegen::RObject& callback) override;
+  void send_RequestHandler_OnCertificateError(const int32_t bid, const std::string& cert_error, const std::string& request_url, const std::string& sslInfo, const  ::thrift_codegen::RObject& callback);
   bool recv_RequestHandler_OnCertificateError();
   void RequestHandler_OnRenderProcessTerminated(const int32_t bid, const std::string& status) override;
   void send_RequestHandler_OnRenderProcessTerminated(const int32_t bid, const std::string& status);
-  void RequestHandler_GetResourceRequestHandler( ::thrift_codegen::RObject& _return, const int32_t bid, const  ::thrift_codegen::RObject& request, const bool isNavigation, const bool isDownload, const std::string& requestInitiator) override;
-  void send_RequestHandler_GetResourceRequestHandler(const int32_t bid, const  ::thrift_codegen::RObject& request, const bool isNavigation, const bool isDownload, const std::string& requestInitiator);
+  void RequestHandler_GetResourceRequestHandler( ::thrift_codegen::RObject& _return, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const bool isNavigation, const bool isDownload, const std::string& requestInitiator) override;
+  void send_RequestHandler_GetResourceRequestHandler(const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const bool isNavigation, const bool isDownload, const std::string& requestInitiator);
   void recv_RequestHandler_GetResourceRequestHandler( ::thrift_codegen::RObject& _return);
   void ResourceRequestHandler_Dispose(const int32_t rrHandler) override;
   void send_ResourceRequestHandler_Dispose(const int32_t rrHandler);
-  void ResourceRequestHandler_GetCookieAccessFilter( ::thrift_codegen::RObject& _return, const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& request) override;
-  void send_ResourceRequestHandler_GetCookieAccessFilter(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& request);
+  void ResourceRequestHandler_GetCookieAccessFilter( ::thrift_codegen::RObject& _return, const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request) override;
+  void send_ResourceRequestHandler_GetCookieAccessFilter(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request);
   void recv_ResourceRequestHandler_GetCookieAccessFilter( ::thrift_codegen::RObject& _return);
   void CookieAccessFilter_Dispose(const int32_t filter) override;
   void send_CookieAccessFilter_Dispose(const int32_t filter);
-  bool CookieAccessFilter_CanSendCookie(const int32_t filter, const int32_t bid, const  ::thrift_codegen::RObject& request, const std::vector<std::string> & cookie) override;
-  void send_CookieAccessFilter_CanSendCookie(const int32_t filter, const int32_t bid, const  ::thrift_codegen::RObject& request, const std::vector<std::string> & cookie);
+  bool CookieAccessFilter_CanSendCookie(const int32_t filter, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const std::vector<std::string> & cookie) override;
+  void send_CookieAccessFilter_CanSendCookie(const int32_t filter, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const std::vector<std::string> & cookie);
   bool recv_CookieAccessFilter_CanSendCookie();
-  bool CookieAccessFilter_CanSaveCookie(const int32_t filter, const int32_t bid, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response, const std::vector<std::string> & cookie) override;
-  void send_CookieAccessFilter_CanSaveCookie(const int32_t filter, const int32_t bid, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response, const std::vector<std::string> & cookie);
+  bool CookieAccessFilter_CanSaveCookie(const int32_t filter, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response, const std::vector<std::string> & cookie) override;
+  void send_CookieAccessFilter_CanSaveCookie(const int32_t filter, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response, const std::vector<std::string> & cookie);
   bool recv_CookieAccessFilter_CanSaveCookie();
-  bool ResourceRequestHandler_OnBeforeResourceLoad(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& request) override;
-  void send_ResourceRequestHandler_OnBeforeResourceLoad(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& request);
+  bool ResourceRequestHandler_OnBeforeResourceLoad(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request) override;
+  void send_ResourceRequestHandler_OnBeforeResourceLoad(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request);
   bool recv_ResourceRequestHandler_OnBeforeResourceLoad();
-  void ResourceRequestHandler_GetResourceHandler( ::thrift_codegen::RObject& _return, const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& request) override;
-  void send_ResourceRequestHandler_GetResourceHandler(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& request);
+  void ResourceRequestHandler_GetResourceHandler( ::thrift_codegen::RObject& _return, const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request) override;
+  void send_ResourceRequestHandler_GetResourceHandler(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request);
   void recv_ResourceRequestHandler_GetResourceHandler( ::thrift_codegen::RObject& _return);
   void ResourceHandler_Dispose(const int32_t resourceHandler) override;
   void send_ResourceHandler_Dispose(const int32_t resourceHandler);
-  void ResourceRequestHandler_OnResourceRedirect(std::string& _return, const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response, const std::string& new_url) override;
-  void send_ResourceRequestHandler_OnResourceRedirect(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response, const std::string& new_url);
+  bool ResourceHandler_ProcessRequest(const int32_t resourceHandler, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& callback) override;
+  void send_ResourceHandler_ProcessRequest(const int32_t resourceHandler, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& callback);
+  bool recv_ResourceHandler_ProcessRequest();
+  void ResourceHandler_GetResponseHeaders( ::thrift_codegen::ResponseHeaders& _return, const int32_t resourceHandler, const  ::thrift_codegen::RObject& response) override;
+  void send_ResourceHandler_GetResponseHeaders(const int32_t resourceHandler, const  ::thrift_codegen::RObject& response);
+  void recv_ResourceHandler_GetResponseHeaders( ::thrift_codegen::ResponseHeaders& _return);
+  void ResourceHandler_ReadResponse( ::thrift_codegen::ResponseData& _return, const int32_t resourceHandler, const int32_t bytes_to_read, const  ::thrift_codegen::RObject& callback) override;
+  void send_ResourceHandler_ReadResponse(const int32_t resourceHandler, const int32_t bytes_to_read, const  ::thrift_codegen::RObject& callback);
+  void recv_ResourceHandler_ReadResponse( ::thrift_codegen::ResponseData& _return);
+  void ResourceHandler_Cancel(const int32_t resourceHandler) override;
+  void send_ResourceHandler_Cancel(const int32_t resourceHandler);
+  void ResourceRequestHandler_OnResourceRedirect(std::string& _return, const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response, const std::string& new_url) override;
+  void send_ResourceRequestHandler_OnResourceRedirect(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response, const std::string& new_url);
   void recv_ResourceRequestHandler_OnResourceRedirect(std::string& _return);
-  bool ResourceRequestHandler_OnResourceResponse(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response) override;
-  void send_ResourceRequestHandler_OnResourceResponse(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response);
+  bool ResourceRequestHandler_OnResourceResponse(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response) override;
+  void send_ResourceRequestHandler_OnResourceResponse(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response);
   bool recv_ResourceRequestHandler_OnResourceResponse();
-  void ResourceRequestHandler_OnResourceLoadComplete(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response, const std::string& status, const int64_t receivedContentLength) override;
-  void send_ResourceRequestHandler_OnResourceLoadComplete(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response, const std::string& status, const int64_t receivedContentLength);
+  void ResourceRequestHandler_OnResourceLoadComplete(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response, const std::string& status, const int64_t receivedContentLength) override;
+  void send_ResourceRequestHandler_OnResourceLoadComplete(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response, const std::string& status, const int64_t receivedContentLength);
   void recv_ResourceRequestHandler_OnResourceLoadComplete();
-  bool ResourceRequestHandler_OnProtocolExecution(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& request, const bool allowOsExecution) override;
-  void send_ResourceRequestHandler_OnProtocolExecution(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& request, const bool allowOsExecution);
+  bool ResourceRequestHandler_OnProtocolExecution(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const bool allowOsExecution) override;
+  void send_ResourceRequestHandler_OnProtocolExecution(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const bool allowOsExecution);
   bool recv_ResourceRequestHandler_OnProtocolExecution();
-  bool MessageRouterHandler_onQuery(const  ::thrift_codegen::RObject& handler, const int32_t bid, const int64_t queryId, const std::string& request, const bool persistent, const  ::thrift_codegen::RObject& queryCallback) override;
-  void send_MessageRouterHandler_onQuery(const  ::thrift_codegen::RObject& handler, const int32_t bid, const int64_t queryId, const std::string& request, const bool persistent, const  ::thrift_codegen::RObject& queryCallback);
+  bool MessageRouterHandler_onQuery(const  ::thrift_codegen::RObject& handler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const int64_t queryId, const std::string& request, const bool persistent, const  ::thrift_codegen::RObject& queryCallback) override;
+  void send_MessageRouterHandler_onQuery(const  ::thrift_codegen::RObject& handler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const int64_t queryId, const std::string& request, const bool persistent, const  ::thrift_codegen::RObject& queryCallback);
   bool recv_MessageRouterHandler_onQuery();
-  void MessageRouterHandler_onQueryCanceled(const  ::thrift_codegen::RObject& handler, const int32_t bid, const int64_t queryId) override;
-  void send_MessageRouterHandler_onQueryCanceled(const  ::thrift_codegen::RObject& handler, const int32_t bid, const int64_t queryId);
+  void MessageRouterHandler_onQueryCanceled(const  ::thrift_codegen::RObject& handler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const int64_t queryId) override;
+  void send_MessageRouterHandler_onQueryCanceled(const  ::thrift_codegen::RObject& handler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const int64_t queryId);
+  void MessageRouterHandler_Dispose(const int32_t handler) override;
+  void send_MessageRouterHandler_Dispose(const int32_t handler);
+  void SchemeHandlerFactory_CreateHandler( ::thrift_codegen::RObject& _return, const int32_t schemeHandlerFactory, const int32_t bid, const  ::thrift_codegen::RObject& frame, const std::string& scheme_name, const  ::thrift_codegen::RObject& request) override;
+  void send_SchemeHandlerFactory_CreateHandler(const int32_t schemeHandlerFactory, const int32_t bid, const  ::thrift_codegen::RObject& frame, const std::string& scheme_name, const  ::thrift_codegen::RObject& request);
+  void recv_SchemeHandlerFactory_CreateHandler( ::thrift_codegen::RObject& _return);
+  void SchemeHandlerFactory_Dispose(const int32_t schemeHandlerFactory) override;
+  void send_SchemeHandlerFactory_Dispose(const int32_t schemeHandlerFactory);
+  void CompletionCallback_OnComplete(const int32_t completionCallback) override;
+  void send_CompletionCallback_OnComplete(const int32_t completionCallback);
+  void RequestContextHandler_GetResourceRequestHandler( ::thrift_codegen::RObject& _return, const int32_t handler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const bool isNavigation, const bool isDownload, const std::string& requestInitiator) override;
+  void send_RequestContextHandler_GetResourceRequestHandler(const int32_t handler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const bool isNavigation, const bool isDownload, const std::string& requestInitiator);
+  void recv_RequestContextHandler_GetResourceRequestHandler( ::thrift_codegen::RObject& _return);
+  bool CookieVisitor_Visit(const int32_t visitor, const  ::thrift_codegen::Cookie& cookie, const int32_t count, const int32_t total) override;
+  void send_CookieVisitor_Visit(const int32_t visitor, const  ::thrift_codegen::Cookie& cookie, const int32_t count, const int32_t total);
+  bool recv_CookieVisitor_Visit();
+  void CookieVisitor_Dispose(const int32_t visitor) override;
+  void send_CookieVisitor_Dispose(const int32_t visitor);
  protected:
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
@@ -4426,7 +6006,6 @@ class ClientHandlersProcessor : public ::apache::thrift::TDispatchProcessor {
   ProcessMap processMap_;
   void process_connect(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_log(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_AppHandler_GetRegisteredCustomSchemes(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_AppHandler_OnContextInitialized(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_RenderHandler_GetViewRect(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_RenderHandler_GetScreenInfo(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -4445,6 +6024,11 @@ class ClientHandlersProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_DisplayHandler_OnTooltip(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_DisplayHandler_OnStatusMessage(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_DisplayHandler_OnConsoleMessage(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_KeyboardHandler_OnPreKeyEvent(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_KeyboardHandler_OnKeyEvent(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_FocusHandler_OnTakeFocus(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_FocusHandler_OnSetFocus(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_FocusHandler_OnGotFocus(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_RequestHandler_OnBeforeBrowse(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_RequestHandler_OnOpenURLFromTab(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_RequestHandler_GetAuthCredentials(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -4459,18 +6043,28 @@ class ClientHandlersProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_ResourceRequestHandler_OnBeforeResourceLoad(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_ResourceRequestHandler_GetResourceHandler(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_ResourceHandler_Dispose(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_ResourceHandler_ProcessRequest(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_ResourceHandler_GetResponseHeaders(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_ResourceHandler_ReadResponse(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_ResourceHandler_Cancel(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_ResourceRequestHandler_OnResourceRedirect(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_ResourceRequestHandler_OnResourceResponse(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_ResourceRequestHandler_OnResourceLoadComplete(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_ResourceRequestHandler_OnProtocolExecution(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_MessageRouterHandler_onQuery(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_MessageRouterHandler_onQueryCanceled(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_MessageRouterHandler_Dispose(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_SchemeHandlerFactory_CreateHandler(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_SchemeHandlerFactory_Dispose(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_CompletionCallback_OnComplete(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_RequestContextHandler_GetResourceRequestHandler(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_CookieVisitor_Visit(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_CookieVisitor_Dispose(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   ClientHandlersProcessor(::std::shared_ptr<ClientHandlersIf> iface) :
     iface_(iface) {
     processMap_["connect"] = &ClientHandlersProcessor::process_connect;
     processMap_["log"] = &ClientHandlersProcessor::process_log;
-    processMap_["AppHandler_GetRegisteredCustomSchemes"] = &ClientHandlersProcessor::process_AppHandler_GetRegisteredCustomSchemes;
     processMap_["AppHandler_OnContextInitialized"] = &ClientHandlersProcessor::process_AppHandler_OnContextInitialized;
     processMap_["RenderHandler_GetViewRect"] = &ClientHandlersProcessor::process_RenderHandler_GetViewRect;
     processMap_["RenderHandler_GetScreenInfo"] = &ClientHandlersProcessor::process_RenderHandler_GetScreenInfo;
@@ -4489,6 +6083,11 @@ class ClientHandlersProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["DisplayHandler_OnTooltip"] = &ClientHandlersProcessor::process_DisplayHandler_OnTooltip;
     processMap_["DisplayHandler_OnStatusMessage"] = &ClientHandlersProcessor::process_DisplayHandler_OnStatusMessage;
     processMap_["DisplayHandler_OnConsoleMessage"] = &ClientHandlersProcessor::process_DisplayHandler_OnConsoleMessage;
+    processMap_["KeyboardHandler_OnPreKeyEvent"] = &ClientHandlersProcessor::process_KeyboardHandler_OnPreKeyEvent;
+    processMap_["KeyboardHandler_OnKeyEvent"] = &ClientHandlersProcessor::process_KeyboardHandler_OnKeyEvent;
+    processMap_["FocusHandler_OnTakeFocus"] = &ClientHandlersProcessor::process_FocusHandler_OnTakeFocus;
+    processMap_["FocusHandler_OnSetFocus"] = &ClientHandlersProcessor::process_FocusHandler_OnSetFocus;
+    processMap_["FocusHandler_OnGotFocus"] = &ClientHandlersProcessor::process_FocusHandler_OnGotFocus;
     processMap_["RequestHandler_OnBeforeBrowse"] = &ClientHandlersProcessor::process_RequestHandler_OnBeforeBrowse;
     processMap_["RequestHandler_OnOpenURLFromTab"] = &ClientHandlersProcessor::process_RequestHandler_OnOpenURLFromTab;
     processMap_["RequestHandler_GetAuthCredentials"] = &ClientHandlersProcessor::process_RequestHandler_GetAuthCredentials;
@@ -4503,12 +6102,23 @@ class ClientHandlersProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["ResourceRequestHandler_OnBeforeResourceLoad"] = &ClientHandlersProcessor::process_ResourceRequestHandler_OnBeforeResourceLoad;
     processMap_["ResourceRequestHandler_GetResourceHandler"] = &ClientHandlersProcessor::process_ResourceRequestHandler_GetResourceHandler;
     processMap_["ResourceHandler_Dispose"] = &ClientHandlersProcessor::process_ResourceHandler_Dispose;
+    processMap_["ResourceHandler_ProcessRequest"] = &ClientHandlersProcessor::process_ResourceHandler_ProcessRequest;
+    processMap_["ResourceHandler_GetResponseHeaders"] = &ClientHandlersProcessor::process_ResourceHandler_GetResponseHeaders;
+    processMap_["ResourceHandler_ReadResponse"] = &ClientHandlersProcessor::process_ResourceHandler_ReadResponse;
+    processMap_["ResourceHandler_Cancel"] = &ClientHandlersProcessor::process_ResourceHandler_Cancel;
     processMap_["ResourceRequestHandler_OnResourceRedirect"] = &ClientHandlersProcessor::process_ResourceRequestHandler_OnResourceRedirect;
     processMap_["ResourceRequestHandler_OnResourceResponse"] = &ClientHandlersProcessor::process_ResourceRequestHandler_OnResourceResponse;
     processMap_["ResourceRequestHandler_OnResourceLoadComplete"] = &ClientHandlersProcessor::process_ResourceRequestHandler_OnResourceLoadComplete;
     processMap_["ResourceRequestHandler_OnProtocolExecution"] = &ClientHandlersProcessor::process_ResourceRequestHandler_OnProtocolExecution;
     processMap_["MessageRouterHandler_onQuery"] = &ClientHandlersProcessor::process_MessageRouterHandler_onQuery;
     processMap_["MessageRouterHandler_onQueryCanceled"] = &ClientHandlersProcessor::process_MessageRouterHandler_onQueryCanceled;
+    processMap_["MessageRouterHandler_Dispose"] = &ClientHandlersProcessor::process_MessageRouterHandler_Dispose;
+    processMap_["SchemeHandlerFactory_CreateHandler"] = &ClientHandlersProcessor::process_SchemeHandlerFactory_CreateHandler;
+    processMap_["SchemeHandlerFactory_Dispose"] = &ClientHandlersProcessor::process_SchemeHandlerFactory_Dispose;
+    processMap_["CompletionCallback_OnComplete"] = &ClientHandlersProcessor::process_CompletionCallback_OnComplete;
+    processMap_["RequestContextHandler_GetResourceRequestHandler"] = &ClientHandlersProcessor::process_RequestContextHandler_GetResourceRequestHandler;
+    processMap_["CookieVisitor_Visit"] = &ClientHandlersProcessor::process_CookieVisitor_Visit;
+    processMap_["CookieVisitor_Dispose"] = &ClientHandlersProcessor::process_CookieVisitor_Dispose;
   }
 
   virtual ~ClientHandlersProcessor() {}
@@ -4553,16 +6163,6 @@ class ClientHandlersMultiface : virtual public ClientHandlersIf {
       ifaces_[i]->log(msg);
     }
     ifaces_[i]->log(msg);
-  }
-
-  void AppHandler_GetRegisteredCustomSchemes(std::vector<CustomScheme> & _return) override {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->AppHandler_GetRegisteredCustomSchemes(_return);
-    }
-    ifaces_[i]->AppHandler_GetRegisteredCustomSchemes(_return);
-    return;
   }
 
   void AppHandler_OnContextInitialized() override {
@@ -4613,22 +6213,22 @@ class ClientHandlersMultiface : virtual public ClientHandlersIf {
     ifaces_[i]->RenderHandler_OnPaint(bid, popup, dirtyRectsCount, sharedMemName, sharedMemHandle, width, height);
   }
 
-  bool LifeSpanHandler_OnBeforePopup(const int32_t bid, const std::string& url, const std::string& frameName, const bool gesture) override {
+  bool LifeSpanHandler_OnBeforePopup(const int32_t bid, const  ::thrift_codegen::RObject& frame, const std::string& url, const std::string& frameName, const bool gesture) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->LifeSpanHandler_OnBeforePopup(bid, url, frameName, gesture);
+      ifaces_[i]->LifeSpanHandler_OnBeforePopup(bid, frame, url, frameName, gesture);
     }
-    return ifaces_[i]->LifeSpanHandler_OnBeforePopup(bid, url, frameName, gesture);
+    return ifaces_[i]->LifeSpanHandler_OnBeforePopup(bid, frame, url, frameName, gesture);
   }
 
-  void LifeSpanHandler_OnAfterCreated(const int32_t bid) override {
+  void LifeSpanHandler_OnAfterCreated(const int32_t bid, const int32_t nativeBrowserIdentifier) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->LifeSpanHandler_OnAfterCreated(bid);
+      ifaces_[i]->LifeSpanHandler_OnAfterCreated(bid, nativeBrowserIdentifier);
     }
-    ifaces_[i]->LifeSpanHandler_OnAfterCreated(bid);
+    ifaces_[i]->LifeSpanHandler_OnAfterCreated(bid, nativeBrowserIdentifier);
   }
 
   bool LifeSpanHandler_DoClose(const int32_t bid) override {
@@ -4658,40 +6258,40 @@ class ClientHandlersMultiface : virtual public ClientHandlersIf {
     ifaces_[i]->LoadHandler_OnLoadingStateChange(bid, isLoading, canGoBack, canGoForward);
   }
 
-  void LoadHandler_OnLoadStart(const int32_t bid, const int32_t transition_type) override {
+  void LoadHandler_OnLoadStart(const int32_t bid, const  ::thrift_codegen::RObject& frame, const int32_t transition_type) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->LoadHandler_OnLoadStart(bid, transition_type);
+      ifaces_[i]->LoadHandler_OnLoadStart(bid, frame, transition_type);
     }
-    ifaces_[i]->LoadHandler_OnLoadStart(bid, transition_type);
+    ifaces_[i]->LoadHandler_OnLoadStart(bid, frame, transition_type);
   }
 
-  void LoadHandler_OnLoadEnd(const int32_t bid, const int32_t httpStatusCode) override {
+  void LoadHandler_OnLoadEnd(const int32_t bid, const  ::thrift_codegen::RObject& frame, const int32_t httpStatusCode) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->LoadHandler_OnLoadEnd(bid, httpStatusCode);
+      ifaces_[i]->LoadHandler_OnLoadEnd(bid, frame, httpStatusCode);
     }
-    ifaces_[i]->LoadHandler_OnLoadEnd(bid, httpStatusCode);
+    ifaces_[i]->LoadHandler_OnLoadEnd(bid, frame, httpStatusCode);
   }
 
-  void LoadHandler_OnLoadError(const int32_t bid, const int32_t errorCode, const std::string& errorText, const std::string& failedUrl) override {
+  void LoadHandler_OnLoadError(const int32_t bid, const  ::thrift_codegen::RObject& frame, const int32_t errorCode, const std::string& errorText, const std::string& failedUrl) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->LoadHandler_OnLoadError(bid, errorCode, errorText, failedUrl);
+      ifaces_[i]->LoadHandler_OnLoadError(bid, frame, errorCode, errorText, failedUrl);
     }
-    ifaces_[i]->LoadHandler_OnLoadError(bid, errorCode, errorText, failedUrl);
+    ifaces_[i]->LoadHandler_OnLoadError(bid, frame, errorCode, errorText, failedUrl);
   }
 
-  void DisplayHandler_OnAddressChange(const int32_t bid, const std::string& url) override {
+  void DisplayHandler_OnAddressChange(const int32_t bid, const  ::thrift_codegen::RObject& frame, const std::string& url) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->DisplayHandler_OnAddressChange(bid, url);
+      ifaces_[i]->DisplayHandler_OnAddressChange(bid, frame, url);
     }
-    ifaces_[i]->DisplayHandler_OnAddressChange(bid, url);
+    ifaces_[i]->DisplayHandler_OnAddressChange(bid, frame, url);
   }
 
   void DisplayHandler_OnTitleChange(const int32_t bid, const std::string& title) override {
@@ -4730,22 +6330,67 @@ class ClientHandlersMultiface : virtual public ClientHandlersIf {
     return ifaces_[i]->DisplayHandler_OnConsoleMessage(bid, level, message, source, line);
   }
 
-  bool RequestHandler_OnBeforeBrowse(const int32_t bid, const  ::thrift_codegen::RObject& request, const bool user_gesture, const bool is_redirect) override {
+  bool KeyboardHandler_OnPreKeyEvent(const int32_t bid, const  ::thrift_codegen::KeyEvent& event) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->RequestHandler_OnBeforeBrowse(bid, request, user_gesture, is_redirect);
+      ifaces_[i]->KeyboardHandler_OnPreKeyEvent(bid, event);
     }
-    return ifaces_[i]->RequestHandler_OnBeforeBrowse(bid, request, user_gesture, is_redirect);
+    return ifaces_[i]->KeyboardHandler_OnPreKeyEvent(bid, event);
   }
 
-  bool RequestHandler_OnOpenURLFromTab(const int32_t bid, const std::string& target_url, const bool user_gesture) override {
+  bool KeyboardHandler_OnKeyEvent(const int32_t bid, const  ::thrift_codegen::KeyEvent& event) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->RequestHandler_OnOpenURLFromTab(bid, target_url, user_gesture);
+      ifaces_[i]->KeyboardHandler_OnKeyEvent(bid, event);
     }
-    return ifaces_[i]->RequestHandler_OnOpenURLFromTab(bid, target_url, user_gesture);
+    return ifaces_[i]->KeyboardHandler_OnKeyEvent(bid, event);
+  }
+
+  void FocusHandler_OnTakeFocus(const int32_t bid, const bool next) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->FocusHandler_OnTakeFocus(bid, next);
+    }
+    ifaces_[i]->FocusHandler_OnTakeFocus(bid, next);
+  }
+
+  bool FocusHandler_OnSetFocus(const int32_t bid, const std::string& source) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->FocusHandler_OnSetFocus(bid, source);
+    }
+    return ifaces_[i]->FocusHandler_OnSetFocus(bid, source);
+  }
+
+  void FocusHandler_OnGotFocus(const int32_t bid) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->FocusHandler_OnGotFocus(bid);
+    }
+    ifaces_[i]->FocusHandler_OnGotFocus(bid);
+  }
+
+  bool RequestHandler_OnBeforeBrowse(const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const bool user_gesture, const bool is_redirect) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->RequestHandler_OnBeforeBrowse(bid, frame, request, user_gesture, is_redirect);
+    }
+    return ifaces_[i]->RequestHandler_OnBeforeBrowse(bid, frame, request, user_gesture, is_redirect);
+  }
+
+  bool RequestHandler_OnOpenURLFromTab(const int32_t bid, const  ::thrift_codegen::RObject& frame, const std::string& target_url, const bool user_gesture) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->RequestHandler_OnOpenURLFromTab(bid, frame, target_url, user_gesture);
+    }
+    return ifaces_[i]->RequestHandler_OnOpenURLFromTab(bid, frame, target_url, user_gesture);
   }
 
   bool RequestHandler_GetAuthCredentials(const int32_t bid, const std::string& origin_url, const bool isProxy, const std::string& host, const int32_t port, const std::string& realm, const std::string& scheme, const  ::thrift_codegen::RObject& authCallback) override {
@@ -4757,7 +6402,7 @@ class ClientHandlersMultiface : virtual public ClientHandlersIf {
     return ifaces_[i]->RequestHandler_GetAuthCredentials(bid, origin_url, isProxy, host, port, realm, scheme, authCallback);
   }
 
-  bool RequestHandler_OnCertificateError(const int32_t bid, const std::string& cert_error, const std::string& request_url, const  ::thrift_codegen::RObject& sslInfo, const  ::thrift_codegen::RObject& callback) override {
+  bool RequestHandler_OnCertificateError(const int32_t bid, const std::string& cert_error, const std::string& request_url, const std::string& sslInfo, const  ::thrift_codegen::RObject& callback) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
@@ -4775,13 +6420,13 @@ class ClientHandlersMultiface : virtual public ClientHandlersIf {
     ifaces_[i]->RequestHandler_OnRenderProcessTerminated(bid, status);
   }
 
-  void RequestHandler_GetResourceRequestHandler( ::thrift_codegen::RObject& _return, const int32_t bid, const  ::thrift_codegen::RObject& request, const bool isNavigation, const bool isDownload, const std::string& requestInitiator) override {
+  void RequestHandler_GetResourceRequestHandler( ::thrift_codegen::RObject& _return, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const bool isNavigation, const bool isDownload, const std::string& requestInitiator) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->RequestHandler_GetResourceRequestHandler(_return, bid, request, isNavigation, isDownload, requestInitiator);
+      ifaces_[i]->RequestHandler_GetResourceRequestHandler(_return, bid, frame, request, isNavigation, isDownload, requestInitiator);
     }
-    ifaces_[i]->RequestHandler_GetResourceRequestHandler(_return, bid, request, isNavigation, isDownload, requestInitiator);
+    ifaces_[i]->RequestHandler_GetResourceRequestHandler(_return, bid, frame, request, isNavigation, isDownload, requestInitiator);
     return;
   }
 
@@ -4794,13 +6439,13 @@ class ClientHandlersMultiface : virtual public ClientHandlersIf {
     ifaces_[i]->ResourceRequestHandler_Dispose(rrHandler);
   }
 
-  void ResourceRequestHandler_GetCookieAccessFilter( ::thrift_codegen::RObject& _return, const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& request) override {
+  void ResourceRequestHandler_GetCookieAccessFilter( ::thrift_codegen::RObject& _return, const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->ResourceRequestHandler_GetCookieAccessFilter(_return, rrHandler, bid, request);
+      ifaces_[i]->ResourceRequestHandler_GetCookieAccessFilter(_return, rrHandler, bid, frame, request);
     }
-    ifaces_[i]->ResourceRequestHandler_GetCookieAccessFilter(_return, rrHandler, bid, request);
+    ifaces_[i]->ResourceRequestHandler_GetCookieAccessFilter(_return, rrHandler, bid, frame, request);
     return;
   }
 
@@ -4813,40 +6458,40 @@ class ClientHandlersMultiface : virtual public ClientHandlersIf {
     ifaces_[i]->CookieAccessFilter_Dispose(filter);
   }
 
-  bool CookieAccessFilter_CanSendCookie(const int32_t filter, const int32_t bid, const  ::thrift_codegen::RObject& request, const std::vector<std::string> & cookie) override {
+  bool CookieAccessFilter_CanSendCookie(const int32_t filter, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const std::vector<std::string> & cookie) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->CookieAccessFilter_CanSendCookie(filter, bid, request, cookie);
+      ifaces_[i]->CookieAccessFilter_CanSendCookie(filter, bid, frame, request, cookie);
     }
-    return ifaces_[i]->CookieAccessFilter_CanSendCookie(filter, bid, request, cookie);
+    return ifaces_[i]->CookieAccessFilter_CanSendCookie(filter, bid, frame, request, cookie);
   }
 
-  bool CookieAccessFilter_CanSaveCookie(const int32_t filter, const int32_t bid, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response, const std::vector<std::string> & cookie) override {
+  bool CookieAccessFilter_CanSaveCookie(const int32_t filter, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response, const std::vector<std::string> & cookie) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->CookieAccessFilter_CanSaveCookie(filter, bid, request, response, cookie);
+      ifaces_[i]->CookieAccessFilter_CanSaveCookie(filter, bid, frame, request, response, cookie);
     }
-    return ifaces_[i]->CookieAccessFilter_CanSaveCookie(filter, bid, request, response, cookie);
+    return ifaces_[i]->CookieAccessFilter_CanSaveCookie(filter, bid, frame, request, response, cookie);
   }
 
-  bool ResourceRequestHandler_OnBeforeResourceLoad(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& request) override {
+  bool ResourceRequestHandler_OnBeforeResourceLoad(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->ResourceRequestHandler_OnBeforeResourceLoad(rrHandler, bid, request);
+      ifaces_[i]->ResourceRequestHandler_OnBeforeResourceLoad(rrHandler, bid, frame, request);
     }
-    return ifaces_[i]->ResourceRequestHandler_OnBeforeResourceLoad(rrHandler, bid, request);
+    return ifaces_[i]->ResourceRequestHandler_OnBeforeResourceLoad(rrHandler, bid, frame, request);
   }
 
-  void ResourceRequestHandler_GetResourceHandler( ::thrift_codegen::RObject& _return, const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& request) override {
+  void ResourceRequestHandler_GetResourceHandler( ::thrift_codegen::RObject& _return, const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->ResourceRequestHandler_GetResourceHandler(_return, rrHandler, bid, request);
+      ifaces_[i]->ResourceRequestHandler_GetResourceHandler(_return, rrHandler, bid, frame, request);
     }
-    ifaces_[i]->ResourceRequestHandler_GetResourceHandler(_return, rrHandler, bid, request);
+    ifaces_[i]->ResourceRequestHandler_GetResourceHandler(_return, rrHandler, bid, frame, request);
     return;
   }
 
@@ -4859,59 +6504,162 @@ class ClientHandlersMultiface : virtual public ClientHandlersIf {
     ifaces_[i]->ResourceHandler_Dispose(resourceHandler);
   }
 
-  void ResourceRequestHandler_OnResourceRedirect(std::string& _return, const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response, const std::string& new_url) override {
+  bool ResourceHandler_ProcessRequest(const int32_t resourceHandler, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& callback) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->ResourceRequestHandler_OnResourceRedirect(_return, rrHandler, bid, request, response, new_url);
+      ifaces_[i]->ResourceHandler_ProcessRequest(resourceHandler, request, callback);
     }
-    ifaces_[i]->ResourceRequestHandler_OnResourceRedirect(_return, rrHandler, bid, request, response, new_url);
+    return ifaces_[i]->ResourceHandler_ProcessRequest(resourceHandler, request, callback);
+  }
+
+  void ResourceHandler_GetResponseHeaders( ::thrift_codegen::ResponseHeaders& _return, const int32_t resourceHandler, const  ::thrift_codegen::RObject& response) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->ResourceHandler_GetResponseHeaders(_return, resourceHandler, response);
+    }
+    ifaces_[i]->ResourceHandler_GetResponseHeaders(_return, resourceHandler, response);
     return;
   }
 
-  bool ResourceRequestHandler_OnResourceResponse(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response) override {
+  void ResourceHandler_ReadResponse( ::thrift_codegen::ResponseData& _return, const int32_t resourceHandler, const int32_t bytes_to_read, const  ::thrift_codegen::RObject& callback) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->ResourceRequestHandler_OnResourceResponse(rrHandler, bid, request, response);
+      ifaces_[i]->ResourceHandler_ReadResponse(_return, resourceHandler, bytes_to_read, callback);
     }
-    return ifaces_[i]->ResourceRequestHandler_OnResourceResponse(rrHandler, bid, request, response);
+    ifaces_[i]->ResourceHandler_ReadResponse(_return, resourceHandler, bytes_to_read, callback);
+    return;
   }
 
-  void ResourceRequestHandler_OnResourceLoadComplete(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response, const std::string& status, const int64_t receivedContentLength) override {
+  void ResourceHandler_Cancel(const int32_t resourceHandler) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->ResourceRequestHandler_OnResourceLoadComplete(rrHandler, bid, request, response, status, receivedContentLength);
+      ifaces_[i]->ResourceHandler_Cancel(resourceHandler);
     }
-    ifaces_[i]->ResourceRequestHandler_OnResourceLoadComplete(rrHandler, bid, request, response, status, receivedContentLength);
+    ifaces_[i]->ResourceHandler_Cancel(resourceHandler);
   }
 
-  bool ResourceRequestHandler_OnProtocolExecution(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& request, const bool allowOsExecution) override {
+  void ResourceRequestHandler_OnResourceRedirect(std::string& _return, const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response, const std::string& new_url) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->ResourceRequestHandler_OnProtocolExecution(rrHandler, bid, request, allowOsExecution);
+      ifaces_[i]->ResourceRequestHandler_OnResourceRedirect(_return, rrHandler, bid, frame, request, response, new_url);
     }
-    return ifaces_[i]->ResourceRequestHandler_OnProtocolExecution(rrHandler, bid, request, allowOsExecution);
+    ifaces_[i]->ResourceRequestHandler_OnResourceRedirect(_return, rrHandler, bid, frame, request, response, new_url);
+    return;
   }
 
-  bool MessageRouterHandler_onQuery(const  ::thrift_codegen::RObject& handler, const int32_t bid, const int64_t queryId, const std::string& request, const bool persistent, const  ::thrift_codegen::RObject& queryCallback) override {
+  bool ResourceRequestHandler_OnResourceResponse(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->MessageRouterHandler_onQuery(handler, bid, queryId, request, persistent, queryCallback);
+      ifaces_[i]->ResourceRequestHandler_OnResourceResponse(rrHandler, bid, frame, request, response);
     }
-    return ifaces_[i]->MessageRouterHandler_onQuery(handler, bid, queryId, request, persistent, queryCallback);
+    return ifaces_[i]->ResourceRequestHandler_OnResourceResponse(rrHandler, bid, frame, request, response);
   }
 
-  void MessageRouterHandler_onQueryCanceled(const  ::thrift_codegen::RObject& handler, const int32_t bid, const int64_t queryId) override {
+  void ResourceRequestHandler_OnResourceLoadComplete(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response, const std::string& status, const int64_t receivedContentLength) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->MessageRouterHandler_onQueryCanceled(handler, bid, queryId);
+      ifaces_[i]->ResourceRequestHandler_OnResourceLoadComplete(rrHandler, bid, frame, request, response, status, receivedContentLength);
     }
-    ifaces_[i]->MessageRouterHandler_onQueryCanceled(handler, bid, queryId);
+    ifaces_[i]->ResourceRequestHandler_OnResourceLoadComplete(rrHandler, bid, frame, request, response, status, receivedContentLength);
+  }
+
+  bool ResourceRequestHandler_OnProtocolExecution(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const bool allowOsExecution) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->ResourceRequestHandler_OnProtocolExecution(rrHandler, bid, frame, request, allowOsExecution);
+    }
+    return ifaces_[i]->ResourceRequestHandler_OnProtocolExecution(rrHandler, bid, frame, request, allowOsExecution);
+  }
+
+  bool MessageRouterHandler_onQuery(const  ::thrift_codegen::RObject& handler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const int64_t queryId, const std::string& request, const bool persistent, const  ::thrift_codegen::RObject& queryCallback) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->MessageRouterHandler_onQuery(handler, bid, frame, queryId, request, persistent, queryCallback);
+    }
+    return ifaces_[i]->MessageRouterHandler_onQuery(handler, bid, frame, queryId, request, persistent, queryCallback);
+  }
+
+  void MessageRouterHandler_onQueryCanceled(const  ::thrift_codegen::RObject& handler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const int64_t queryId) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->MessageRouterHandler_onQueryCanceled(handler, bid, frame, queryId);
+    }
+    ifaces_[i]->MessageRouterHandler_onQueryCanceled(handler, bid, frame, queryId);
+  }
+
+  void MessageRouterHandler_Dispose(const int32_t handler) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->MessageRouterHandler_Dispose(handler);
+    }
+    ifaces_[i]->MessageRouterHandler_Dispose(handler);
+  }
+
+  void SchemeHandlerFactory_CreateHandler( ::thrift_codegen::RObject& _return, const int32_t schemeHandlerFactory, const int32_t bid, const  ::thrift_codegen::RObject& frame, const std::string& scheme_name, const  ::thrift_codegen::RObject& request) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->SchemeHandlerFactory_CreateHandler(_return, schemeHandlerFactory, bid, frame, scheme_name, request);
+    }
+    ifaces_[i]->SchemeHandlerFactory_CreateHandler(_return, schemeHandlerFactory, bid, frame, scheme_name, request);
+    return;
+  }
+
+  void SchemeHandlerFactory_Dispose(const int32_t schemeHandlerFactory) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->SchemeHandlerFactory_Dispose(schemeHandlerFactory);
+    }
+    ifaces_[i]->SchemeHandlerFactory_Dispose(schemeHandlerFactory);
+  }
+
+  void CompletionCallback_OnComplete(const int32_t completionCallback) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->CompletionCallback_OnComplete(completionCallback);
+    }
+    ifaces_[i]->CompletionCallback_OnComplete(completionCallback);
+  }
+
+  void RequestContextHandler_GetResourceRequestHandler( ::thrift_codegen::RObject& _return, const int32_t handler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const bool isNavigation, const bool isDownload, const std::string& requestInitiator) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->RequestContextHandler_GetResourceRequestHandler(_return, handler, bid, frame, request, isNavigation, isDownload, requestInitiator);
+    }
+    ifaces_[i]->RequestContextHandler_GetResourceRequestHandler(_return, handler, bid, frame, request, isNavigation, isDownload, requestInitiator);
+    return;
+  }
+
+  bool CookieVisitor_Visit(const int32_t visitor, const  ::thrift_codegen::Cookie& cookie, const int32_t count, const int32_t total) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->CookieVisitor_Visit(visitor, cookie, count, total);
+    }
+    return ifaces_[i]->CookieVisitor_Visit(visitor, cookie, count, total);
+  }
+
+  void CookieVisitor_Dispose(const int32_t visitor) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->CookieVisitor_Dispose(visitor);
+    }
+    ifaces_[i]->CookieVisitor_Dispose(visitor);
   }
 
 };
@@ -4951,12 +6699,8 @@ class ClientHandlersConcurrentClient : virtual public ClientHandlersIf {
   int32_t recv_connect(const int32_t seqid);
   void log(const std::string& msg) override;
   void send_log(const std::string& msg);
-  void AppHandler_GetRegisteredCustomSchemes(std::vector<CustomScheme> & _return) override;
-  int32_t send_AppHandler_GetRegisteredCustomSchemes();
-  void recv_AppHandler_GetRegisteredCustomSchemes(std::vector<CustomScheme> & _return, const int32_t seqid);
   void AppHandler_OnContextInitialized() override;
-  int32_t send_AppHandler_OnContextInitialized();
-  void recv_AppHandler_OnContextInitialized(const int32_t seqid);
+  void send_AppHandler_OnContextInitialized();
   void RenderHandler_GetViewRect(Rect& _return, const int32_t bid) override;
   int32_t send_RenderHandler_GetViewRect(const int32_t bid);
   void recv_RenderHandler_GetViewRect(Rect& _return, const int32_t seqid);
@@ -4969,11 +6713,11 @@ class ClientHandlersConcurrentClient : virtual public ClientHandlersIf {
   void RenderHandler_OnPaint(const int32_t bid, const bool popup, const int32_t dirtyRectsCount, const std::string& sharedMemName, const int64_t sharedMemHandle, const int32_t width, const int32_t height) override;
   int32_t send_RenderHandler_OnPaint(const int32_t bid, const bool popup, const int32_t dirtyRectsCount, const std::string& sharedMemName, const int64_t sharedMemHandle, const int32_t width, const int32_t height);
   void recv_RenderHandler_OnPaint(const int32_t seqid);
-  bool LifeSpanHandler_OnBeforePopup(const int32_t bid, const std::string& url, const std::string& frameName, const bool gesture) override;
-  int32_t send_LifeSpanHandler_OnBeforePopup(const int32_t bid, const std::string& url, const std::string& frameName, const bool gesture);
+  bool LifeSpanHandler_OnBeforePopup(const int32_t bid, const  ::thrift_codegen::RObject& frame, const std::string& url, const std::string& frameName, const bool gesture) override;
+  int32_t send_LifeSpanHandler_OnBeforePopup(const int32_t bid, const  ::thrift_codegen::RObject& frame, const std::string& url, const std::string& frameName, const bool gesture);
   bool recv_LifeSpanHandler_OnBeforePopup(const int32_t seqid);
-  void LifeSpanHandler_OnAfterCreated(const int32_t bid) override;
-  void send_LifeSpanHandler_OnAfterCreated(const int32_t bid);
+  void LifeSpanHandler_OnAfterCreated(const int32_t bid, const int32_t nativeBrowserIdentifier) override;
+  void send_LifeSpanHandler_OnAfterCreated(const int32_t bid, const int32_t nativeBrowserIdentifier);
   bool LifeSpanHandler_DoClose(const int32_t bid) override;
   int32_t send_LifeSpanHandler_DoClose(const int32_t bid);
   bool recv_LifeSpanHandler_DoClose(const int32_t seqid);
@@ -4981,14 +6725,14 @@ class ClientHandlersConcurrentClient : virtual public ClientHandlersIf {
   void send_LifeSpanHandler_OnBeforeClose(const int32_t bid);
   void LoadHandler_OnLoadingStateChange(const int32_t bid, const bool isLoading, const bool canGoBack, const bool canGoForward) override;
   void send_LoadHandler_OnLoadingStateChange(const int32_t bid, const bool isLoading, const bool canGoBack, const bool canGoForward);
-  void LoadHandler_OnLoadStart(const int32_t bid, const int32_t transition_type) override;
-  void send_LoadHandler_OnLoadStart(const int32_t bid, const int32_t transition_type);
-  void LoadHandler_OnLoadEnd(const int32_t bid, const int32_t httpStatusCode) override;
-  void send_LoadHandler_OnLoadEnd(const int32_t bid, const int32_t httpStatusCode);
-  void LoadHandler_OnLoadError(const int32_t bid, const int32_t errorCode, const std::string& errorText, const std::string& failedUrl) override;
-  void send_LoadHandler_OnLoadError(const int32_t bid, const int32_t errorCode, const std::string& errorText, const std::string& failedUrl);
-  void DisplayHandler_OnAddressChange(const int32_t bid, const std::string& url) override;
-  void send_DisplayHandler_OnAddressChange(const int32_t bid, const std::string& url);
+  void LoadHandler_OnLoadStart(const int32_t bid, const  ::thrift_codegen::RObject& frame, const int32_t transition_type) override;
+  void send_LoadHandler_OnLoadStart(const int32_t bid, const  ::thrift_codegen::RObject& frame, const int32_t transition_type);
+  void LoadHandler_OnLoadEnd(const int32_t bid, const  ::thrift_codegen::RObject& frame, const int32_t httpStatusCode) override;
+  void send_LoadHandler_OnLoadEnd(const int32_t bid, const  ::thrift_codegen::RObject& frame, const int32_t httpStatusCode);
+  void LoadHandler_OnLoadError(const int32_t bid, const  ::thrift_codegen::RObject& frame, const int32_t errorCode, const std::string& errorText, const std::string& failedUrl) override;
+  void send_LoadHandler_OnLoadError(const int32_t bid, const  ::thrift_codegen::RObject& frame, const int32_t errorCode, const std::string& errorText, const std::string& failedUrl);
+  void DisplayHandler_OnAddressChange(const int32_t bid, const  ::thrift_codegen::RObject& frame, const std::string& url) override;
+  void send_DisplayHandler_OnAddressChange(const int32_t bid, const  ::thrift_codegen::RObject& frame, const std::string& url);
   void DisplayHandler_OnTitleChange(const int32_t bid, const std::string& title) override;
   void send_DisplayHandler_OnTitleChange(const int32_t bid, const std::string& title);
   bool DisplayHandler_OnTooltip(const int32_t bid, const std::string& text) override;
@@ -4999,61 +6743,102 @@ class ClientHandlersConcurrentClient : virtual public ClientHandlersIf {
   bool DisplayHandler_OnConsoleMessage(const int32_t bid, const int32_t level, const std::string& message, const std::string& source, const int32_t line) override;
   int32_t send_DisplayHandler_OnConsoleMessage(const int32_t bid, const int32_t level, const std::string& message, const std::string& source, const int32_t line);
   bool recv_DisplayHandler_OnConsoleMessage(const int32_t seqid);
-  bool RequestHandler_OnBeforeBrowse(const int32_t bid, const  ::thrift_codegen::RObject& request, const bool user_gesture, const bool is_redirect) override;
-  int32_t send_RequestHandler_OnBeforeBrowse(const int32_t bid, const  ::thrift_codegen::RObject& request, const bool user_gesture, const bool is_redirect);
+  bool KeyboardHandler_OnPreKeyEvent(const int32_t bid, const  ::thrift_codegen::KeyEvent& event) override;
+  int32_t send_KeyboardHandler_OnPreKeyEvent(const int32_t bid, const  ::thrift_codegen::KeyEvent& event);
+  bool recv_KeyboardHandler_OnPreKeyEvent(const int32_t seqid);
+  bool KeyboardHandler_OnKeyEvent(const int32_t bid, const  ::thrift_codegen::KeyEvent& event) override;
+  int32_t send_KeyboardHandler_OnKeyEvent(const int32_t bid, const  ::thrift_codegen::KeyEvent& event);
+  bool recv_KeyboardHandler_OnKeyEvent(const int32_t seqid);
+  void FocusHandler_OnTakeFocus(const int32_t bid, const bool next) override;
+  void send_FocusHandler_OnTakeFocus(const int32_t bid, const bool next);
+  bool FocusHandler_OnSetFocus(const int32_t bid, const std::string& source) override;
+  int32_t send_FocusHandler_OnSetFocus(const int32_t bid, const std::string& source);
+  bool recv_FocusHandler_OnSetFocus(const int32_t seqid);
+  void FocusHandler_OnGotFocus(const int32_t bid) override;
+  void send_FocusHandler_OnGotFocus(const int32_t bid);
+  bool RequestHandler_OnBeforeBrowse(const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const bool user_gesture, const bool is_redirect) override;
+  int32_t send_RequestHandler_OnBeforeBrowse(const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const bool user_gesture, const bool is_redirect);
   bool recv_RequestHandler_OnBeforeBrowse(const int32_t seqid);
-  bool RequestHandler_OnOpenURLFromTab(const int32_t bid, const std::string& target_url, const bool user_gesture) override;
-  int32_t send_RequestHandler_OnOpenURLFromTab(const int32_t bid, const std::string& target_url, const bool user_gesture);
+  bool RequestHandler_OnOpenURLFromTab(const int32_t bid, const  ::thrift_codegen::RObject& frame, const std::string& target_url, const bool user_gesture) override;
+  int32_t send_RequestHandler_OnOpenURLFromTab(const int32_t bid, const  ::thrift_codegen::RObject& frame, const std::string& target_url, const bool user_gesture);
   bool recv_RequestHandler_OnOpenURLFromTab(const int32_t seqid);
   bool RequestHandler_GetAuthCredentials(const int32_t bid, const std::string& origin_url, const bool isProxy, const std::string& host, const int32_t port, const std::string& realm, const std::string& scheme, const  ::thrift_codegen::RObject& authCallback) override;
   int32_t send_RequestHandler_GetAuthCredentials(const int32_t bid, const std::string& origin_url, const bool isProxy, const std::string& host, const int32_t port, const std::string& realm, const std::string& scheme, const  ::thrift_codegen::RObject& authCallback);
   bool recv_RequestHandler_GetAuthCredentials(const int32_t seqid);
-  bool RequestHandler_OnCertificateError(const int32_t bid, const std::string& cert_error, const std::string& request_url, const  ::thrift_codegen::RObject& sslInfo, const  ::thrift_codegen::RObject& callback) override;
-  int32_t send_RequestHandler_OnCertificateError(const int32_t bid, const std::string& cert_error, const std::string& request_url, const  ::thrift_codegen::RObject& sslInfo, const  ::thrift_codegen::RObject& callback);
+  bool RequestHandler_OnCertificateError(const int32_t bid, const std::string& cert_error, const std::string& request_url, const std::string& sslInfo, const  ::thrift_codegen::RObject& callback) override;
+  int32_t send_RequestHandler_OnCertificateError(const int32_t bid, const std::string& cert_error, const std::string& request_url, const std::string& sslInfo, const  ::thrift_codegen::RObject& callback);
   bool recv_RequestHandler_OnCertificateError(const int32_t seqid);
   void RequestHandler_OnRenderProcessTerminated(const int32_t bid, const std::string& status) override;
   void send_RequestHandler_OnRenderProcessTerminated(const int32_t bid, const std::string& status);
-  void RequestHandler_GetResourceRequestHandler( ::thrift_codegen::RObject& _return, const int32_t bid, const  ::thrift_codegen::RObject& request, const bool isNavigation, const bool isDownload, const std::string& requestInitiator) override;
-  int32_t send_RequestHandler_GetResourceRequestHandler(const int32_t bid, const  ::thrift_codegen::RObject& request, const bool isNavigation, const bool isDownload, const std::string& requestInitiator);
+  void RequestHandler_GetResourceRequestHandler( ::thrift_codegen::RObject& _return, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const bool isNavigation, const bool isDownload, const std::string& requestInitiator) override;
+  int32_t send_RequestHandler_GetResourceRequestHandler(const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const bool isNavigation, const bool isDownload, const std::string& requestInitiator);
   void recv_RequestHandler_GetResourceRequestHandler( ::thrift_codegen::RObject& _return, const int32_t seqid);
   void ResourceRequestHandler_Dispose(const int32_t rrHandler) override;
   void send_ResourceRequestHandler_Dispose(const int32_t rrHandler);
-  void ResourceRequestHandler_GetCookieAccessFilter( ::thrift_codegen::RObject& _return, const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& request) override;
-  int32_t send_ResourceRequestHandler_GetCookieAccessFilter(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& request);
+  void ResourceRequestHandler_GetCookieAccessFilter( ::thrift_codegen::RObject& _return, const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request) override;
+  int32_t send_ResourceRequestHandler_GetCookieAccessFilter(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request);
   void recv_ResourceRequestHandler_GetCookieAccessFilter( ::thrift_codegen::RObject& _return, const int32_t seqid);
   void CookieAccessFilter_Dispose(const int32_t filter) override;
   void send_CookieAccessFilter_Dispose(const int32_t filter);
-  bool CookieAccessFilter_CanSendCookie(const int32_t filter, const int32_t bid, const  ::thrift_codegen::RObject& request, const std::vector<std::string> & cookie) override;
-  int32_t send_CookieAccessFilter_CanSendCookie(const int32_t filter, const int32_t bid, const  ::thrift_codegen::RObject& request, const std::vector<std::string> & cookie);
+  bool CookieAccessFilter_CanSendCookie(const int32_t filter, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const std::vector<std::string> & cookie) override;
+  int32_t send_CookieAccessFilter_CanSendCookie(const int32_t filter, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const std::vector<std::string> & cookie);
   bool recv_CookieAccessFilter_CanSendCookie(const int32_t seqid);
-  bool CookieAccessFilter_CanSaveCookie(const int32_t filter, const int32_t bid, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response, const std::vector<std::string> & cookie) override;
-  int32_t send_CookieAccessFilter_CanSaveCookie(const int32_t filter, const int32_t bid, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response, const std::vector<std::string> & cookie);
+  bool CookieAccessFilter_CanSaveCookie(const int32_t filter, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response, const std::vector<std::string> & cookie) override;
+  int32_t send_CookieAccessFilter_CanSaveCookie(const int32_t filter, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response, const std::vector<std::string> & cookie);
   bool recv_CookieAccessFilter_CanSaveCookie(const int32_t seqid);
-  bool ResourceRequestHandler_OnBeforeResourceLoad(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& request) override;
-  int32_t send_ResourceRequestHandler_OnBeforeResourceLoad(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& request);
+  bool ResourceRequestHandler_OnBeforeResourceLoad(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request) override;
+  int32_t send_ResourceRequestHandler_OnBeforeResourceLoad(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request);
   bool recv_ResourceRequestHandler_OnBeforeResourceLoad(const int32_t seqid);
-  void ResourceRequestHandler_GetResourceHandler( ::thrift_codegen::RObject& _return, const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& request) override;
-  int32_t send_ResourceRequestHandler_GetResourceHandler(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& request);
+  void ResourceRequestHandler_GetResourceHandler( ::thrift_codegen::RObject& _return, const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request) override;
+  int32_t send_ResourceRequestHandler_GetResourceHandler(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request);
   void recv_ResourceRequestHandler_GetResourceHandler( ::thrift_codegen::RObject& _return, const int32_t seqid);
   void ResourceHandler_Dispose(const int32_t resourceHandler) override;
   void send_ResourceHandler_Dispose(const int32_t resourceHandler);
-  void ResourceRequestHandler_OnResourceRedirect(std::string& _return, const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response, const std::string& new_url) override;
-  int32_t send_ResourceRequestHandler_OnResourceRedirect(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response, const std::string& new_url);
+  bool ResourceHandler_ProcessRequest(const int32_t resourceHandler, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& callback) override;
+  int32_t send_ResourceHandler_ProcessRequest(const int32_t resourceHandler, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& callback);
+  bool recv_ResourceHandler_ProcessRequest(const int32_t seqid);
+  void ResourceHandler_GetResponseHeaders( ::thrift_codegen::ResponseHeaders& _return, const int32_t resourceHandler, const  ::thrift_codegen::RObject& response) override;
+  int32_t send_ResourceHandler_GetResponseHeaders(const int32_t resourceHandler, const  ::thrift_codegen::RObject& response);
+  void recv_ResourceHandler_GetResponseHeaders( ::thrift_codegen::ResponseHeaders& _return, const int32_t seqid);
+  void ResourceHandler_ReadResponse( ::thrift_codegen::ResponseData& _return, const int32_t resourceHandler, const int32_t bytes_to_read, const  ::thrift_codegen::RObject& callback) override;
+  int32_t send_ResourceHandler_ReadResponse(const int32_t resourceHandler, const int32_t bytes_to_read, const  ::thrift_codegen::RObject& callback);
+  void recv_ResourceHandler_ReadResponse( ::thrift_codegen::ResponseData& _return, const int32_t seqid);
+  void ResourceHandler_Cancel(const int32_t resourceHandler) override;
+  void send_ResourceHandler_Cancel(const int32_t resourceHandler);
+  void ResourceRequestHandler_OnResourceRedirect(std::string& _return, const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response, const std::string& new_url) override;
+  int32_t send_ResourceRequestHandler_OnResourceRedirect(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response, const std::string& new_url);
   void recv_ResourceRequestHandler_OnResourceRedirect(std::string& _return, const int32_t seqid);
-  bool ResourceRequestHandler_OnResourceResponse(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response) override;
-  int32_t send_ResourceRequestHandler_OnResourceResponse(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response);
+  bool ResourceRequestHandler_OnResourceResponse(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response) override;
+  int32_t send_ResourceRequestHandler_OnResourceResponse(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response);
   bool recv_ResourceRequestHandler_OnResourceResponse(const int32_t seqid);
-  void ResourceRequestHandler_OnResourceLoadComplete(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response, const std::string& status, const int64_t receivedContentLength) override;
-  int32_t send_ResourceRequestHandler_OnResourceLoadComplete(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response, const std::string& status, const int64_t receivedContentLength);
+  void ResourceRequestHandler_OnResourceLoadComplete(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response, const std::string& status, const int64_t receivedContentLength) override;
+  int32_t send_ResourceRequestHandler_OnResourceLoadComplete(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const  ::thrift_codegen::RObject& response, const std::string& status, const int64_t receivedContentLength);
   void recv_ResourceRequestHandler_OnResourceLoadComplete(const int32_t seqid);
-  bool ResourceRequestHandler_OnProtocolExecution(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& request, const bool allowOsExecution) override;
-  int32_t send_ResourceRequestHandler_OnProtocolExecution(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& request, const bool allowOsExecution);
+  bool ResourceRequestHandler_OnProtocolExecution(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const bool allowOsExecution) override;
+  int32_t send_ResourceRequestHandler_OnProtocolExecution(const int32_t rrHandler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const bool allowOsExecution);
   bool recv_ResourceRequestHandler_OnProtocolExecution(const int32_t seqid);
-  bool MessageRouterHandler_onQuery(const  ::thrift_codegen::RObject& handler, const int32_t bid, const int64_t queryId, const std::string& request, const bool persistent, const  ::thrift_codegen::RObject& queryCallback) override;
-  int32_t send_MessageRouterHandler_onQuery(const  ::thrift_codegen::RObject& handler, const int32_t bid, const int64_t queryId, const std::string& request, const bool persistent, const  ::thrift_codegen::RObject& queryCallback);
+  bool MessageRouterHandler_onQuery(const  ::thrift_codegen::RObject& handler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const int64_t queryId, const std::string& request, const bool persistent, const  ::thrift_codegen::RObject& queryCallback) override;
+  int32_t send_MessageRouterHandler_onQuery(const  ::thrift_codegen::RObject& handler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const int64_t queryId, const std::string& request, const bool persistent, const  ::thrift_codegen::RObject& queryCallback);
   bool recv_MessageRouterHandler_onQuery(const int32_t seqid);
-  void MessageRouterHandler_onQueryCanceled(const  ::thrift_codegen::RObject& handler, const int32_t bid, const int64_t queryId) override;
-  void send_MessageRouterHandler_onQueryCanceled(const  ::thrift_codegen::RObject& handler, const int32_t bid, const int64_t queryId);
+  void MessageRouterHandler_onQueryCanceled(const  ::thrift_codegen::RObject& handler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const int64_t queryId) override;
+  void send_MessageRouterHandler_onQueryCanceled(const  ::thrift_codegen::RObject& handler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const int64_t queryId);
+  void MessageRouterHandler_Dispose(const int32_t handler) override;
+  void send_MessageRouterHandler_Dispose(const int32_t handler);
+  void SchemeHandlerFactory_CreateHandler( ::thrift_codegen::RObject& _return, const int32_t schemeHandlerFactory, const int32_t bid, const  ::thrift_codegen::RObject& frame, const std::string& scheme_name, const  ::thrift_codegen::RObject& request) override;
+  int32_t send_SchemeHandlerFactory_CreateHandler(const int32_t schemeHandlerFactory, const int32_t bid, const  ::thrift_codegen::RObject& frame, const std::string& scheme_name, const  ::thrift_codegen::RObject& request);
+  void recv_SchemeHandlerFactory_CreateHandler( ::thrift_codegen::RObject& _return, const int32_t seqid);
+  void SchemeHandlerFactory_Dispose(const int32_t schemeHandlerFactory) override;
+  void send_SchemeHandlerFactory_Dispose(const int32_t schemeHandlerFactory);
+  void CompletionCallback_OnComplete(const int32_t completionCallback) override;
+  void send_CompletionCallback_OnComplete(const int32_t completionCallback);
+  void RequestContextHandler_GetResourceRequestHandler( ::thrift_codegen::RObject& _return, const int32_t handler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const bool isNavigation, const bool isDownload, const std::string& requestInitiator) override;
+  int32_t send_RequestContextHandler_GetResourceRequestHandler(const int32_t handler, const int32_t bid, const  ::thrift_codegen::RObject& frame, const  ::thrift_codegen::RObject& request, const bool isNavigation, const bool isDownload, const std::string& requestInitiator);
+  void recv_RequestContextHandler_GetResourceRequestHandler( ::thrift_codegen::RObject& _return, const int32_t seqid);
+  bool CookieVisitor_Visit(const int32_t visitor, const  ::thrift_codegen::Cookie& cookie, const int32_t count, const int32_t total) override;
+  int32_t send_CookieVisitor_Visit(const int32_t visitor, const  ::thrift_codegen::Cookie& cookie, const int32_t count, const int32_t total);
+  bool recv_CookieVisitor_Visit(const int32_t seqid);
+  void CookieVisitor_Dispose(const int32_t visitor) override;
+  void send_CookieVisitor_Dispose(const int32_t visitor);
  protected:
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;

@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="javaLauncher" default="default" basedir=".">
 
-  <property name="jcef.version" value="119.4.3-gc76a3b9-chromium-119.0.6045.159-api-1.13"/>
+  <property name="jcef.version" value="122.1.9-gd14e051-chromium-122.0.6261.94-api-1.16"/>
 
   <property environment="env"/>
-  <property name="out.native.path" value="${env.OUT_NATIVE_PATH}"/>
-  <property name="bundle.natives.path" value="${env.BUNDLE_NATIVES_PATH}"/>
   <property name="out.path"   value="${env.OUT_PATH}"/>
   <property name="out.name"   value="${env.OUT_NAME}"/>
   <property name="out.id"     value="${env.OUT_ID}"/>
@@ -14,8 +12,7 @@
   <path id="module.path">
     <pathelement location="third_party/jogamp/jar"/>
     <pathelement location="third_party/jogamp/jar/gluegen-rt.jar"/>
-    <pathelement location="third_party/slf4j/slf4j-api-2.0.0.jar"/>
-    <pathelement location="third_party/thrift/libthrift-0.16.0.jar"/>
+    <pathelement location="third_party/thrift/libthrift-0.19.0.jar"/>
   </path>
 
   <condition property="jvm.opts"
@@ -72,6 +69,8 @@
     <fileset dir="third_party/gson" includes="gson-2.10.1.jar"/>
     <fileset dir="third_party/junit" includes="junit-platform-console-standalone-1.10.0.jar"/>
     <fileset dir="third_party/jakarta" includes="jakarta.xml.bind-api-2.3.2.jar"/>
+    <fileset dir="third_party/jbrapi" includes="jbr-api-17.1.10.0.jar"/>
+    <fileset dir="third_party/thrift" includes="libthrift-0.19.0.jar"/>
     <fileset dir="${out.path}" includes="jcef.jar"/>
   </path>
 
@@ -123,9 +122,6 @@
         <include name="org/cef/**"/>
         <include name="com/jetbrains/**"/>
         <include name="${include.module-info.class}"/>
-      </fileset>
-      <fileset dir="${bundle.natives.path}">
-        <include name="native*"/>
       </fileset>
     </jar>
     <jar destfile="${out.path}/jcef-sources.jar" index="true" update="false">

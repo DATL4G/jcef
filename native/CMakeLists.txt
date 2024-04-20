@@ -55,6 +55,8 @@ set(JCEF_SRCS
   CefPrintSettings_N.h
   CefQueryCallback_N.cpp
   CefQueryCallback_N.h
+  CefRegistration_N.cpp
+  CefRegistration_N.h
   CefRequest_N.cpp
   CefRequest_N.h
   CefCallback_N.cpp
@@ -84,6 +86,8 @@ set(JCEF_SRCS
   cookie_visitor.cpp
   cookie_visitor.h
   critical_wait.h
+  devtools_message_observer.cpp
+  devtools_message_observer.h
   dialog_handler.cpp
   dialog_handler.h
   display_handler.cpp
@@ -96,6 +100,8 @@ set(JCEF_SRCS
   focus_handler.h
   permission_handler.cpp
   permission_handler.h
+  int_callback.cpp
+  int_callback.h
   jcef_version.h
   jni_scoped_helpers.h
   jni_scoped_helpers.cpp
@@ -328,14 +334,6 @@ if(OS_MAC)
   add_custom_command(
     TARGET ${JCEF_TARGET}
     POST_BUILD
-    # Pack helpers
-    COMMAND tar
-            -czvf ${CEF_TARGET_OUT_DIR}/helpers.tar.gz
-            -C ${CEF_TARGET_OUT_DIR}
-            "jcef Helper.app"
-            "jcef Helper (GPU).app"
-            "jcef Helper (Renderer).app"
-            "jcef Helper (Plugin).app"
 
     # Build the main app bundle.
     COMMAND ant
@@ -406,7 +404,7 @@ if(OS_MAC)
               "${JCEF_APP}/Contents/Frameworks/${_helper_output_name}.app"
       VERBATIM
       )
-    endforeach()
+  endforeach()
 endif()
 
 

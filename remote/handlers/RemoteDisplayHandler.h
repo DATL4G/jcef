@@ -5,9 +5,12 @@
 #include "include/cef_display_handler.h"
 
 class RemoteClientHandler;
+class RpcExecutor;
+
+// The methods of this class will be called on the UI thread.
 class RemoteDisplayHandler : public CefDisplayHandler {
  public:
-  explicit RemoteDisplayHandler(RemoteClientHandler & owner);
+  explicit RemoteDisplayHandler(int bid, std::shared_ptr<RpcExecutor> service);
   ~RemoteDisplayHandler() override {}
 
   void OnAddressChange(CefRefPtr<CefBrowser> browser,
@@ -25,7 +28,8 @@ class RemoteDisplayHandler : public CefDisplayHandler {
                         int line) override;
 
  protected:
-  RemoteClientHandler & myOwner;
+  const int myBid;
+  std::shared_ptr<RpcExecutor> myService;
 
  private:
   IMPLEMENT_REFCOUNTING(RemoteDisplayHandler);

@@ -10,6 +10,8 @@ import org.cef.callback.CefCommandLine;
 import org.cef.callback.CefSchemeRegistrar;
 import org.cef.misc.CefLog;
 
+import java.util.*;
+
 /**
  * An abstract adapter class for managing app handler events.
  * The methods in this class are using a default implementation.
@@ -23,7 +25,25 @@ public abstract class CefAppHandlerAdapter implements CefAppHandler {
     }
 
     public void updateArgs(String[] args) {
-        args_ = args;
+        Set<String> keysToRemove = new HashSet<>();
+        for (String arg: args) {
+            keysToRemove.add(arg.split("=", 2)[0]);
+        }
+
+        List<String> result = new ArrayList<>();
+        for (String arg: args_) {
+            String key = arg.split("=", 2)[0];
+            if (!keysToRemove.contains(key)) {
+                result.add(arg);
+            }
+        }
+
+        Collections.addAll(result, args);
+        args_ = result.toArray(new String[0]);
+    }
+
+    public String[] getArgs() {
+        return args_ == null ? null : Arrays.copyOf(args_, args_.length);
     }
 
     @Override
@@ -37,9 +57,10 @@ public abstract class CefAppHandlerAdapter implements CefAppHandler {
                     continue;
                 }
                 // Arguments with '--', '-' and, on Windows, '/' prefixes are considered switches.
-                int switchCnt = arg.startsWith("--")
-                        ? 2
-                        : arg.startsWith("/") ? 1 : arg.startsWith("-") ? 1 : 0;
+                int switchCnt = arg.startsWith("--") ? 2
+                        : arg.startsWith("/")        ? 1
+                        : arg.startsWith("-")        ? 1
+                                                     : 0;
                 switch (switchCnt) {
                     case 2:
                         // An argument of "--" will terminate switch parsing with all subsequent

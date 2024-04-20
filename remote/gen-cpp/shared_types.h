@@ -23,14 +23,21 @@ namespace thrift_codegen {
 
 class RObject;
 
+class ResponseHeaders;
+
+class ResponseData;
+
 class PostDataElement;
 
 class PostData;
 
+class KeyEvent;
+
+class Cookie;
+
 typedef struct _RObject__isset {
-  _RObject__isset() : isPersistent(false), isDisableDefaultHandling(false), objInfo(false) {}
-  bool isPersistent :1;
-  bool isDisableDefaultHandling :1;
+  _RObject__isset() : flags(false), objInfo(false) {}
+  bool flags :1;
   bool objInfo :1;
 } _RObject__isset;
 
@@ -41,23 +48,19 @@ class RObject : public virtual ::apache::thrift::TBase {
   RObject& operator=(const RObject&);
   RObject() noexcept
           : objId(0),
-            isPersistent(0),
-            isDisableDefaultHandling(0) {
+            flags(0) {
   }
 
   virtual ~RObject() noexcept;
   int32_t objId;
-  bool isPersistent;
-  bool isDisableDefaultHandling;
+  int32_t flags;
   std::map<std::string, std::string>  objInfo;
 
   _RObject__isset __isset;
 
   void __set_objId(const int32_t val);
 
-  void __set_isPersistent(const bool val);
-
-  void __set_isDisableDefaultHandling(const bool val);
+  void __set_flags(const int32_t val);
 
   void __set_objInfo(const std::map<std::string, std::string> & val);
 
@@ -65,13 +68,9 @@ class RObject : public virtual ::apache::thrift::TBase {
   {
     if (!(objId == rhs.objId))
       return false;
-    if (__isset.isPersistent != rhs.__isset.isPersistent)
+    if (__isset.flags != rhs.__isset.flags)
       return false;
-    else if (__isset.isPersistent && !(isPersistent == rhs.isPersistent))
-      return false;
-    if (__isset.isDisableDefaultHandling != rhs.__isset.isDisableDefaultHandling)
-      return false;
-    else if (__isset.isDisableDefaultHandling && !(isDisableDefaultHandling == rhs.isDisableDefaultHandling))
+    else if (__isset.flags && !(flags == rhs.flags))
       return false;
     if (__isset.objInfo != rhs.__isset.objInfo)
       return false;
@@ -94,6 +93,123 @@ class RObject : public virtual ::apache::thrift::TBase {
 void swap(RObject &a, RObject &b);
 
 std::ostream& operator<<(std::ostream& out, const RObject& obj);
+
+typedef struct _ResponseHeaders__isset {
+  _ResponseHeaders__isset() : length(false), redirectUrl(false) {}
+  bool length :1;
+  bool redirectUrl :1;
+} _ResponseHeaders__isset;
+
+class ResponseHeaders : public virtual ::apache::thrift::TBase {
+ public:
+
+  ResponseHeaders(const ResponseHeaders&);
+  ResponseHeaders& operator=(const ResponseHeaders&);
+  ResponseHeaders() noexcept
+                  : length(0),
+                    redirectUrl() {
+  }
+
+  virtual ~ResponseHeaders() noexcept;
+  int32_t length;
+  std::string redirectUrl;
+
+  _ResponseHeaders__isset __isset;
+
+  void __set_length(const int32_t val);
+
+  void __set_redirectUrl(const std::string& val);
+
+  bool operator == (const ResponseHeaders & rhs) const
+  {
+    if (__isset.length != rhs.__isset.length)
+      return false;
+    else if (__isset.length && !(length == rhs.length))
+      return false;
+    if (__isset.redirectUrl != rhs.__isset.redirectUrl)
+      return false;
+    else if (__isset.redirectUrl && !(redirectUrl == rhs.redirectUrl))
+      return false;
+    return true;
+  }
+  bool operator != (const ResponseHeaders &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ResponseHeaders & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot) override;
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const override;
+
+  virtual void printTo(std::ostream& out) const;
+};
+
+void swap(ResponseHeaders &a, ResponseHeaders &b);
+
+std::ostream& operator<<(std::ostream& out, const ResponseHeaders& obj);
+
+typedef struct _ResponseData__isset {
+  _ResponseData__isset() : continueRead(false), data(false), bytes_read(false) {}
+  bool continueRead :1;
+  bool data :1;
+  bool bytes_read :1;
+} _ResponseData__isset;
+
+class ResponseData : public virtual ::apache::thrift::TBase {
+ public:
+
+  ResponseData(const ResponseData&);
+  ResponseData& operator=(const ResponseData&);
+  ResponseData() noexcept
+               : continueRead(0),
+                 data(),
+                 bytes_read(0) {
+  }
+
+  virtual ~ResponseData() noexcept;
+  bool continueRead;
+  std::string data;
+  int32_t bytes_read;
+
+  _ResponseData__isset __isset;
+
+  void __set_continueRead(const bool val);
+
+  void __set_data(const std::string& val);
+
+  void __set_bytes_read(const int32_t val);
+
+  bool operator == (const ResponseData & rhs) const
+  {
+    if (__isset.continueRead != rhs.__isset.continueRead)
+      return false;
+    else if (__isset.continueRead && !(continueRead == rhs.continueRead))
+      return false;
+    if (__isset.data != rhs.__isset.data)
+      return false;
+    else if (__isset.data && !(data == rhs.data))
+      return false;
+    if (__isset.bytes_read != rhs.__isset.bytes_read)
+      return false;
+    else if (__isset.bytes_read && !(bytes_read == rhs.bytes_read))
+      return false;
+    return true;
+  }
+  bool operator != (const ResponseData &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ResponseData & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot) override;
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const override;
+
+  virtual void printTo(std::ostream& out) const;
+};
+
+void swap(ResponseData &a, ResponseData &b);
+
+std::ostream& operator<<(std::ostream& out, const ResponseData& obj);
 
 typedef struct _PostDataElement__isset {
   _PostDataElement__isset() : file(false), bytes(false) {}
@@ -210,6 +326,178 @@ class PostData : public virtual ::apache::thrift::TBase {
 void swap(PostData &a, PostData &b);
 
 std::ostream& operator<<(std::ostream& out, const PostData& obj);
+
+
+class KeyEvent : public virtual ::apache::thrift::TBase {
+ public:
+
+  KeyEvent(const KeyEvent&);
+  KeyEvent& operator=(const KeyEvent&);
+  KeyEvent() noexcept
+           : type(),
+             modifiers(0),
+             windows_key_code(0),
+             native_key_code(0),
+             is_system_key(0),
+             character(0),
+             unmodified_character(0),
+             focus_on_editable_field(0) {
+  }
+
+  virtual ~KeyEvent() noexcept;
+  std::string type;
+  int32_t modifiers;
+  int32_t windows_key_code;
+  int32_t native_key_code;
+  bool is_system_key;
+  int16_t character;
+  int16_t unmodified_character;
+  bool focus_on_editable_field;
+
+  void __set_type(const std::string& val);
+
+  void __set_modifiers(const int32_t val);
+
+  void __set_windows_key_code(const int32_t val);
+
+  void __set_native_key_code(const int32_t val);
+
+  void __set_is_system_key(const bool val);
+
+  void __set_character(const int16_t val);
+
+  void __set_unmodified_character(const int16_t val);
+
+  void __set_focus_on_editable_field(const bool val);
+
+  bool operator == (const KeyEvent & rhs) const
+  {
+    if (!(type == rhs.type))
+      return false;
+    if (!(modifiers == rhs.modifiers))
+      return false;
+    if (!(windows_key_code == rhs.windows_key_code))
+      return false;
+    if (!(native_key_code == rhs.native_key_code))
+      return false;
+    if (!(is_system_key == rhs.is_system_key))
+      return false;
+    if (!(character == rhs.character))
+      return false;
+    if (!(unmodified_character == rhs.unmodified_character))
+      return false;
+    if (!(focus_on_editable_field == rhs.focus_on_editable_field))
+      return false;
+    return true;
+  }
+  bool operator != (const KeyEvent &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const KeyEvent & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot) override;
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const override;
+
+  virtual void printTo(std::ostream& out) const;
+};
+
+void swap(KeyEvent &a, KeyEvent &b);
+
+std::ostream& operator<<(std::ostream& out, const KeyEvent& obj);
+
+typedef struct _Cookie__isset {
+  _Cookie__isset() : expires(false) {}
+  bool expires :1;
+} _Cookie__isset;
+
+class Cookie : public virtual ::apache::thrift::TBase {
+ public:
+
+  Cookie(const Cookie&);
+  Cookie& operator=(const Cookie&);
+  Cookie() noexcept
+         : name(),
+           value(),
+           domain(),
+           path(),
+           secure(0),
+           httponly(0),
+           creation(0),
+           lastAccess(0),
+           expires(0) {
+  }
+
+  virtual ~Cookie() noexcept;
+  std::string name;
+  std::string value;
+  std::string domain;
+  std::string path;
+  bool secure;
+  bool httponly;
+  int64_t creation;
+  int64_t lastAccess;
+  int64_t expires;
+
+  _Cookie__isset __isset;
+
+  void __set_name(const std::string& val);
+
+  void __set_value(const std::string& val);
+
+  void __set_domain(const std::string& val);
+
+  void __set_path(const std::string& val);
+
+  void __set_secure(const bool val);
+
+  void __set_httponly(const bool val);
+
+  void __set_creation(const int64_t val);
+
+  void __set_lastAccess(const int64_t val);
+
+  void __set_expires(const int64_t val);
+
+  bool operator == (const Cookie & rhs) const
+  {
+    if (!(name == rhs.name))
+      return false;
+    if (!(value == rhs.value))
+      return false;
+    if (!(domain == rhs.domain))
+      return false;
+    if (!(path == rhs.path))
+      return false;
+    if (!(secure == rhs.secure))
+      return false;
+    if (!(httponly == rhs.httponly))
+      return false;
+    if (!(creation == rhs.creation))
+      return false;
+    if (!(lastAccess == rhs.lastAccess))
+      return false;
+    if (__isset.expires != rhs.__isset.expires)
+      return false;
+    else if (__isset.expires && !(expires == rhs.expires))
+      return false;
+    return true;
+  }
+  bool operator != (const Cookie &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const Cookie & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot) override;
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const override;
+
+  virtual void printTo(std::ostream& out) const;
+};
+
+void swap(Cookie &a, Cookie &b);
+
+std::ostream& operator<<(std::ostream& out, const Cookie& obj);
 
 } // namespace
 

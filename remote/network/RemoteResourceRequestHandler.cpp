@@ -6,85 +6,119 @@
 #include "RemoteRequest.h"
 #include "RemoteResourceHandler.h"
 #include "RemoteResponse.h"
+#include "../browser/RemoteFrame.h"
 
 namespace {
   std::string status2str(cef_urlrequest_status_t type);
 }
 
 // Disable logging until optimized
+#ifdef LNDCT
+#undef LNDCT
 #define LNDCT()
+#endif
 
-RemoteResourceRequestHandler::RemoteResourceRequestHandler(RemoteClientHandler& owner, thrift_codegen::RObject peer)
-    : RemoteJavaObject(owner, peer.objId, [=](std::shared_ptr<thrift_codegen::ClientHandlersClient> service) { service->ResourceRequestHandler_Dispose(peer.objId); }) {}
+RemoteResourceRequestHandler::RemoteResourceRequestHandler(
+    int bid,
+    std::shared_ptr<RpcExecutor> serviceIO,
+    thrift_codegen::RObject peer)
+    : RemoteJavaObject(
+          serviceIO,
+          peer.objId,
+          [=](std::shared_ptr<thrift_codegen::ClientHandlersClient> service) {
+            service->ResourceRequestHandler_Dispose(peer.objId);
+          }), myBid(bid) {}
 
-CefRefPtr<CefCookieAccessFilter>
-RemoteResourceRequestHandler::GetCookieAccessFilter(
+///
+/// Called on the IO thread before a resource request is loaded. The |browser|
+/// and |frame| values represent the source of the request, and may be NULL
+/// for requests originating from service workers or CefURLRequest. To
+/// optionally filter cookies for the request return a CefCookieAccessFilter
+/// object. The |request| object cannot not be modified in this callback.
+///
+/*--cef(optional_param=browser,optional_param=frame)--*/
+CefRefPtr<CefCookieAccessFilter> RemoteResourceRequestHandler::GetCookieAccessFilter(
     CefRefPtr<CefBrowser> browser,
     CefRefPtr<CefFrame> frame,
     CefRefPtr<CefRequest> request
 ) {
   LNDCT();
-  if (myCookieAccessFilterReceived)
-    return myCookieAccessFilter;
 
-  RemoteRequest * rr = RemoteRequest::create(myOwner.getService(), request);
-  Holder<RemoteRequest> holder(*rr);
+  RemoteRequest::Holder req(request);
+  RemoteFrame::Holder frm(frame);
   thrift_codegen::RObject remoteHandler;
   
-  myOwner.exec([&](RpcExecutor::Service s){
-    s->ResourceRequestHandler_GetCookieAccessFilter(remoteHandler, myPeerId, myOwner.getBid(), rr->serverIdWithMap());
+  myService->exec([&](RpcExecutor::Service s){
+    s->ResourceRequestHandler_GetCookieAccessFilter(remoteHandler, myPeerId, myBid, frm.get()->serverIdWithMap(), req.get()->serverIdWithMap());
   });
-  myCookieAccessFilterReceived = true;
-  if (!remoteHandler.__isset.isPersistent || !remoteHandler.isPersistent)
-    Log::error("Non-persistent CookieAccessFilter can cause unstable behaviour and won't be used.");
-  else if (remoteHandler.objId != -1)
-    myCookieAccessFilter = new RemoteCookieAccessFilter(myOwner, remoteHandler);
-
-  return myCookieAccessFilter;
+  return remoteHandler.objId != -1 ? new RemoteCookieAccessFilter(myBid, myService, remoteHandler) : nullptr;
 }
 
-CefResourceRequestHandler::ReturnValue
-RemoteResourceRequestHandler::OnBeforeResourceLoad(
+///
+/// Called on the IO thread before a resource request is loaded. The |browser|
+/// and |frame| values represent the source of the request, and may be NULL
+/// for requests originating from service workers or CefURLRequest. To
+/// redirect or change the resource load optionally modify |request|.
+/// Modification of the request URL will be treated as a redirect. Return
+/// RV_CONTINUE to continue the request immediately. Return RV_CONTINUE_ASYNC
+/// and call CefCallback methods at a later time to continue or cancel the
+/// request asynchronously. Return RV_CANCEL to cancel the request
+/// immediately.
+///
+/*--cef(optional_param=browser,optional_param=frame, default_retval=RV_CONTINUE)--*/
+CefResourceRequestHandler::ReturnValue RemoteResourceRequestHandler::OnBeforeResourceLoad(
     CefRefPtr<CefBrowser> browser,
     CefRefPtr<CefFrame> frame,
     CefRefPtr<CefRequest> request,
     CefRefPtr<CefCallback> callback
 ) {
   LNDCT();
-  RemoteRequest * rr = RemoteRequest::create(myOwner.getService(), request);
-  Holder<RemoteRequest> holder(*rr);
+  RemoteRequest::Holder req(request);
+  RemoteFrame::Holder frm(frame);
   CefResourceRequestHandler::ReturnValue result = RV_CONTINUE;
-  myOwner.exec([&](RpcExecutor::Service s){
-    bool boolRes = s->ResourceRequestHandler_OnBeforeResourceLoad(myPeerId, myOwner.getBid(), rr->serverIdWithMap());
+  myService->exec([&](RpcExecutor::Service s){
+    bool boolRes = s->ResourceRequestHandler_OnBeforeResourceLoad(myPeerId, myBid, frm.get()->serverIdWithMap(), req.get()->serverIdWithMap());
     result = (boolRes ? RV_CANCEL : RV_CONTINUE);
   });
   return result;
 }
 
+///
+/// Called on the IO thread before a resource is loaded. The |browser| and
+/// |frame| values represent the source of the request, and may be NULL for
+/// requests originating from service workers or CefURLRequest. To allow the
+/// resource to load using the default network loader return NULL. To specify
+/// a handler for the resource return a CefResourceHandler object. The
+/// |request| object cannot not be modified in this callback.
+///
+/*--cef(optional_param=browser,optional_param=frame)--*/
 CefRefPtr<CefResourceHandler> RemoteResourceRequestHandler::GetResourceHandler(
     CefRefPtr<CefBrowser> browser,
     CefRefPtr<CefFrame> frame,
     CefRefPtr<CefRequest> request
 ) {
   LNDCT();
-  if (myResourceHandlerReceived)
-    return myResourceHandler;
 
-  RemoteRequest * rr = RemoteRequest::create(myOwner.getService(), request);
-  Holder<RemoteRequest> holder(*rr);
+  RemoteRequest::Holder req(request);
+  RemoteFrame::Holder frm(frame);
   thrift_codegen::RObject remoteHandler;
-  myOwner.exec([&](RpcExecutor::Service s){
-    s->ResourceRequestHandler_GetResourceHandler(remoteHandler, myPeerId, myOwner.getBid(), rr->serverIdWithMap());
+  myService->exec([&](RpcExecutor::Service s){
+    s->ResourceRequestHandler_GetResourceHandler(remoteHandler, myPeerId, myBid, frm.get()->serverIdWithMap(), req.get()->serverIdWithMap());
   });
-  myResourceHandlerReceived = true;
-  if (!remoteHandler.__isset.isPersistent || !remoteHandler.isPersistent)
-    Log::error("Non-persistent ResourceHandler can cause unstable behaviour and won't be used.");
-  else if (remoteHandler.objId != -1) {
-    myResourceHandler = new RemoteResourceHandler(myOwner, remoteHandler);
-  }
-  return myResourceHandler;
+  return remoteHandler.objId != -1 ? new RemoteResourceHandler(myBid, myService, remoteHandler) : nullptr;
 }
 
+///
+/// Called on the IO thread when a resource load is redirected. The |browser|
+/// and |frame| values represent the source of the request, and may be NULL
+/// for requests originating from service workers or CefURLRequest. The
+/// |request| parameter will contain the old URL and other request-related
+/// information. The |response| parameter will contain the response that
+/// resulted in the redirect. The |new_url| parameter will contain the new URL
+/// and can be changed if desired. The |request| and |response| objects cannot
+/// be modified in this callback.
+///
+/*--cef(optional_param=browser,optional_param=frame)--*/
 void RemoteResourceRequestHandler::OnResourceRedirect(
     CefRefPtr<CefBrowser> browser,
     CefRefPtr<CefFrame> frame,
@@ -93,19 +127,32 @@ void RemoteResourceRequestHandler::OnResourceRedirect(
     CefString& new_url
 ) {
   LNDCT();
-  RemoteRequest * rr = RemoteRequest::create(myOwner.getService(), request);
-  Holder<RemoteRequest> holder(*rr);
-  RemoteResponse * rresp = RemoteResponse::create(myOwner.getService(), response);
-  Holder<RemoteResponse> holderResp(*rresp);
+  RemoteRequest::Holder req(request);
+  RemoteResponse::Holder resp(response);
+  RemoteFrame::Holder frm(frame);
   std::string result;
-  myOwner.exec([&](RpcExecutor::Service s){
-    s->ResourceRequestHandler_OnResourceRedirect(result, myPeerId, myOwner.getBid(), rr->serverIdWithMap(),
-                                                 rresp->serverIdWithMap(), new_url.ToString());
+  myService->exec([&](RpcExecutor::Service s){
+    s->ResourceRequestHandler_OnResourceRedirect(result, myPeerId, myBid, frm.get()->serverIdWithMap(), req.get()->serverIdWithMap(),
+                                                 resp.get()->serverIdWithMap(), new_url.ToString());
   });
   CefString tmp(result);
   new_url.swap(tmp);
 }
 
+///
+/// Called on the IO thread when a resource response is received. The
+/// |browser| and |frame| values represent the source of the request, and may
+/// be NULL for requests originating from service workers or CefURLRequest. To
+/// allow the resource load to proceed without modification return false. To
+/// redirect or retry the resource load optionally modify |request| and return
+/// true. Modification of the request URL will be treated as a redirect.
+/// Requests handled using the default network loader cannot be redirected in
+/// this callback. The |response| object cannot be modified in this callback.
+///
+/// WARNING: Redirecting using this method is deprecated. Use
+/// OnBeforeResourceLoad or GetResourceHandler to perform redirects.
+///
+/*--cef(optional_param=browser,optional_param=frame)--*/
 bool RemoteResourceRequestHandler::OnResourceResponse(
     CefRefPtr<CefBrowser> browser,
     CefRefPtr<CefFrame> frame,
@@ -113,16 +160,32 @@ bool RemoteResourceRequestHandler::OnResourceResponse(
     CefRefPtr<CefResponse> response
 ) {
   LNDCT();
-  RemoteRequest * rr = RemoteRequest::create(myOwner.getService(), request);
-  Holder<RemoteRequest> holder(*rr);
-  RemoteResponse * rresp = RemoteResponse::create(myOwner.getService(), response);
-  Holder<RemoteResponse> holderResp(*rresp);
-  return myOwner.exec<bool>([&](RpcExecutor::Service s){
-    return s->ResourceRequestHandler_OnResourceResponse(myPeerId, myOwner.getBid(), rr->serverIdWithMap(),
-                                                          rresp->serverIdWithMap());
+  RemoteRequest::Holder req(request);
+  RemoteResponse::Holder resp(response);
+  RemoteFrame::Holder frm(frame);
+  return myService->exec<bool>([&](RpcExecutor::Service s){
+    return s->ResourceRequestHandler_OnResourceResponse(myPeerId, myBid, frm.get()->serverIdWithMap(), req.get()->serverIdWithMap(),
+                                                        resp.get()->serverIdWithMap());
   }, false);
 }
 
+///
+/// Called on the IO thread when a resource load has completed. The |browser|
+/// and |frame| values represent the source of the request, and may be NULL
+/// for requests originating from service workers or CefURLRequest. |request|
+/// and |response| represent the request and response respectively and cannot
+/// be modified in this callback. |status| indicates the load completion
+/// status. |received_content_length| is the number of response bytes actually
+/// read. This method will be called for all requests, including requests that
+/// are aborted due to CEF shutdown or destruction of the associated browser.
+/// In cases where the associated browser is destroyed this callback may
+/// arrive after the CefLifeSpanHandler::OnBeforeClose callback for that
+/// browser. The CefFrame::IsValid method can be used to test for this
+/// situation, and care should be taken not to call |browser| or |frame|
+/// methods that modify state (like LoadURL, SendProcessMessage, etc.) if the
+/// frame is invalid.
+///
+/*--cef(optional_param=browser,optional_param=frame)--*/
 void RemoteResourceRequestHandler::OnResourceLoadComplete(
     CefRefPtr<CefBrowser> browser,
     CefRefPtr<CefFrame> frame,
@@ -132,26 +195,36 @@ void RemoteResourceRequestHandler::OnResourceLoadComplete(
     int64_t received_content_length
 ) {
   LNDCT();
-  RemoteRequest * rr = RemoteRequest::create(myOwner.getService(), request);
-  Holder<RemoteRequest> holder(*rr);
-  RemoteResponse * rresp = RemoteResponse::create(myOwner.getService(), response);
-  Holder<RemoteResponse> holderResp(*rresp);
-  myOwner.exec([&](RpcExecutor::Service s){
-    s->ResourceRequestHandler_OnResourceLoadComplete(myPeerId, myOwner.getBid(), rr->serverIdWithMap(),
-                                                     rresp->serverIdWithMap(), status2str(status), received_content_length);
+  RemoteRequest::Holder req(request);
+  RemoteResponse::Holder resp(response);
+  RemoteFrame::Holder frm(frame);
+  myService->exec([&](RpcExecutor::Service s){
+    s->ResourceRequestHandler_OnResourceLoadComplete(myPeerId, myBid, frm.get()->serverIdWithMap(), req.get()->serverIdWithMap(),
+                                                     resp.get()->serverIdWithMap(), status2str(status), received_content_length);
   });
 }
 
+///
+/// Called on the IO thread to handle requests for URLs with an unknown
+/// protocol component. The |browser| and |frame| values represent the source
+/// of the request, and may be NULL for requests originating from service
+/// workers or CefURLRequest. |request| cannot be modified in this callback.
+/// Set |allow_os_execution| to true to attempt execution via the registered
+/// OS protocol handler, if any. SECURITY WARNING: YOU SHOULD USE THIS METHOD
+/// TO ENFORCE RESTRICTIONS BASED ON SCHEME, HOST OR OTHER URL ANALYSIS BEFORE
+/// ALLOWING OS EXECUTION.
+///
+/*--cef(optional_param=browser,optional_param=frame)--*/
 void RemoteResourceRequestHandler::OnProtocolExecution(
     CefRefPtr<CefBrowser> browser,
     CefRefPtr<CefFrame> frame,
     CefRefPtr<CefRequest> request,
     bool& allow_os_execution) {
   LNDCT();
-  RemoteRequest * rr = RemoteRequest::create(myOwner.getService(), request);
-  Holder<RemoteRequest> holder(*rr);
-  myOwner.exec([&](RpcExecutor::Service s){
-    allow_os_execution = s->ResourceRequestHandler_OnProtocolExecution(myPeerId, myOwner.getBid(), rr->serverIdWithMap(), allow_os_execution);
+  RemoteRequest::Holder req(request);
+  RemoteFrame::Holder frm(frame);
+  myService->exec([&](RpcExecutor::Service s){
+    allow_os_execution = s->ResourceRequestHandler_OnProtocolExecution(myPeerId, myBid, frm.get()->serverIdWithMap(), req.get()->serverIdWithMap(), allow_os_execution);
   });
 }
 

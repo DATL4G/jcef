@@ -20,9 +20,14 @@ class ServerHandler : virtual public ServerIf {
     // Your initialization goes here
   }
 
-  int32_t connect(const int32_t backwardConnectionPort, const std::vector<std::string> & cmdLineArgs, const std::map<std::string, std::string> & settings) {
+  int32_t connect(const std::string& backwardConnectionPipe, const bool isMaster) {
     // Your implementation goes here
     printf("connect\n");
+  }
+
+  int32_t connectTcp(const int32_t backwardConnectionPort, const bool isMaster) {
+    // Your implementation goes here
+    printf("connectTcp\n");
   }
 
   void log(const std::string& msg) {
@@ -30,14 +35,39 @@ class ServerHandler : virtual public ServerIf {
     printf("log\n");
   }
 
-  int32_t createBrowser(const int32_t cid, const std::string& url) {
+  void echo(std::string& _return, const std::string& msg) {
     // Your implementation goes here
-    printf("createBrowser\n");
+    printf("echo\n");
   }
 
-  void closeBrowser(const int32_t bid) {
+  void version(std::string& _return) {
     // Your implementation goes here
-    printf("closeBrowser\n");
+    printf("version\n");
+  }
+
+  void state(std::string& _return) {
+    // Your implementation goes here
+    printf("state\n");
+  }
+
+  void stop() {
+    // Your implementation goes here
+    printf("stop\n");
+  }
+
+  int32_t Browser_Create(const int32_t cid, const int32_t handlersMask, const  ::thrift_codegen::RObject& requestContextHandler) {
+    // Your implementation goes here
+    printf("Browser_Create\n");
+  }
+
+  void Browser_StartNativeCreation(const int32_t bid, const std::string& url) {
+    // Your implementation goes here
+    printf("Browser_StartNativeCreation\n");
+  }
+
+  void Browser_Close(const int32_t bid) {
+    // Your implementation goes here
+    printf("Browser_Close\n");
   }
 
   void Browser_Reload(const int32_t bid) {
@@ -65,9 +95,14 @@ class ServerHandler : virtual public ServerIf {
     printf("Browser_ExecuteJavaScript\n");
   }
 
-  void Browser_WasResized(const int32_t bid, const int32_t width, const int32_t height) {
+  void Browser_WasResized(const int32_t bid) {
     // Your implementation goes here
     printf("Browser_WasResized\n");
+  }
+
+  void Browser_NotifyScreenInfoChanged(const int32_t bid) {
+    // Your implementation goes here
+    printf("Browser_NotifyScreenInfoChanged\n");
   }
 
   void Browser_SendKeyEvent(const int32_t bid, const int32_t event_type, const int32_t modifiers, const int16_t key_char, const int64_t scanCode, const int32_t key_code) {
@@ -83,6 +118,111 @@ class ServerHandler : virtual public ServerIf {
   void Browser_SendMouseWheelEvent(const int32_t bid, const int32_t scroll_type, const int32_t x, const int32_t y, const int32_t modifiers, const int32_t delta, const int32_t units_to_scroll) {
     // Your implementation goes here
     printf("Browser_SendMouseWheelEvent\n");
+  }
+
+  bool Browser_CanGoForward(const int32_t bid) {
+    // Your implementation goes here
+    printf("Browser_CanGoForward\n");
+  }
+
+  bool Browser_CanGoBack(const int32_t bid) {
+    // Your implementation goes here
+    printf("Browser_CanGoBack\n");
+  }
+
+  void Browser_GoBack(const int32_t bid) {
+    // Your implementation goes here
+    printf("Browser_GoBack\n");
+  }
+
+  void Browser_GoForward(const int32_t bid) {
+    // Your implementation goes here
+    printf("Browser_GoForward\n");
+  }
+
+  bool Browser_IsLoading(const int32_t bid) {
+    // Your implementation goes here
+    printf("Browser_IsLoading\n");
+  }
+
+  void Browser_StopLoad(const int32_t bid) {
+    // Your implementation goes here
+    printf("Browser_StopLoad\n");
+  }
+
+  int32_t Browser_GetFrameCount(const int32_t bid) {
+    // Your implementation goes here
+    printf("Browser_GetFrameCount\n");
+  }
+
+  bool Browser_IsPopup(const int32_t bid) {
+    // Your implementation goes here
+    printf("Browser_IsPopup\n");
+  }
+
+  bool Browser_HasDocument(const int32_t bid) {
+    // Your implementation goes here
+    printf("Browser_HasDocument\n");
+  }
+
+  void Browser_ViewSource(const int32_t bid) {
+    // Your implementation goes here
+    printf("Browser_ViewSource\n");
+  }
+
+  void Browser_GetSource(const int32_t bid, const  ::thrift_codegen::RObject& stringVisitor) {
+    // Your implementation goes here
+    printf("Browser_GetSource\n");
+  }
+
+  void Browser_GetText(const int32_t bid, const  ::thrift_codegen::RObject& stringVisitor) {
+    // Your implementation goes here
+    printf("Browser_GetText\n");
+  }
+
+  void Browser_SetFocus(const int32_t bid, const bool enable) {
+    // Your implementation goes here
+    printf("Browser_SetFocus\n");
+  }
+
+  double Browser_GetZoomLevel(const int32_t bid) {
+    // Your implementation goes here
+    printf("Browser_GetZoomLevel\n");
+  }
+
+  void Browser_SetZoomLevel(const int32_t bid, const double val) {
+    // Your implementation goes here
+    printf("Browser_SetZoomLevel\n");
+  }
+
+  void Browser_StartDownload(const int32_t bid, const std::string& url) {
+    // Your implementation goes here
+    printf("Browser_StartDownload\n");
+  }
+
+  void Browser_Find(const int32_t bid, const std::string& searchText, const bool forward, const bool matchCase, const bool findNext) {
+    // Your implementation goes here
+    printf("Browser_Find\n");
+  }
+
+  void Browser_StopFinding(const int32_t bid, const bool clearSelection) {
+    // Your implementation goes here
+    printf("Browser_StopFinding\n");
+  }
+
+  void Browser_ReplaceMisspelling(const int32_t bid, const std::string& word) {
+    // Your implementation goes here
+    printf("Browser_ReplaceMisspelling\n");
+  }
+
+  void Browser_SetFrameRate(const int32_t bid, const int32_t val) {
+    // Your implementation goes here
+    printf("Browser_SetFrameRate\n");
+  }
+
+  void Frame_ExecuteJavaScript(const int32_t frameId, const std::string& code, const std::string& url, const int32_t line) {
+    // Your implementation goes here
+    printf("Frame_ExecuteJavaScript\n");
   }
 
   void Request_Update(const  ::thrift_codegen::RObject& request) {
@@ -228,6 +368,61 @@ class ServerHandler : virtual public ServerIf {
   void QueryCallback_Failure(const  ::thrift_codegen::RObject& qcallback, const int32_t error_code, const std::string& error_message) {
     // Your implementation goes here
     printf("QueryCallback_Failure\n");
+  }
+
+  void SchemeHandlerFactory_Register(const std::string& schemeName, const std::string& domainName, const  ::thrift_codegen::RObject& schemeHandlerFactory) {
+    // Your implementation goes here
+    printf("SchemeHandlerFactory_Register\n");
+  }
+
+  void ClearAllSchemeHandlerFactories() {
+    // Your implementation goes here
+    printf("ClearAllSchemeHandlerFactories\n");
+  }
+
+  void RequestContext_ClearCertificateExceptions(const int32_t bid, const  ::thrift_codegen::RObject& completionCallback) {
+    // Your implementation goes here
+    printf("RequestContext_ClearCertificateExceptions\n");
+  }
+
+  void RequestContext_CloseAllConnections(const int32_t bid, const  ::thrift_codegen::RObject& completionCallback) {
+    // Your implementation goes here
+    printf("RequestContext_CloseAllConnections\n");
+  }
+
+  void CookieManager_Create( ::thrift_codegen::RObject& _return) {
+    // Your implementation goes here
+    printf("CookieManager_Create\n");
+  }
+
+  void CookieManager_Dispose(const  ::thrift_codegen::RObject& cookieManager) {
+    // Your implementation goes here
+    printf("CookieManager_Dispose\n");
+  }
+
+  bool CookieManager_VisitAllCookies(const  ::thrift_codegen::RObject& cookieManager, const  ::thrift_codegen::RObject& visitor) {
+    // Your implementation goes here
+    printf("CookieManager_VisitAllCookies\n");
+  }
+
+  bool CookieManager_VisitUrlCookies(const  ::thrift_codegen::RObject& cookieManager, const  ::thrift_codegen::RObject& visitor, const std::string& url, const bool includeHttpOnly) {
+    // Your implementation goes here
+    printf("CookieManager_VisitUrlCookies\n");
+  }
+
+  bool CookieManager_SetCookie(const  ::thrift_codegen::RObject& cookieManager, const std::string& url, const  ::thrift_codegen::Cookie& cookie) {
+    // Your implementation goes here
+    printf("CookieManager_SetCookie\n");
+  }
+
+  bool CookieManager_DeleteCookies(const  ::thrift_codegen::RObject& cookieManager, const std::string& url, const std::string& cookieName) {
+    // Your implementation goes here
+    printf("CookieManager_DeleteCookies\n");
+  }
+
+  bool CookieManager_FlushStore(const  ::thrift_codegen::RObject& cookieManager, const  ::thrift_codegen::RObject& completionCallback) {
+    // Your implementation goes here
+    printf("CookieManager_FlushStore\n");
   }
 
 };

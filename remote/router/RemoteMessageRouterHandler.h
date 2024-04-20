@@ -10,12 +10,13 @@ class ClientsManager;
 
 // Created in MessageRouter_AddHandler, disposed in MessageRouter_RemoveHandler.
 // Owned (and managed) by RemoteMessageRouter
-class RemoteMessageRouterHandler : public CefMessageRouterBrowserSide::Handler, public RemoteJavaObjectBase<RemoteMessageRouterHandler> {
+class RemoteMessageRouterHandler : public CefMessageRouterBrowserSide::Handler, public RemoteJavaObject<RemoteMessageRouterHandler> {
  public:
   // Use shared_ptr because need to share pointer between threads
   explicit RemoteMessageRouterHandler(std::shared_ptr<RpcExecutor> service, std::shared_ptr<ClientsManager> manager, thrift_codegen::RObject peer);
   ~RemoteMessageRouterHandler() override;
 
+  // All methods will be executed on the browser process UI thread.
   virtual bool OnQuery(CefRefPtr<CefBrowser> browser,
                        CefRefPtr<CefFrame> frame,
                        int64_t query_id,

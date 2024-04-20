@@ -3,12 +3,13 @@
 
 #include <memory>
 #include <mutex>
-#include <vector>
+#include <map>
 #include "include/cef_base.h"
 
+#include "../gen-cpp/shared_types.h"
+
 class RemoteClientHandler;
-class RpcExecutor;
-class MessageRoutersManager;
+class ServerHandlerContext;
 class CefBrowser;
 
 class ClientsManager {
@@ -16,19 +17,41 @@ class ClientsManager {
   ClientsManager();
 
   // Returns bid
-  int createBrowser(int cid/*id from java*/, std::shared_ptr<RpcExecutor> service, std::shared_ptr<MessageRoutersManager> routersManager, const std::string& url);
-  void closeBrowser(const int32_t bid);
-  void closeAllBrowsers();
+  int createBrowser(int cid /*id from java*/,
+                    std::shared_ptr<ServerHandlerContext> ctx,
+                    int handlersMask, const thrift_codegen::RObject& requestContextHandler);
+  void startNativeBrowserCreation(int bid, const std::string& url);
+  void closeBrowser(int bid);
+
+  void erase(int bid);
+
+  // returns short description of remaining browsers (or empty string when empty browsers set)
+  std::string closeAllBrowsers();
 
   CefRefPtr<CefBrowser> getCefBrowser(int bid);
-  int findRemoteBrowser(CefRefPtr<CefBrowser> browser);
-
   CefRefPtr<RemoteClientHandler> getClient(int bid);
-  void disposeClient(int bid);
+  int findRemoteBrowser(CefRefPtr<CefBrowser> browser); // returns bid
 
  private:
-  std::recursive_mutex myMutex;
-  std::shared_ptr<std::vector<CefRefPtr<RemoteClientHandler>>> myRemoteClients;
+
+  class ClientsStorage {
+   public:
+    CefRefPtr<RemoteClientHandler> get(int bid);
+    void set(int bid, CefRefPtr<RemoteClientHandler>);
+    void erase(int bid);
+    int findRemoteBrowser(CefRefPtr<CefBrowser> browser); // returns bid
+
+    // returns short description of remaining browsers (or empty string when empty browsers set)
+    std::string closeAll();
+
+    std::recursive_mutex myMutex;
+   private:
+    std::map<int, CefRefPtr<RemoteClientHandler>> myBid2Client;
+
+    std::string enumClients();
+  };
+
+  std::shared_ptr<ClientsStorage> myRemoteClients;
 };
 
 #endif  // JCEF_CLIENTSMANAGER_H

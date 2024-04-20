@@ -14,9 +14,12 @@ using namespace boost::interprocess;
 // Need to perform all calculations on server. Client should regularly update data on server.
 
 // Disable logging until optimized
+#ifdef LNDCT
+#undef LNDCT
 #define LNDCT()
+#endif
 
-RemoteRenderHandler::RemoteRenderHandler(RemoteClientHandler & owner) : myOwner(owner), myBufferManager(owner.getCid(), owner.getBid()) {}
+RemoteRenderHandler::RemoteRenderHandler(int bid, std::shared_ptr<RpcExecutor> service) : myBid(bid), myService(service), myBufferManager(bid) {}
 
 bool RemoteRenderHandler::GetRootScreenRect(CefRefPtr<CefBrowser> browser,
                                       CefRect& rect) {
@@ -36,8 +39,8 @@ void RemoteRenderHandler::GetViewRect(CefRefPtr<CefBrowser> browser, CefRect& re
     fillDummy(rect);
     Rect result;
     result.w = -1; // invalidate
-    myOwner.exec([&](const RpcExecutor::Service& s){
-      s->RenderHandler_GetViewRect(result, myOwner.getBid());
+    myService->exec([&](const RpcExecutor::Service& s){
+      s->RenderHandler_GetViewRect(result, myBid);
     });
     if (result.w < 0) return;
 
@@ -47,9 +50,10 @@ void RemoteRenderHandler::GetViewRect(CefRefPtr<CefBrowser> browser, CefRect& re
     rect.height = result.h;
 
     if (rect.width < 1 || rect.height < 1) {
-        Log::debug("small size %d %d", rect.width, rect.height);
+        Log::trace("GetViewRect: small size %d %d", rect.width, rect.height);
         fillDummy(rect);
     }
+    //Log::trace("GetViewRect result: %d %d %d %d", rect.x, rect.y, rect.width, rect.height);
 }
 
 void fillDummy(CefScreenInfo& screen_info) {
@@ -84,8 +88,8 @@ bool RemoteRenderHandler::GetScreenInfo(CefRefPtr<CefBrowser> browser,
     fillDummy(screen_info);
     ScreenInfo result;
     result.depth = -1;// invalidate
-    myOwner.exec([&](const RpcExecutor::Service& s){
-      s->RenderHandler_GetScreenInfo(result, myOwner.getBid());
+    myService->exec([&](const RpcExecutor::Service& s){
+      s->RenderHandler_GetScreenInfo(result, myBid);
     });
     if (result.depth == -1) return false;
 
@@ -103,6 +107,7 @@ bool RemoteRenderHandler::GetScreenInfo(CefRefPtr<CefBrowser> browser,
     screen_info.available_rect.y = result.available_rect.y;
     screen_info.available_rect.width = result.available_rect.w;
     screen_info.available_rect.height = result.available_rect.h;
+    //Log::trace("GetScreenInfo result: rc %d %d %d %d, avail %d %d %d %d", result.rect.x, result.rect.y, result.rect.w, result.rect.h, result.available_rect.x, result.available_rect.y, result.available_rect.w, result.available_rect.w);
     return true;
 }
 
@@ -114,8 +119,8 @@ bool RemoteRenderHandler::GetScreenPoint(CefRefPtr<CefBrowser> browser,
     LNDCT();
     Point result;
     result.x = INT32_MIN;// invalidate
-    myOwner.exec([&](const RpcExecutor::Service& s){
-      s->RenderHandler_GetScreenPoint(result, myOwner.getBid(), viewX, viewY);
+    myService->exec([&](const RpcExecutor::Service& s){
+      s->RenderHandler_GetScreenPoint(result, myBid, viewX, viewY);
     });
     if (result.x == INT32_MIN) return false;
 
@@ -140,7 +145,26 @@ void RemoteRenderHandler::OnPopupSize(CefRefPtr<CefBrowser> browser,
 //
 #define DRAW_DEBUG 0
 
-inline void fillRect(unsigned char * dst, int stride, int y, int x, int dx, int dy, int r, int g, int b, int a) {
+inline void fillRect(unsigned char * dst, int stride, int y, int x, int dx, int dy, int r, int g, int b, int a, int width, int height) {
+    if (y >= height)
+      return;
+    if (x >= width)
+      return;
+
+    if (y < 0) {
+      dy += y;
+      y = 0;
+    }
+    if (y + dy >= height)
+      dy = height - y;
+
+    if (x < 0) {
+      dx += x;
+      x = 0;
+    }
+    if (x + dx >= width)
+      dx = width - x;
+
     for (int yy = y, yEnd = y + dy; yy < yEnd; ++yy) {
         const int offset = yy*stride;
         for (int xx = x, xEnd = x + dx; xx < xEnd; ++xx) {
@@ -152,6 +176,67 @@ inline void fillRect(unsigned char * dst, int stride, int y, int x, int dx, int 
     }
 }
 
+inline void drawLineX(unsigned char * dst, int stride, int y, int x, int dx, int r, int g, int b, int a, int width, int height) {
+  if (y < 0)
+    return;
+  if (y >= height)
+    return;
+  if (x >= width)
+    return;
+
+  if (x < 0) {
+    dx += x;
+    x = 0;
+  }
+  if (x + dx >= width)
+    dx = width - x;
+
+  const int offset = y*stride;
+  for (int xx = x, xEnd = x + dx; xx < xEnd; ++xx) {
+    dst[offset + xx*4] = a; // alpha
+    dst[offset + xx*4 + 1] = r; // red
+    dst[offset + xx*4 + 2] = g; // green
+    dst[offset + xx*4 + 3] = b; // blue
+  }
+}
+
+inline void drawLineY(unsigned char * dst, int stride, int y, int x, int dy, int r, int g, int b, int a, int width, int height) {
+  if (x < 0)
+    return;
+  if (y >= height)
+    return;
+  if (x >= width)
+    return;
+
+  if (y < 0) {
+    dy += y;
+    y = 0;
+  }
+  if (y + dy >= height)
+    dy = height - y;
+
+  for (int yy = y, yEnd = y + dy; yy < yEnd; ++yy) {
+    const int offset = yy*stride;
+    dst[offset + x*4] = a; // alpha
+    dst[offset + x*4 + 1] = r; // red
+    dst[offset + x*4 + 2] = g; // green
+    dst[offset + x*4 + 3] = b; // blue
+  }
+}
+
+inline void drawRect(unsigned char * dst, int stride, int y, int x, int width, int height, int r, int g, int b, int a, int totalWidth, int totalHeight) {
+  const int thickness = 50;
+  fillRect(dst, stride, y - thickness/2, x, width, thickness, r, g, b, a, totalWidth, totalHeight);
+  fillRect(dst, stride, y, x + width - thickness/2, thickness, height, r, g, b, a, totalWidth, totalHeight);
+  fillRect(dst, stride, y + height - thickness/2, x, width, thickness, r, g, b, a, totalWidth, totalHeight);
+  fillRect(dst, stride, y, x - thickness/2, thickness, height, r, g, b, a, totalWidth, totalHeight);
+}
+
+inline void semifillRect(unsigned char * dst, int stride, int y, int x, int width, int height, int r, int g, int b, int a, int totalWidth, int totalHeight) {
+  for (int xEnd = x + width; x < xEnd; x += 2)
+    drawLineY(dst, stride, y, x, height, r, g, b, a, totalWidth, totalHeight);
+}
+
 void RemoteRenderHandler::OnPaint(CefRefPtr<CefBrowser> browser,
                             PaintElementType type,
                             const RectList& dirtyRects,
@@ -161,33 +246,34 @@ void RemoteRenderHandler::OnPaint(CefRefPtr<CefBrowser> browser,
     const int rasterPixCount = width*height;
     const size_t extendedRectsCount = dirtyRects.size() < 10 ? 10 : dirtyRects.size();
     SharedBuffer & buff = myBufferManager.getLockedBuffer(rasterPixCount*4 + 4*4*extendedRectsCount);
-    if (buff.ptr() == nullptr) return;
+    if (buff.ptr() == nullptr) {
+      Log::error("SharedBuffer is empty.");
+      return;
+    }
 
-    // write flipped raster
-    // TODO: premultiply alpha in this loop
-    const int stride = width*4;
-    for (int y = 0; y < height; ++y)
-      ::memcpy(((char*)buff.ptr()) + (height - y - 1)*stride, ((char*)buffer) + y*stride, stride);
+    ::memcpy((char*)buff.ptr(), (char*)buffer, rasterPixCount*4);
 
     int32_t * sharedRects = (int32_t *)buff.ptr() + rasterPixCount;
     for (const CefRect& r : dirtyRects) {
       *(sharedRects++) = r.x;
-      *(sharedRects++) = height - (r.y + r.height);
+      *(sharedRects++) = r.y;
       *(sharedRects++) = r.width;
       *(sharedRects++) = r.height;
     }
 
 #ifdef DRAW_DEBUG
-    fillRect((unsigned char *)buff.ptr(), stride, 0, 0, 10, 10, 255, 0, 0, 255);
-    fillRect((unsigned char *)buff.ptr(), stride, 0, width - 10, 10, 10, 0, 255, 0, 255);
-    fillRect((unsigned char *)buff.ptr(), stride, height - 10, width - 10, 10, 10, 0, 0, 255, 255);
-    fillRect((unsigned char *)buff.ptr(), stride, height - 10, 0, 10, 10, 255, 0, 255, 255);
+    const int stride = width*4;
+    const int th = 30;
+    fillRect((unsigned char *)buff.ptr(), stride, 0, 0, th, th, 255, 0, 0, 255, width, height);
+    fillRect((unsigned char *)buff.ptr(), stride, 0, width - th, th, th, 0, 255, 0, 255, width, height);
+    fillRect((unsigned char *)buff.ptr(), stride, height - th, width - th, th, th, 0, 0, 255, 255, width, height);
+    fillRect((unsigned char *)buff.ptr(), stride, height - th, 0, th, th, 255, 0, 255, 255, width, height);
 #endif //DRAW_DEBUG
 
     buff.unlock();
 
-    myOwner.exec([&](const RpcExecutor::Service& s){
-      s->RenderHandler_OnPaint(myOwner.getBid(), type != PET_VIEW, static_cast<int>(dirtyRects.size()),
+    myService->exec([&](const RpcExecutor::Service& s){
+      s->RenderHandler_OnPaint(myBid, type != PET_VIEW, static_cast<int>(dirtyRects.size()),
                  buff.uid(), buff.handle(),
                  width, height);
     });

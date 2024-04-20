@@ -4,9 +4,7 @@ set -euo pipefail
 
 export JOGAMP_DIR="$JCEF_ROOT_DIR"/third_party/jogamp/jar
 export THRIFT_DIR="$JCEF_ROOT_DIR"/third_party/thrift
-export SLF_DIR="$JCEF_ROOT_DIR"/third_party/slf4j
-export THRIFT_JAR=libthrift-0.16.0.jar
-export SLF_JAR=slf4j-api-2.0.0.jar
+export THRIFT_JAR=libthrift-0.19.0.jar
 
 function extract_jar {
   __jar=$1
@@ -69,24 +67,6 @@ fi
 "$JAVA_HOME"/bin/jmod create --module-path . --class-path jogl-all.jar --libs lib jogl.all.jmod
 rm -rf jogl-all.jar lib
 
-echo "*** create slf4j module..."
-
-cp "$SLF_DIR"/"$SLF_JAR" .
-cp "$JB_TOOLS_DIR"/common/slf4j-module-info.java module-info.java
-"$JAVA_HOME"/bin/javac --patch-module org.slf4j=$SLF_JAR module-info.java
-
-export TMP_DIR="tmp_jar_content"
-mkdir $TMP_DIR
-cd $TMP_DIR
-"$JAVA_HOME"/bin/jar -xvf ../$SLF_JAR
-rm -rf ./META-INF/versions
-cp ../module-info.class .
-"$JAVA_HOME"/bin/jar -cvf ../slf4j.jar .
-cd ..
-rm -rf module-info.class module-info.java $TMP_DIR
-"$JAVA_HOME"/bin/jmod create --class-path slf4j.jar org.slf4j.jmod
-rm -rf "$SLF_JAR" slf4j.jar
-
 echo "*** create thrift module..."
 
 cp "$THRIFT_DIR"/"$THRIFT_JAR" .
@@ -110,6 +90,7 @@ case "$OS" in
 
   mkdir lib
   for resource in $(ls "$OUT_NATIVE_DIR" | grep -v '\.dat\|\.exe\|\.bin\|\.exp\|\.lib'); do
+    # TODO: remove resource dups
     cp -R "$OUT_NATIVE_DIR"/"$resource" lib
   done
 
@@ -121,6 +102,11 @@ case "$OS" in
 
   "$JAVA_HOME"/bin/jmod create --module-path . --class-path jcef.jar --cmds bin --libs lib jcef.jmod
   rm -rf jcef.jar bin lib
+
+  rm -rf ../cef_server && mkdir ../cef_server
+  cp -R "$OUT_REMOTE_DIR"/bin ../cef_server
+  cp -R "$OUT_REMOTE_DIR"/lib ../cef_server
+  cp "$OUT_REMOTE_DIR"/shared_mem_helper.dll ../cef_server
   ;;
 
 "macosx")
@@ -137,6 +123,11 @@ case "$OS" in
   cp -R "$OUT_NATIVE_DIR"/* lib
   cp -R "$OUT_REMOTE_DIR"/libshared_mem_helper.so lib
   cp -R "$OUT_REMOTE_DIR"/cef_server lib
+
+  echo "*** create cef_server bundle..."
+  rm -rf ../cef_server && mkdir ../cef_server
+  cp -R "$OUT_REMOTE_DIR"/* ../cef_server
+  find ../cef_server -name "*.log" -type f -delete
 
   echo "*** find patched libcef.so..."
   if [ -z "${PATCHED_LIBCEF_DIR:-}" ]; then

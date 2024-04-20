@@ -4,8 +4,8 @@
 
 package org.cef;
 
-import com.jetbrains.cef.JCefAppConfig;
 import com.jetbrains.cef.remote.CefServer;
+import com.jetbrains.cef.remote.callback.RemoteSchemeHandlerFactory;
 import org.cef.callback.CefSchemeHandlerFactory;
 import org.cef.handler.CefAppHandler;
 import org.cef.handler.CefAppHandlerAdapter;
@@ -160,8 +160,8 @@ public class CefApp extends CefAppHandlerAdapter {
     private CefApp(String[] args, CefSettings settings) {
         super(args);
 
-        if (settings != null) settings_ = settings.clone();
-        CefLog.init(settings);
+        if (settings != null) settings_ = fixSettings(settings);
+        CefLog.init(settings_);
         setState(CefAppState.NEW);
 
         ourStartupFeature.thenRunAsync(() -> {
@@ -172,9 +172,7 @@ public class CefApp extends CefAppHandlerAdapter {
             // execute successfully)
             // TODO: ensure and make all initialization steps in single bg thread.
             if (IS_REMOTE_ENABLED) {
-                if (!CefServer.initialize()) {
-                    CefLog.Error("CefApp: can't connect to native server.");
-                } else {
+                if (CefServer.connect(appHandler_, settings_)) {
                     CefLog.Debug("CefApp: native CefServer is initialized.");
                     setState(CefAppState.INITIALIZED);
                     synchronized (initializationListeners_) {
@@ -299,20 +297,20 @@ public class CefApp extends CefAppHandlerAdapter {
         if (getState().compareTo(CefAppState.NEW) > 0)
             throw new IllegalStateException("Settings can only be passed to CEF"
                     + " before createClient is called the first time. Current state is " + getState());
-        settings_ = settings.clone();
+        settings_ = fixSettings(settings);
     }
 
     public final CefVersion getVersion() {
-        if (isRemoteEnabled()) {
-            // TODO: request from server
-            CefVersion result = new CefVersion(0, "0", 0, 0, 0, 0, 0, 0, 0, 0) {
+        if (IS_REMOTE_ENABLED) {
+            // TODO: request remaining params from server
+            return new CefVersion(0, "0", 0, 0, 0, 0, 0, 0, 0, 0) {
                 @Override
                 public String toString() {
-                    return "remote " + JCefAppConfig.getVersion();
+                    return "remote_" + CefServer.getVersion();
                 }
                 @Override
                 public String getJcefVersion() {
-                    return "remote " + JCefAppConfig.getVersion();
+                    return "remote_" + CefServer.getVersion();
                 }
             };
         }
@@ -372,7 +370,7 @@ public class CefApp extends CefAppHandlerAdapter {
                 // (3) Shutdown sequence. Close all clients and continue.
                 setState(CefAppState.SHUTTING_DOWN);
                 if (clients_.isEmpty()) {
-                    scheduleNativeShutdown();
+                    finishShutdown();
                 } else {
                     // shutdown() will be called from clientWasDisposed() when the last
                     // client is gone.
@@ -384,6 +382,7 @@ public class CefApp extends CefAppHandlerAdapter {
                         c.dispose();
                     }
                 }
+
                 break;
 
             case NONE:
@@ -429,6 +428,14 @@ public class CefApp extends CefAppHandlerAdapter {
      * called on any thread in the browser process.
      */
     public boolean registerSchemeHandlerFactory(String schemeName, String domainName, CefSchemeHandlerFactory factory) {
+        if (IS_REMOTE_ENABLED) {
+            CefServer.instance().onConnected(()->{
+                RemoteSchemeHandlerFactory rf = RemoteSchemeHandlerFactory.create(factory);
+                CefServer.instance().getService().exec(s -> s.SchemeHandlerFactory_Register(schemeName, domainName, rf.thriftId()));
+            }, "registerSchemeHandlerFactory", true);
+            return true;
+        }
+
         onInitialization(state -> {
             if (!N_RegisterSchemeHandlerFactory(schemeName, domainName, factory))
                 CefLog.Error("Can't register scheme [%s:%s]", schemeName, domainName);
@@ -441,6 +448,13 @@ public class CefApp extends CefAppHandlerAdapter {
      * function may be called on any thread in the browser process.
      */
     public boolean clearSchemeHandlerFactories() {
+        if (IS_REMOTE_ENABLED) {
+            CefServer.instance().onConnected(()->{
+                CefServer.instance().getService().exec(s -> s.ClearAllSchemeHandlerFactories());
+            }, "clearSchemeHandlerFactories", false);
+            return true;
+        }
+
         if (!isInitialized_)
             return false;
         return N_ClearSchemeHandlerFactories();
@@ -461,7 +475,7 @@ public class CefApp extends CefAppHandlerAdapter {
         CefLog.Debug("CefApp: client was disposed: %s [clients count %d]", client, clients_.size());
         if (clients_.isEmpty() && getState().compareTo(CefAppState.SHUTTING_DOWN) >= 0) {
             // Shutdown native system.
-            scheduleNativeShutdown();
+            finishShutdown();
         }
     }
 
@@ -508,12 +522,29 @@ public class CefApp extends CefAppHandlerAdapter {
     /**
      * Shut down the context.
      */
-    private void scheduleNativeShutdown() {
+    private void finishShutdown() {
+        if (IS_REMOTE_ENABLED) {
+            CefServer.instance().disconnect();
+            synchronized (this) {
+                setState(CefAppState.TERMINATED);
+                CefApp.self = null;
+            }
+            return;
+        }
         new Thread(() -> {
-            // Can execute on any thread
-            CefLog.Info("shutdown CEF on " + Thread.currentThread());
+            // Empiric observation: to avoid crashes we must perform native shutdown in next manner:
+            // last client closed -> small pause (to allow CEF finish some bg tasks) -> call CefShutdown
+            // This small pause will be in bg thread, see JBR-5822.
+            final int sleepBeforeShutdown = Utils.getInteger("JCEF_SLEEP_BEFORE_SHUTDOWN", 999);
+            if (sleepBeforeShutdown > 0) {
+                try {
+                    CefLog.Debug("Sleep before native shutdown for %d ms, thread %s.", sleepBeforeShutdown, Thread.currentThread());
+                    Thread.sleep(sleepBeforeShutdown);
+                } catch (InterruptedException e) {}
+            }
 
             // Shutdown native CEF.
+            CefLog.Info("Perform native shutdown of CEF on thread %s.", Thread.currentThread());
             N_Shutdown();
 
             synchronized (this) {
@@ -528,6 +559,10 @@ public class CefApp extends CefAppHandlerAdapter {
      * Windows with windowed rendering.
      */
     public final void doMessageLoopWork(final long delay_ms) {
+        if (IS_REMOTE_ENABLED) {
+            CefLog.Error("doMessageLoopWork musn't be called in remote mode.");
+            return;
+        }
         // Execute on the AWT event dispatching thread.
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -536,7 +571,7 @@ public class CefApp extends CefAppHandlerAdapter {
 
                 // The maximum number of milliseconds we're willing to wait between
                 // calls to DoMessageLoopWork().
-                final long kMaxTimerDelay = 1000 / settings_.frameRateLimit;
+                final long kMaxTimerDelay = 1000 / 30; // 30fps
 
                 if (workTimer_ != null) {
                     workTimer_.stop();
@@ -601,6 +636,16 @@ public class CefApp extends CefAppHandlerAdapter {
                 ourStartupFeature.completeExceptionally(e);
             }
         });
+    }
+
+    private static CefSettings fixSettings(CefSettings settings) {
+        CefSettings result = settings.clone();
+        // A workaround for IDEA-350784. Disable sandbox on linux. Until the reason of the crash is eliminated.
+        if (OS.isLinux() && !Boolean.getBoolean("jcef.sandbox.force_enabled")) {
+            result.no_sandbox = true;
+        }
+
+        return result;
     }
 
     static class NamedThreadExecutor implements Executor {

@@ -1,8 +1,8 @@
 package tests;
 
 
+import org.cef.CefClient;
 import org.cef.browser.CefBrowser;
-import org.cef.callback.CefNativeAdapter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -70,10 +70,9 @@ class JBCefOsrComponent extends JPanel {
     @Override
     public void addNotify() {
         super.addNotify();
-        if (myBrowser instanceof CefNativeAdapter
-                && ((CefNativeAdapter)myBrowser).getNativeRef("CefBrowser") == 0) {
+
+        if (!CefClient.isNativeBrowserCreationStarted(myBrowser))
             myBrowser.createImmediately();
-        }
     }
 
     @Override

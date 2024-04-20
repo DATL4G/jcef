@@ -35,52 +35,17 @@ uint32_t Server_connect_args::read(::apache::thrift::protocol::TProtocol* iprot)
     switch (fid)
     {
       case 1:
-        if (ftype == ::apache::thrift::protocol::T_I32) {
-          xfer += iprot->readI32(this->backwardConnectionPort);
-          this->__isset.backwardConnectionPort = true;
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->backwardConnectionPipe);
+          this->__isset.backwardConnectionPipe = true;
         } else {
           xfer += iprot->skip(ftype);
         }
         break;
       case 2:
-        if (ftype == ::apache::thrift::protocol::T_LIST) {
-          {
-            this->cmdLineArgs.clear();
-            uint32_t _size0;
-            ::apache::thrift::protocol::TType _etype3;
-            xfer += iprot->readListBegin(_etype3, _size0);
-            this->cmdLineArgs.resize(_size0);
-            uint32_t _i4;
-            for (_i4 = 0; _i4 < _size0; ++_i4)
-            {
-              xfer += iprot->readString(this->cmdLineArgs[_i4]);
-            }
-            xfer += iprot->readListEnd();
-          }
-          this->__isset.cmdLineArgs = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 3:
-        if (ftype == ::apache::thrift::protocol::T_MAP) {
-          {
-            this->settings.clear();
-            uint32_t _size5;
-            ::apache::thrift::protocol::TType _ktype6;
-            ::apache::thrift::protocol::TType _vtype7;
-            xfer += iprot->readMapBegin(_ktype6, _vtype7, _size5);
-            uint32_t _i9;
-            for (_i9 = 0; _i9 < _size5; ++_i9)
-            {
-              std::string _key10;
-              xfer += iprot->readString(_key10);
-              std::string& _val11 = this->settings[_key10];
-              xfer += iprot->readString(_val11);
-            }
-            xfer += iprot->readMapEnd();
-          }
-          this->__isset.settings = true;
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool(this->isMaster);
+          this->__isset.isMaster = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -102,33 +67,12 @@ uint32_t Server_connect_args::write(::apache::thrift::protocol::TProtocol* oprot
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("Server_connect_args");
 
-  xfer += oprot->writeFieldBegin("backwardConnectionPort", ::apache::thrift::protocol::T_I32, 1);
-  xfer += oprot->writeI32(this->backwardConnectionPort);
+  xfer += oprot->writeFieldBegin("backwardConnectionPipe", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->backwardConnectionPipe);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("cmdLineArgs", ::apache::thrift::protocol::T_LIST, 2);
-  {
-    xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->cmdLineArgs.size()));
-    std::vector<std::string> ::const_iterator _iter12;
-    for (_iter12 = this->cmdLineArgs.begin(); _iter12 != this->cmdLineArgs.end(); ++_iter12)
-    {
-      xfer += oprot->writeString((*_iter12));
-    }
-    xfer += oprot->writeListEnd();
-  }
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("settings", ::apache::thrift::protocol::T_MAP, 3);
-  {
-    xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->settings.size()));
-    std::map<std::string, std::string> ::const_iterator _iter13;
-    for (_iter13 = this->settings.begin(); _iter13 != this->settings.end(); ++_iter13)
-    {
-      xfer += oprot->writeString(_iter13->first);
-      xfer += oprot->writeString(_iter13->second);
-    }
-    xfer += oprot->writeMapEnd();
-  }
+  xfer += oprot->writeFieldBegin("isMaster", ::apache::thrift::protocol::T_BOOL, 2);
+  xfer += oprot->writeBool(this->isMaster);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -146,33 +90,12 @@ uint32_t Server_connect_pargs::write(::apache::thrift::protocol::TProtocol* opro
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("Server_connect_pargs");
 
-  xfer += oprot->writeFieldBegin("backwardConnectionPort", ::apache::thrift::protocol::T_I32, 1);
-  xfer += oprot->writeI32((*(this->backwardConnectionPort)));
+  xfer += oprot->writeFieldBegin("backwardConnectionPipe", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->backwardConnectionPipe)));
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("cmdLineArgs", ::apache::thrift::protocol::T_LIST, 2);
-  {
-    xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRING, static_cast<uint32_t>((*(this->cmdLineArgs)).size()));
-    std::vector<std::string> ::const_iterator _iter14;
-    for (_iter14 = (*(this->cmdLineArgs)).begin(); _iter14 != (*(this->cmdLineArgs)).end(); ++_iter14)
-    {
-      xfer += oprot->writeString((*_iter14));
-    }
-    xfer += oprot->writeListEnd();
-  }
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("settings", ::apache::thrift::protocol::T_MAP, 3);
-  {
-    xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>((*(this->settings)).size()));
-    std::map<std::string, std::string> ::const_iterator _iter15;
-    for (_iter15 = (*(this->settings)).begin(); _iter15 != (*(this->settings)).end(); ++_iter15)
-    {
-      xfer += oprot->writeString(_iter15->first);
-      xfer += oprot->writeString(_iter15->second);
-    }
-    xfer += oprot->writeMapEnd();
-  }
+  xfer += oprot->writeFieldBegin("isMaster", ::apache::thrift::protocol::T_BOOL, 2);
+  xfer += oprot->writeBool((*(this->isMaster)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -248,6 +171,209 @@ Server_connect_presult::~Server_connect_presult() noexcept {
 
 
 uint32_t Server_connect_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32((*(this->success)));
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
+Server_connectTcp_args::~Server_connectTcp_args() noexcept {
+}
+
+
+uint32_t Server_connectTcp_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->backwardConnectionPort);
+          this->__isset.backwardConnectionPort = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool(this->isMaster);
+          this->__isset.isMaster = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_connectTcp_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_connectTcp_args");
+
+  xfer += oprot->writeFieldBegin("backwardConnectionPort", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32(this->backwardConnectionPort);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("isMaster", ::apache::thrift::protocol::T_BOOL, 2);
+  xfer += oprot->writeBool(this->isMaster);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_connectTcp_pargs::~Server_connectTcp_pargs() noexcept {
+}
+
+
+uint32_t Server_connectTcp_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_connectTcp_pargs");
+
+  xfer += oprot->writeFieldBegin("backwardConnectionPort", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32((*(this->backwardConnectionPort)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("isMaster", ::apache::thrift::protocol::T_BOOL, 2);
+  xfer += oprot->writeBool((*(this->isMaster)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_connectTcp_result::~Server_connectTcp_result() noexcept {
+}
+
+
+uint32_t Server_connectTcp_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->success);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_connectTcp_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("Server_connectTcp_result");
+
+  if (this->__isset.success) {
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_I32, 0);
+    xfer += oprot->writeI32(this->success);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_connectTcp_presult::~Server_connectTcp_presult() noexcept {
+}
+
+
+uint32_t Server_connectTcp_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -368,11 +494,588 @@ uint32_t Server_log_pargs::write(::apache::thrift::protocol::TProtocol* oprot) c
 }
 
 
-Server_createBrowser_args::~Server_createBrowser_args() noexcept {
+Server_echo_args::~Server_echo_args() noexcept {
 }
 
 
-uint32_t Server_createBrowser_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t Server_echo_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->msg);
+          this->__isset.msg = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_echo_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_echo_args");
+
+  xfer += oprot->writeFieldBegin("msg", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->msg);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_echo_pargs::~Server_echo_pargs() noexcept {
+}
+
+
+uint32_t Server_echo_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_echo_pargs");
+
+  xfer += oprot->writeFieldBegin("msg", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->msg)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_echo_result::~Server_echo_result() noexcept {
+}
+
+
+uint32_t Server_echo_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->success);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_echo_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("Server_echo_result");
+
+  if (this->__isset.success) {
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRING, 0);
+    xfer += oprot->writeString(this->success);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_echo_presult::~Server_echo_presult() noexcept {
+}
+
+
+uint32_t Server_echo_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString((*(this->success)));
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
+Server_version_args::~Server_version_args() noexcept {
+}
+
+
+uint32_t Server_version_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    xfer += iprot->skip(ftype);
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_version_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_version_args");
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_version_pargs::~Server_version_pargs() noexcept {
+}
+
+
+uint32_t Server_version_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_version_pargs");
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_version_result::~Server_version_result() noexcept {
+}
+
+
+uint32_t Server_version_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->success);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_version_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("Server_version_result");
+
+  if (this->__isset.success) {
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRING, 0);
+    xfer += oprot->writeString(this->success);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_version_presult::~Server_version_presult() noexcept {
+}
+
+
+uint32_t Server_version_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString((*(this->success)));
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
+Server_state_args::~Server_state_args() noexcept {
+}
+
+
+uint32_t Server_state_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    xfer += iprot->skip(ftype);
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_state_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_state_args");
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_state_pargs::~Server_state_pargs() noexcept {
+}
+
+
+uint32_t Server_state_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_state_pargs");
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_state_result::~Server_state_result() noexcept {
+}
+
+
+uint32_t Server_state_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->success);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_state_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("Server_state_result");
+
+  if (this->__isset.success) {
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRING, 0);
+    xfer += oprot->writeString(this->success);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_state_presult::~Server_state_presult() noexcept {
+}
+
+
+uint32_t Server_state_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString((*(this->success)));
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
+Server_stop_args::~Server_stop_args() noexcept {
+}
+
+
+uint32_t Server_stop_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    xfer += iprot->skip(ftype);
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_stop_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_stop_args");
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_stop_pargs::~Server_stop_pargs() noexcept {
+}
+
+
+uint32_t Server_stop_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_stop_pargs");
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_Create_args::~Server_Browser_Create_args() noexcept {
+}
+
+
+uint32_t Server_Browser_Create_args::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -402,9 +1105,17 @@ uint32_t Server_createBrowser_args::read(::apache::thrift::protocol::TProtocol* 
         }
         break;
       case 2:
-        if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readString(this->url);
-          this->__isset.url = true;
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->handlersMask);
+          this->__isset.handlersMask = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->requestContextHandler.read(iprot);
+          this->__isset.requestContextHandler = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -421,17 +1132,21 @@ uint32_t Server_createBrowser_args::read(::apache::thrift::protocol::TProtocol* 
   return xfer;
 }
 
-uint32_t Server_createBrowser_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t Server_Browser_Create_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("Server_createBrowser_args");
+  xfer += oprot->writeStructBegin("Server_Browser_Create_args");
 
   xfer += oprot->writeFieldBegin("cid", ::apache::thrift::protocol::T_I32, 1);
   xfer += oprot->writeI32(this->cid);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("url", ::apache::thrift::protocol::T_STRING, 2);
-  xfer += oprot->writeString(this->url);
+  xfer += oprot->writeFieldBegin("handlersMask", ::apache::thrift::protocol::T_I32, 2);
+  xfer += oprot->writeI32(this->handlersMask);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("requestContextHandler", ::apache::thrift::protocol::T_STRUCT, 3);
+  xfer += this->requestContextHandler.write(oprot);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -440,21 +1155,25 @@ uint32_t Server_createBrowser_args::write(::apache::thrift::protocol::TProtocol*
 }
 
 
-Server_createBrowser_pargs::~Server_createBrowser_pargs() noexcept {
+Server_Browser_Create_pargs::~Server_Browser_Create_pargs() noexcept {
 }
 
 
-uint32_t Server_createBrowser_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t Server_Browser_Create_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("Server_createBrowser_pargs");
+  xfer += oprot->writeStructBegin("Server_Browser_Create_pargs");
 
   xfer += oprot->writeFieldBegin("cid", ::apache::thrift::protocol::T_I32, 1);
   xfer += oprot->writeI32((*(this->cid)));
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("url", ::apache::thrift::protocol::T_STRING, 2);
-  xfer += oprot->writeString((*(this->url)));
+  xfer += oprot->writeFieldBegin("handlersMask", ::apache::thrift::protocol::T_I32, 2);
+  xfer += oprot->writeI32((*(this->handlersMask)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("requestContextHandler", ::apache::thrift::protocol::T_STRUCT, 3);
+  xfer += (*(this->requestContextHandler)).write(oprot);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -463,11 +1182,11 @@ uint32_t Server_createBrowser_pargs::write(::apache::thrift::protocol::TProtocol
 }
 
 
-Server_createBrowser_result::~Server_createBrowser_result() noexcept {
+Server_Browser_Create_result::~Server_Browser_Create_result() noexcept {
 }
 
 
-uint32_t Server_createBrowser_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t Server_Browser_Create_result::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -508,11 +1227,11 @@ uint32_t Server_createBrowser_result::read(::apache::thrift::protocol::TProtocol
   return xfer;
 }
 
-uint32_t Server_createBrowser_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t Server_Browser_Create_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
 
   uint32_t xfer = 0;
 
-  xfer += oprot->writeStructBegin("Server_createBrowser_result");
+  xfer += oprot->writeStructBegin("Server_Browser_Create_result");
 
   if (this->__isset.success) {
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_I32, 0);
@@ -525,11 +1244,11 @@ uint32_t Server_createBrowser_result::write(::apache::thrift::protocol::TProtoco
 }
 
 
-Server_createBrowser_presult::~Server_createBrowser_presult() noexcept {
+Server_Browser_Create_presult::~Server_Browser_Create_presult() noexcept {
 }
 
 
-uint32_t Server_createBrowser_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t Server_Browser_Create_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -571,11 +1290,106 @@ uint32_t Server_createBrowser_presult::read(::apache::thrift::protocol::TProtoco
 }
 
 
-Server_closeBrowser_args::~Server_closeBrowser_args() noexcept {
+Server_Browser_StartNativeCreation_args::~Server_Browser_StartNativeCreation_args() noexcept {
 }
 
 
-uint32_t Server_closeBrowser_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t Server_Browser_StartNativeCreation_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->bid);
+          this->__isset.bid = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->url);
+          this->__isset.url = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_Browser_StartNativeCreation_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Browser_StartNativeCreation_args");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32(this->bid);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("url", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString(this->url);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_StartNativeCreation_pargs::~Server_Browser_StartNativeCreation_pargs() noexcept {
+}
+
+
+uint32_t Server_Browser_StartNativeCreation_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Browser_StartNativeCreation_pargs");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32((*(this->bid)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("url", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString((*(this->url)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_Close_args::~Server_Browser_Close_args() noexcept {
+}
+
+
+uint32_t Server_Browser_Close_args::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -616,10 +1430,10 @@ uint32_t Server_closeBrowser_args::read(::apache::thrift::protocol::TProtocol* i
   return xfer;
 }
 
-uint32_t Server_closeBrowser_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t Server_Browser_Close_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("Server_closeBrowser_args");
+  xfer += oprot->writeStructBegin("Server_Browser_Close_args");
 
   xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
   xfer += oprot->writeI32(this->bid);
@@ -631,14 +1445,14 @@ uint32_t Server_closeBrowser_args::write(::apache::thrift::protocol::TProtocol* 
 }
 
 
-Server_closeBrowser_pargs::~Server_closeBrowser_pargs() noexcept {
+Server_Browser_Close_pargs::~Server_Browser_Close_pargs() noexcept {
 }
 
 
-uint32_t Server_closeBrowser_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t Server_Browser_Close_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("Server_closeBrowser_pargs");
+  xfer += oprot->writeStructBegin("Server_Browser_Close_pargs");
 
   xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
   xfer += oprot->writeI32((*(this->bid)));
@@ -1250,22 +2064,6 @@ uint32_t Server_Browser_WasResized_args::read(::apache::thrift::protocol::TProto
           xfer += iprot->skip(ftype);
         }
         break;
-      case 2:
-        if (ftype == ::apache::thrift::protocol::T_I32) {
-          xfer += iprot->readI32(this->width);
-          this->__isset.width = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 3:
-        if (ftype == ::apache::thrift::protocol::T_I32) {
-          xfer += iprot->readI32(this->height);
-          this->__isset.height = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -1287,14 +2085,6 @@ uint32_t Server_Browser_WasResized_args::write(::apache::thrift::protocol::TProt
   xfer += oprot->writeI32(this->bid);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("width", ::apache::thrift::protocol::T_I32, 2);
-  xfer += oprot->writeI32(this->width);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("height", ::apache::thrift::protocol::T_I32, 3);
-  xfer += oprot->writeI32(this->height);
-  xfer += oprot->writeFieldEnd();
-
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -1314,12 +2104,83 @@ uint32_t Server_Browser_WasResized_pargs::write(::apache::thrift::protocol::TPro
   xfer += oprot->writeI32((*(this->bid)));
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("width", ::apache::thrift::protocol::T_I32, 2);
-  xfer += oprot->writeI32((*(this->width)));
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_NotifyScreenInfoChanged_args::~Server_Browser_NotifyScreenInfoChanged_args() noexcept {
+}
+
+
+uint32_t Server_Browser_NotifyScreenInfoChanged_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->bid);
+          this->__isset.bid = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_Browser_NotifyScreenInfoChanged_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Browser_NotifyScreenInfoChanged_args");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32(this->bid);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("height", ::apache::thrift::protocol::T_I32, 3);
-  xfer += oprot->writeI32((*(this->height)));
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_NotifyScreenInfoChanged_pargs::~Server_Browser_NotifyScreenInfoChanged_pargs() noexcept {
+}
+
+
+uint32_t Server_Browser_NotifyScreenInfoChanged_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Browser_NotifyScreenInfoChanged_pargs");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32((*(this->bid)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -1829,6 +2690,2661 @@ uint32_t Server_Browser_SendMouseWheelEvent_pargs::write(::apache::thrift::proto
 
   xfer += oprot->writeFieldBegin("units_to_scroll", ::apache::thrift::protocol::T_I32, 7);
   xfer += oprot->writeI32((*(this->units_to_scroll)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_CanGoForward_args::~Server_Browser_CanGoForward_args() noexcept {
+}
+
+
+uint32_t Server_Browser_CanGoForward_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->bid);
+          this->__isset.bid = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_Browser_CanGoForward_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Browser_CanGoForward_args");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32(this->bid);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_CanGoForward_pargs::~Server_Browser_CanGoForward_pargs() noexcept {
+}
+
+
+uint32_t Server_Browser_CanGoForward_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Browser_CanGoForward_pargs");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32((*(this->bid)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_CanGoForward_result::~Server_Browser_CanGoForward_result() noexcept {
+}
+
+
+uint32_t Server_Browser_CanGoForward_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool(this->success);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_Browser_CanGoForward_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("Server_Browser_CanGoForward_result");
+
+  if (this->__isset.success) {
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_BOOL, 0);
+    xfer += oprot->writeBool(this->success);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_CanGoForward_presult::~Server_Browser_CanGoForward_presult() noexcept {
+}
+
+
+uint32_t Server_Browser_CanGoForward_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool((*(this->success)));
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
+Server_Browser_CanGoBack_args::~Server_Browser_CanGoBack_args() noexcept {
+}
+
+
+uint32_t Server_Browser_CanGoBack_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->bid);
+          this->__isset.bid = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_Browser_CanGoBack_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Browser_CanGoBack_args");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32(this->bid);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_CanGoBack_pargs::~Server_Browser_CanGoBack_pargs() noexcept {
+}
+
+
+uint32_t Server_Browser_CanGoBack_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Browser_CanGoBack_pargs");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32((*(this->bid)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_CanGoBack_result::~Server_Browser_CanGoBack_result() noexcept {
+}
+
+
+uint32_t Server_Browser_CanGoBack_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool(this->success);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_Browser_CanGoBack_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("Server_Browser_CanGoBack_result");
+
+  if (this->__isset.success) {
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_BOOL, 0);
+    xfer += oprot->writeBool(this->success);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_CanGoBack_presult::~Server_Browser_CanGoBack_presult() noexcept {
+}
+
+
+uint32_t Server_Browser_CanGoBack_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool((*(this->success)));
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
+Server_Browser_GoBack_args::~Server_Browser_GoBack_args() noexcept {
+}
+
+
+uint32_t Server_Browser_GoBack_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->bid);
+          this->__isset.bid = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_Browser_GoBack_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Browser_GoBack_args");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32(this->bid);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_GoBack_pargs::~Server_Browser_GoBack_pargs() noexcept {
+}
+
+
+uint32_t Server_Browser_GoBack_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Browser_GoBack_pargs");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32((*(this->bid)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_GoForward_args::~Server_Browser_GoForward_args() noexcept {
+}
+
+
+uint32_t Server_Browser_GoForward_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->bid);
+          this->__isset.bid = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_Browser_GoForward_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Browser_GoForward_args");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32(this->bid);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_GoForward_pargs::~Server_Browser_GoForward_pargs() noexcept {
+}
+
+
+uint32_t Server_Browser_GoForward_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Browser_GoForward_pargs");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32((*(this->bid)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_IsLoading_args::~Server_Browser_IsLoading_args() noexcept {
+}
+
+
+uint32_t Server_Browser_IsLoading_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->bid);
+          this->__isset.bid = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_Browser_IsLoading_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Browser_IsLoading_args");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32(this->bid);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_IsLoading_pargs::~Server_Browser_IsLoading_pargs() noexcept {
+}
+
+
+uint32_t Server_Browser_IsLoading_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Browser_IsLoading_pargs");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32((*(this->bid)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_IsLoading_result::~Server_Browser_IsLoading_result() noexcept {
+}
+
+
+uint32_t Server_Browser_IsLoading_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool(this->success);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_Browser_IsLoading_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("Server_Browser_IsLoading_result");
+
+  if (this->__isset.success) {
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_BOOL, 0);
+    xfer += oprot->writeBool(this->success);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_IsLoading_presult::~Server_Browser_IsLoading_presult() noexcept {
+}
+
+
+uint32_t Server_Browser_IsLoading_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool((*(this->success)));
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
+Server_Browser_StopLoad_args::~Server_Browser_StopLoad_args() noexcept {
+}
+
+
+uint32_t Server_Browser_StopLoad_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->bid);
+          this->__isset.bid = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_Browser_StopLoad_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Browser_StopLoad_args");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32(this->bid);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_StopLoad_pargs::~Server_Browser_StopLoad_pargs() noexcept {
+}
+
+
+uint32_t Server_Browser_StopLoad_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Browser_StopLoad_pargs");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32((*(this->bid)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_GetFrameCount_args::~Server_Browser_GetFrameCount_args() noexcept {
+}
+
+
+uint32_t Server_Browser_GetFrameCount_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->bid);
+          this->__isset.bid = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_Browser_GetFrameCount_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Browser_GetFrameCount_args");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32(this->bid);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_GetFrameCount_pargs::~Server_Browser_GetFrameCount_pargs() noexcept {
+}
+
+
+uint32_t Server_Browser_GetFrameCount_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Browser_GetFrameCount_pargs");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32((*(this->bid)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_GetFrameCount_result::~Server_Browser_GetFrameCount_result() noexcept {
+}
+
+
+uint32_t Server_Browser_GetFrameCount_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->success);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_Browser_GetFrameCount_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("Server_Browser_GetFrameCount_result");
+
+  if (this->__isset.success) {
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_I32, 0);
+    xfer += oprot->writeI32(this->success);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_GetFrameCount_presult::~Server_Browser_GetFrameCount_presult() noexcept {
+}
+
+
+uint32_t Server_Browser_GetFrameCount_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32((*(this->success)));
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
+Server_Browser_IsPopup_args::~Server_Browser_IsPopup_args() noexcept {
+}
+
+
+uint32_t Server_Browser_IsPopup_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->bid);
+          this->__isset.bid = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_Browser_IsPopup_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Browser_IsPopup_args");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32(this->bid);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_IsPopup_pargs::~Server_Browser_IsPopup_pargs() noexcept {
+}
+
+
+uint32_t Server_Browser_IsPopup_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Browser_IsPopup_pargs");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32((*(this->bid)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_IsPopup_result::~Server_Browser_IsPopup_result() noexcept {
+}
+
+
+uint32_t Server_Browser_IsPopup_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool(this->success);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_Browser_IsPopup_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("Server_Browser_IsPopup_result");
+
+  if (this->__isset.success) {
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_BOOL, 0);
+    xfer += oprot->writeBool(this->success);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_IsPopup_presult::~Server_Browser_IsPopup_presult() noexcept {
+}
+
+
+uint32_t Server_Browser_IsPopup_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool((*(this->success)));
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
+Server_Browser_HasDocument_args::~Server_Browser_HasDocument_args() noexcept {
+}
+
+
+uint32_t Server_Browser_HasDocument_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->bid);
+          this->__isset.bid = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_Browser_HasDocument_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Browser_HasDocument_args");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32(this->bid);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_HasDocument_pargs::~Server_Browser_HasDocument_pargs() noexcept {
+}
+
+
+uint32_t Server_Browser_HasDocument_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Browser_HasDocument_pargs");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32((*(this->bid)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_HasDocument_result::~Server_Browser_HasDocument_result() noexcept {
+}
+
+
+uint32_t Server_Browser_HasDocument_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool(this->success);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_Browser_HasDocument_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("Server_Browser_HasDocument_result");
+
+  if (this->__isset.success) {
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_BOOL, 0);
+    xfer += oprot->writeBool(this->success);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_HasDocument_presult::~Server_Browser_HasDocument_presult() noexcept {
+}
+
+
+uint32_t Server_Browser_HasDocument_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool((*(this->success)));
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
+Server_Browser_ViewSource_args::~Server_Browser_ViewSource_args() noexcept {
+}
+
+
+uint32_t Server_Browser_ViewSource_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->bid);
+          this->__isset.bid = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_Browser_ViewSource_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Browser_ViewSource_args");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32(this->bid);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_ViewSource_pargs::~Server_Browser_ViewSource_pargs() noexcept {
+}
+
+
+uint32_t Server_Browser_ViewSource_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Browser_ViewSource_pargs");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32((*(this->bid)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_GetSource_args::~Server_Browser_GetSource_args() noexcept {
+}
+
+
+uint32_t Server_Browser_GetSource_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->bid);
+          this->__isset.bid = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->stringVisitor.read(iprot);
+          this->__isset.stringVisitor = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_Browser_GetSource_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Browser_GetSource_args");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32(this->bid);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("stringVisitor", ::apache::thrift::protocol::T_STRUCT, 2);
+  xfer += this->stringVisitor.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_GetSource_pargs::~Server_Browser_GetSource_pargs() noexcept {
+}
+
+
+uint32_t Server_Browser_GetSource_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Browser_GetSource_pargs");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32((*(this->bid)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("stringVisitor", ::apache::thrift::protocol::T_STRUCT, 2);
+  xfer += (*(this->stringVisitor)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_GetText_args::~Server_Browser_GetText_args() noexcept {
+}
+
+
+uint32_t Server_Browser_GetText_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->bid);
+          this->__isset.bid = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->stringVisitor.read(iprot);
+          this->__isset.stringVisitor = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_Browser_GetText_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Browser_GetText_args");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32(this->bid);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("stringVisitor", ::apache::thrift::protocol::T_STRUCT, 2);
+  xfer += this->stringVisitor.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_GetText_pargs::~Server_Browser_GetText_pargs() noexcept {
+}
+
+
+uint32_t Server_Browser_GetText_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Browser_GetText_pargs");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32((*(this->bid)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("stringVisitor", ::apache::thrift::protocol::T_STRUCT, 2);
+  xfer += (*(this->stringVisitor)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_SetFocus_args::~Server_Browser_SetFocus_args() noexcept {
+}
+
+
+uint32_t Server_Browser_SetFocus_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->bid);
+          this->__isset.bid = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool(this->enable);
+          this->__isset.enable = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_Browser_SetFocus_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Browser_SetFocus_args");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32(this->bid);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("enable", ::apache::thrift::protocol::T_BOOL, 2);
+  xfer += oprot->writeBool(this->enable);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_SetFocus_pargs::~Server_Browser_SetFocus_pargs() noexcept {
+}
+
+
+uint32_t Server_Browser_SetFocus_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Browser_SetFocus_pargs");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32((*(this->bid)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("enable", ::apache::thrift::protocol::T_BOOL, 2);
+  xfer += oprot->writeBool((*(this->enable)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_GetZoomLevel_args::~Server_Browser_GetZoomLevel_args() noexcept {
+}
+
+
+uint32_t Server_Browser_GetZoomLevel_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->bid);
+          this->__isset.bid = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_Browser_GetZoomLevel_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Browser_GetZoomLevel_args");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32(this->bid);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_GetZoomLevel_pargs::~Server_Browser_GetZoomLevel_pargs() noexcept {
+}
+
+
+uint32_t Server_Browser_GetZoomLevel_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Browser_GetZoomLevel_pargs");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32((*(this->bid)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_GetZoomLevel_result::~Server_Browser_GetZoomLevel_result() noexcept {
+}
+
+
+uint32_t Server_Browser_GetZoomLevel_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_DOUBLE) {
+          xfer += iprot->readDouble(this->success);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_Browser_GetZoomLevel_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("Server_Browser_GetZoomLevel_result");
+
+  if (this->__isset.success) {
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_DOUBLE, 0);
+    xfer += oprot->writeDouble(this->success);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_GetZoomLevel_presult::~Server_Browser_GetZoomLevel_presult() noexcept {
+}
+
+
+uint32_t Server_Browser_GetZoomLevel_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_DOUBLE) {
+          xfer += iprot->readDouble((*(this->success)));
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
+Server_Browser_SetZoomLevel_args::~Server_Browser_SetZoomLevel_args() noexcept {
+}
+
+
+uint32_t Server_Browser_SetZoomLevel_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->bid);
+          this->__isset.bid = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_DOUBLE) {
+          xfer += iprot->readDouble(this->val);
+          this->__isset.val = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_Browser_SetZoomLevel_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Browser_SetZoomLevel_args");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32(this->bid);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("val", ::apache::thrift::protocol::T_DOUBLE, 2);
+  xfer += oprot->writeDouble(this->val);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_SetZoomLevel_pargs::~Server_Browser_SetZoomLevel_pargs() noexcept {
+}
+
+
+uint32_t Server_Browser_SetZoomLevel_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Browser_SetZoomLevel_pargs");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32((*(this->bid)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("val", ::apache::thrift::protocol::T_DOUBLE, 2);
+  xfer += oprot->writeDouble((*(this->val)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_StartDownload_args::~Server_Browser_StartDownload_args() noexcept {
+}
+
+
+uint32_t Server_Browser_StartDownload_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->bid);
+          this->__isset.bid = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->url);
+          this->__isset.url = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_Browser_StartDownload_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Browser_StartDownload_args");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32(this->bid);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("url", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString(this->url);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_StartDownload_pargs::~Server_Browser_StartDownload_pargs() noexcept {
+}
+
+
+uint32_t Server_Browser_StartDownload_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Browser_StartDownload_pargs");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32((*(this->bid)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("url", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString((*(this->url)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_Find_args::~Server_Browser_Find_args() noexcept {
+}
+
+
+uint32_t Server_Browser_Find_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->bid);
+          this->__isset.bid = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->searchText);
+          this->__isset.searchText = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool(this->forward);
+          this->__isset.forward = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 4:
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool(this->matchCase);
+          this->__isset.matchCase = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 5:
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool(this->findNext);
+          this->__isset.findNext = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_Browser_Find_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Browser_Find_args");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32(this->bid);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("searchText", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString(this->searchText);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("forward", ::apache::thrift::protocol::T_BOOL, 3);
+  xfer += oprot->writeBool(this->forward);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("matchCase", ::apache::thrift::protocol::T_BOOL, 4);
+  xfer += oprot->writeBool(this->matchCase);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("findNext", ::apache::thrift::protocol::T_BOOL, 5);
+  xfer += oprot->writeBool(this->findNext);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_Find_pargs::~Server_Browser_Find_pargs() noexcept {
+}
+
+
+uint32_t Server_Browser_Find_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Browser_Find_pargs");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32((*(this->bid)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("searchText", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString((*(this->searchText)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("forward", ::apache::thrift::protocol::T_BOOL, 3);
+  xfer += oprot->writeBool((*(this->forward)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("matchCase", ::apache::thrift::protocol::T_BOOL, 4);
+  xfer += oprot->writeBool((*(this->matchCase)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("findNext", ::apache::thrift::protocol::T_BOOL, 5);
+  xfer += oprot->writeBool((*(this->findNext)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_StopFinding_args::~Server_Browser_StopFinding_args() noexcept {
+}
+
+
+uint32_t Server_Browser_StopFinding_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->bid);
+          this->__isset.bid = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool(this->clearSelection);
+          this->__isset.clearSelection = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_Browser_StopFinding_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Browser_StopFinding_args");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32(this->bid);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("clearSelection", ::apache::thrift::protocol::T_BOOL, 2);
+  xfer += oprot->writeBool(this->clearSelection);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_StopFinding_pargs::~Server_Browser_StopFinding_pargs() noexcept {
+}
+
+
+uint32_t Server_Browser_StopFinding_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Browser_StopFinding_pargs");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32((*(this->bid)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("clearSelection", ::apache::thrift::protocol::T_BOOL, 2);
+  xfer += oprot->writeBool((*(this->clearSelection)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_ReplaceMisspelling_args::~Server_Browser_ReplaceMisspelling_args() noexcept {
+}
+
+
+uint32_t Server_Browser_ReplaceMisspelling_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->bid);
+          this->__isset.bid = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->word);
+          this->__isset.word = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_Browser_ReplaceMisspelling_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Browser_ReplaceMisspelling_args");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32(this->bid);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("word", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString(this->word);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_ReplaceMisspelling_pargs::~Server_Browser_ReplaceMisspelling_pargs() noexcept {
+}
+
+
+uint32_t Server_Browser_ReplaceMisspelling_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Browser_ReplaceMisspelling_pargs");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32((*(this->bid)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("word", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString((*(this->word)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_SetFrameRate_args::~Server_Browser_SetFrameRate_args() noexcept {
+}
+
+
+uint32_t Server_Browser_SetFrameRate_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->bid);
+          this->__isset.bid = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->val);
+          this->__isset.val = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_Browser_SetFrameRate_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Browser_SetFrameRate_args");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32(this->bid);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("val", ::apache::thrift::protocol::T_I32, 2);
+  xfer += oprot->writeI32(this->val);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_SetFrameRate_pargs::~Server_Browser_SetFrameRate_pargs() noexcept {
+}
+
+
+uint32_t Server_Browser_SetFrameRate_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Browser_SetFrameRate_pargs");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32((*(this->bid)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("val", ::apache::thrift::protocol::T_I32, 2);
+  xfer += oprot->writeI32((*(this->val)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Frame_ExecuteJavaScript_args::~Server_Frame_ExecuteJavaScript_args() noexcept {
+}
+
+
+uint32_t Server_Frame_ExecuteJavaScript_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->frameId);
+          this->__isset.frameId = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->code);
+          this->__isset.code = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->url);
+          this->__isset.url = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 4:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->line);
+          this->__isset.line = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_Frame_ExecuteJavaScript_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Frame_ExecuteJavaScript_args");
+
+  xfer += oprot->writeFieldBegin("frameId", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32(this->frameId);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("code", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString(this->code);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("url", ::apache::thrift::protocol::T_STRING, 3);
+  xfer += oprot->writeString(this->url);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("line", ::apache::thrift::protocol::T_I32, 4);
+  xfer += oprot->writeI32(this->line);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Frame_ExecuteJavaScript_pargs::~Server_Frame_ExecuteJavaScript_pargs() noexcept {
+}
+
+
+uint32_t Server_Frame_ExecuteJavaScript_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Frame_ExecuteJavaScript_pargs");
+
+  xfer += oprot->writeFieldBegin("frameId", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32((*(this->frameId)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("code", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString((*(this->code)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("url", ::apache::thrift::protocol::T_STRING, 3);
+  xfer += oprot->writeString((*(this->url)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("line", ::apache::thrift::protocol::T_I32, 4);
+  xfer += oprot->writeI32((*(this->line)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -2867,17 +6383,17 @@ uint32_t Server_Request_GetHeaderMap_result::read(::apache::thrift::protocol::TP
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->success.clear();
-            uint32_t _size16;
-            ::apache::thrift::protocol::TType _ktype17;
-            ::apache::thrift::protocol::TType _vtype18;
-            xfer += iprot->readMapBegin(_ktype17, _vtype18, _size16);
-            uint32_t _i20;
-            for (_i20 = 0; _i20 < _size16; ++_i20)
+            uint32_t _size0;
+            ::apache::thrift::protocol::TType _ktype1;
+            ::apache::thrift::protocol::TType _vtype2;
+            xfer += iprot->readMapBegin(_ktype1, _vtype2, _size0);
+            uint32_t _i4;
+            for (_i4 = 0; _i4 < _size0; ++_i4)
             {
-              std::string _key21;
-              xfer += iprot->readString(_key21);
-              std::string& _val22 = this->success[_key21];
-              xfer += iprot->readString(_val22);
+              std::string _key5;
+              xfer += iprot->readString(_key5);
+              std::string& _val6 = this->success[_key5];
+              xfer += iprot->readString(_val6);
             }
             xfer += iprot->readMapEnd();
           }
@@ -2908,11 +6424,11 @@ uint32_t Server_Request_GetHeaderMap_result::write(::apache::thrift::protocol::T
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_MAP, 0);
     {
       xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->success.size()));
-      std::map<std::string, std::string> ::const_iterator _iter23;
-      for (_iter23 = this->success.begin(); _iter23 != this->success.end(); ++_iter23)
+      std::map<std::string, std::string> ::const_iterator _iter7;
+      for (_iter7 = this->success.begin(); _iter7 != this->success.end(); ++_iter7)
       {
-        xfer += oprot->writeString(_iter23->first);
-        xfer += oprot->writeString(_iter23->second);
+        xfer += oprot->writeString(_iter7->first);
+        xfer += oprot->writeString(_iter7->second);
       }
       xfer += oprot->writeMapEnd();
     }
@@ -2953,17 +6469,17 @@ uint32_t Server_Request_GetHeaderMap_presult::read(::apache::thrift::protocol::T
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             (*(this->success)).clear();
-            uint32_t _size24;
-            ::apache::thrift::protocol::TType _ktype25;
-            ::apache::thrift::protocol::TType _vtype26;
-            xfer += iprot->readMapBegin(_ktype25, _vtype26, _size24);
-            uint32_t _i28;
-            for (_i28 = 0; _i28 < _size24; ++_i28)
+            uint32_t _size8;
+            ::apache::thrift::protocol::TType _ktype9;
+            ::apache::thrift::protocol::TType _vtype10;
+            xfer += iprot->readMapBegin(_ktype9, _vtype10, _size8);
+            uint32_t _i12;
+            for (_i12 = 0; _i12 < _size8; ++_i12)
             {
-              std::string _key29;
-              xfer += iprot->readString(_key29);
-              std::string& _val30 = (*(this->success))[_key29];
-              xfer += iprot->readString(_val30);
+              std::string _key13;
+              xfer += iprot->readString(_key13);
+              std::string& _val14 = (*(this->success))[_key13];
+              xfer += iprot->readString(_val14);
             }
             xfer += iprot->readMapEnd();
           }
@@ -3022,17 +6538,17 @@ uint32_t Server_Request_SetHeaderMap_args::read(::apache::thrift::protocol::TPro
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->headerMap.clear();
-            uint32_t _size31;
-            ::apache::thrift::protocol::TType _ktype32;
-            ::apache::thrift::protocol::TType _vtype33;
-            xfer += iprot->readMapBegin(_ktype32, _vtype33, _size31);
-            uint32_t _i35;
-            for (_i35 = 0; _i35 < _size31; ++_i35)
+            uint32_t _size15;
+            ::apache::thrift::protocol::TType _ktype16;
+            ::apache::thrift::protocol::TType _vtype17;
+            xfer += iprot->readMapBegin(_ktype16, _vtype17, _size15);
+            uint32_t _i19;
+            for (_i19 = 0; _i19 < _size15; ++_i19)
             {
-              std::string _key36;
-              xfer += iprot->readString(_key36);
-              std::string& _val37 = this->headerMap[_key36];
-              xfer += iprot->readString(_val37);
+              std::string _key20;
+              xfer += iprot->readString(_key20);
+              std::string& _val21 = this->headerMap[_key20];
+              xfer += iprot->readString(_val21);
             }
             xfer += iprot->readMapEnd();
           }
@@ -3065,11 +6581,11 @@ uint32_t Server_Request_SetHeaderMap_args::write(::apache::thrift::protocol::TPr
   xfer += oprot->writeFieldBegin("headerMap", ::apache::thrift::protocol::T_MAP, 2);
   {
     xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->headerMap.size()));
-    std::map<std::string, std::string> ::const_iterator _iter38;
-    for (_iter38 = this->headerMap.begin(); _iter38 != this->headerMap.end(); ++_iter38)
+    std::map<std::string, std::string> ::const_iterator _iter22;
+    for (_iter22 = this->headerMap.begin(); _iter22 != this->headerMap.end(); ++_iter22)
     {
-      xfer += oprot->writeString(_iter38->first);
-      xfer += oprot->writeString(_iter38->second);
+      xfer += oprot->writeString(_iter22->first);
+      xfer += oprot->writeString(_iter22->second);
     }
     xfer += oprot->writeMapEnd();
   }
@@ -3097,11 +6613,11 @@ uint32_t Server_Request_SetHeaderMap_pargs::write(::apache::thrift::protocol::TP
   xfer += oprot->writeFieldBegin("headerMap", ::apache::thrift::protocol::T_MAP, 2);
   {
     xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>((*(this->headerMap)).size()));
-    std::map<std::string, std::string> ::const_iterator _iter39;
-    for (_iter39 = (*(this->headerMap)).begin(); _iter39 != (*(this->headerMap)).end(); ++_iter39)
+    std::map<std::string, std::string> ::const_iterator _iter23;
+    for (_iter23 = (*(this->headerMap)).begin(); _iter23 != (*(this->headerMap)).end(); ++_iter23)
     {
-      xfer += oprot->writeString(_iter39->first);
-      xfer += oprot->writeString(_iter39->second);
+      xfer += oprot->writeString(_iter23->first);
+      xfer += oprot->writeString(_iter23->second);
     }
     xfer += oprot->writeMapEnd();
   }
@@ -3251,17 +6767,17 @@ uint32_t Server_Request_Set_args::read(::apache::thrift::protocol::TProtocol* ip
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->headerMap.clear();
-            uint32_t _size40;
-            ::apache::thrift::protocol::TType _ktype41;
-            ::apache::thrift::protocol::TType _vtype42;
-            xfer += iprot->readMapBegin(_ktype41, _vtype42, _size40);
-            uint32_t _i44;
-            for (_i44 = 0; _i44 < _size40; ++_i44)
+            uint32_t _size24;
+            ::apache::thrift::protocol::TType _ktype25;
+            ::apache::thrift::protocol::TType _vtype26;
+            xfer += iprot->readMapBegin(_ktype25, _vtype26, _size24);
+            uint32_t _i28;
+            for (_i28 = 0; _i28 < _size24; ++_i28)
             {
-              std::string _key45;
-              xfer += iprot->readString(_key45);
-              std::string& _val46 = this->headerMap[_key45];
-              xfer += iprot->readString(_val46);
+              std::string _key29;
+              xfer += iprot->readString(_key29);
+              std::string& _val30 = this->headerMap[_key29];
+              xfer += iprot->readString(_val30);
             }
             xfer += iprot->readMapEnd();
           }
@@ -3306,11 +6822,11 @@ uint32_t Server_Request_Set_args::write(::apache::thrift::protocol::TProtocol* o
   xfer += oprot->writeFieldBegin("headerMap", ::apache::thrift::protocol::T_MAP, 5);
   {
     xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->headerMap.size()));
-    std::map<std::string, std::string> ::const_iterator _iter47;
-    for (_iter47 = this->headerMap.begin(); _iter47 != this->headerMap.end(); ++_iter47)
+    std::map<std::string, std::string> ::const_iterator _iter31;
+    for (_iter31 = this->headerMap.begin(); _iter31 != this->headerMap.end(); ++_iter31)
     {
-      xfer += oprot->writeString(_iter47->first);
-      xfer += oprot->writeString(_iter47->second);
+      xfer += oprot->writeString(_iter31->first);
+      xfer += oprot->writeString(_iter31->second);
     }
     xfer += oprot->writeMapEnd();
   }
@@ -3350,11 +6866,11 @@ uint32_t Server_Request_Set_pargs::write(::apache::thrift::protocol::TProtocol* 
   xfer += oprot->writeFieldBegin("headerMap", ::apache::thrift::protocol::T_MAP, 5);
   {
     xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>((*(this->headerMap)).size()));
-    std::map<std::string, std::string> ::const_iterator _iter48;
-    for (_iter48 = (*(this->headerMap)).begin(); _iter48 != (*(this->headerMap)).end(); ++_iter48)
+    std::map<std::string, std::string> ::const_iterator _iter32;
+    for (_iter32 = (*(this->headerMap)).begin(); _iter32 != (*(this->headerMap)).end(); ++_iter32)
     {
-      xfer += oprot->writeString(_iter48->first);
-      xfer += oprot->writeString(_iter48->second);
+      xfer += oprot->writeString(_iter32->first);
+      xfer += oprot->writeString(_iter32->second);
     }
     xfer += oprot->writeMapEnd();
   }
@@ -4114,17 +7630,17 @@ uint32_t Server_Response_GetHeaderMap_result::read(::apache::thrift::protocol::T
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->success.clear();
-            uint32_t _size49;
-            ::apache::thrift::protocol::TType _ktype50;
-            ::apache::thrift::protocol::TType _vtype51;
-            xfer += iprot->readMapBegin(_ktype50, _vtype51, _size49);
-            uint32_t _i53;
-            for (_i53 = 0; _i53 < _size49; ++_i53)
+            uint32_t _size33;
+            ::apache::thrift::protocol::TType _ktype34;
+            ::apache::thrift::protocol::TType _vtype35;
+            xfer += iprot->readMapBegin(_ktype34, _vtype35, _size33);
+            uint32_t _i37;
+            for (_i37 = 0; _i37 < _size33; ++_i37)
             {
-              std::string _key54;
-              xfer += iprot->readString(_key54);
-              std::string& _val55 = this->success[_key54];
-              xfer += iprot->readString(_val55);
+              std::string _key38;
+              xfer += iprot->readString(_key38);
+              std::string& _val39 = this->success[_key38];
+              xfer += iprot->readString(_val39);
             }
             xfer += iprot->readMapEnd();
           }
@@ -4155,11 +7671,11 @@ uint32_t Server_Response_GetHeaderMap_result::write(::apache::thrift::protocol::
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_MAP, 0);
     {
       xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->success.size()));
-      std::map<std::string, std::string> ::const_iterator _iter56;
-      for (_iter56 = this->success.begin(); _iter56 != this->success.end(); ++_iter56)
+      std::map<std::string, std::string> ::const_iterator _iter40;
+      for (_iter40 = this->success.begin(); _iter40 != this->success.end(); ++_iter40)
       {
-        xfer += oprot->writeString(_iter56->first);
-        xfer += oprot->writeString(_iter56->second);
+        xfer += oprot->writeString(_iter40->first);
+        xfer += oprot->writeString(_iter40->second);
       }
       xfer += oprot->writeMapEnd();
     }
@@ -4200,17 +7716,17 @@ uint32_t Server_Response_GetHeaderMap_presult::read(::apache::thrift::protocol::
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             (*(this->success)).clear();
-            uint32_t _size57;
-            ::apache::thrift::protocol::TType _ktype58;
-            ::apache::thrift::protocol::TType _vtype59;
-            xfer += iprot->readMapBegin(_ktype58, _vtype59, _size57);
-            uint32_t _i61;
-            for (_i61 = 0; _i61 < _size57; ++_i61)
+            uint32_t _size41;
+            ::apache::thrift::protocol::TType _ktype42;
+            ::apache::thrift::protocol::TType _vtype43;
+            xfer += iprot->readMapBegin(_ktype42, _vtype43, _size41);
+            uint32_t _i45;
+            for (_i45 = 0; _i45 < _size41; ++_i45)
             {
-              std::string _key62;
-              xfer += iprot->readString(_key62);
-              std::string& _val63 = (*(this->success))[_key62];
-              xfer += iprot->readString(_val63);
+              std::string _key46;
+              xfer += iprot->readString(_key46);
+              std::string& _val47 = (*(this->success))[_key46];
+              xfer += iprot->readString(_val47);
             }
             xfer += iprot->readMapEnd();
           }
@@ -4269,17 +7785,17 @@ uint32_t Server_Response_SetHeaderMap_args::read(::apache::thrift::protocol::TPr
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->headerMap.clear();
-            uint32_t _size64;
-            ::apache::thrift::protocol::TType _ktype65;
-            ::apache::thrift::protocol::TType _vtype66;
-            xfer += iprot->readMapBegin(_ktype65, _vtype66, _size64);
-            uint32_t _i68;
-            for (_i68 = 0; _i68 < _size64; ++_i68)
+            uint32_t _size48;
+            ::apache::thrift::protocol::TType _ktype49;
+            ::apache::thrift::protocol::TType _vtype50;
+            xfer += iprot->readMapBegin(_ktype49, _vtype50, _size48);
+            uint32_t _i52;
+            for (_i52 = 0; _i52 < _size48; ++_i52)
             {
-              std::string _key69;
-              xfer += iprot->readString(_key69);
-              std::string& _val70 = this->headerMap[_key69];
-              xfer += iprot->readString(_val70);
+              std::string _key53;
+              xfer += iprot->readString(_key53);
+              std::string& _val54 = this->headerMap[_key53];
+              xfer += iprot->readString(_val54);
             }
             xfer += iprot->readMapEnd();
           }
@@ -4312,11 +7828,11 @@ uint32_t Server_Response_SetHeaderMap_args::write(::apache::thrift::protocol::TP
   xfer += oprot->writeFieldBegin("headerMap", ::apache::thrift::protocol::T_MAP, 2);
   {
     xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->headerMap.size()));
-    std::map<std::string, std::string> ::const_iterator _iter71;
-    for (_iter71 = this->headerMap.begin(); _iter71 != this->headerMap.end(); ++_iter71)
+    std::map<std::string, std::string> ::const_iterator _iter55;
+    for (_iter55 = this->headerMap.begin(); _iter55 != this->headerMap.end(); ++_iter55)
     {
-      xfer += oprot->writeString(_iter71->first);
-      xfer += oprot->writeString(_iter71->second);
+      xfer += oprot->writeString(_iter55->first);
+      xfer += oprot->writeString(_iter55->second);
     }
     xfer += oprot->writeMapEnd();
   }
@@ -4344,11 +7860,11 @@ uint32_t Server_Response_SetHeaderMap_pargs::write(::apache::thrift::protocol::T
   xfer += oprot->writeFieldBegin("headerMap", ::apache::thrift::protocol::T_MAP, 2);
   {
     xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>((*(this->headerMap)).size()));
-    std::map<std::string, std::string> ::const_iterator _iter72;
-    for (_iter72 = (*(this->headerMap)).begin(); _iter72 != (*(this->headerMap)).end(); ++_iter72)
+    std::map<std::string, std::string> ::const_iterator _iter56;
+    for (_iter56 = (*(this->headerMap)).begin(); _iter56 != (*(this->headerMap)).end(); ++_iter56)
     {
-      xfer += oprot->writeString(_iter72->first);
-      xfer += oprot->writeString(_iter72->second);
+      xfer += oprot->writeString(_iter56->first);
+      xfer += oprot->writeString(_iter56->second);
     }
     xfer += oprot->writeMapEnd();
   }
@@ -6401,21 +9917,1703 @@ uint32_t Server_QueryCallback_Failure_pargs::write(::apache::thrift::protocol::T
   return xfer;
 }
 
-int32_t ServerClient::connect(const int32_t backwardConnectionPort, const std::vector<std::string> & cmdLineArgs, const std::map<std::string, std::string> & settings)
+
+Server_SchemeHandlerFactory_Register_args::~Server_SchemeHandlerFactory_Register_args() noexcept {
+}
+
+
+uint32_t Server_SchemeHandlerFactory_Register_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->schemeName);
+          this->__isset.schemeName = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->domainName);
+          this->__isset.domainName = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->schemeHandlerFactory.read(iprot);
+          this->__isset.schemeHandlerFactory = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_SchemeHandlerFactory_Register_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_SchemeHandlerFactory_Register_args");
+
+  xfer += oprot->writeFieldBegin("schemeName", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->schemeName);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("domainName", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString(this->domainName);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("schemeHandlerFactory", ::apache::thrift::protocol::T_STRUCT, 3);
+  xfer += this->schemeHandlerFactory.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_SchemeHandlerFactory_Register_pargs::~Server_SchemeHandlerFactory_Register_pargs() noexcept {
+}
+
+
+uint32_t Server_SchemeHandlerFactory_Register_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_SchemeHandlerFactory_Register_pargs");
+
+  xfer += oprot->writeFieldBegin("schemeName", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->schemeName)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("domainName", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString((*(this->domainName)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("schemeHandlerFactory", ::apache::thrift::protocol::T_STRUCT, 3);
+  xfer += (*(this->schemeHandlerFactory)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_ClearAllSchemeHandlerFactories_args::~Server_ClearAllSchemeHandlerFactories_args() noexcept {
+}
+
+
+uint32_t Server_ClearAllSchemeHandlerFactories_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    xfer += iprot->skip(ftype);
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_ClearAllSchemeHandlerFactories_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_ClearAllSchemeHandlerFactories_args");
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_ClearAllSchemeHandlerFactories_pargs::~Server_ClearAllSchemeHandlerFactories_pargs() noexcept {
+}
+
+
+uint32_t Server_ClearAllSchemeHandlerFactories_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_ClearAllSchemeHandlerFactories_pargs");
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_RequestContext_ClearCertificateExceptions_args::~Server_RequestContext_ClearCertificateExceptions_args() noexcept {
+}
+
+
+uint32_t Server_RequestContext_ClearCertificateExceptions_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->bid);
+          this->__isset.bid = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->completionCallback.read(iprot);
+          this->__isset.completionCallback = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_RequestContext_ClearCertificateExceptions_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_RequestContext_ClearCertificateExceptions_args");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32(this->bid);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("completionCallback", ::apache::thrift::protocol::T_STRUCT, 2);
+  xfer += this->completionCallback.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_RequestContext_ClearCertificateExceptions_pargs::~Server_RequestContext_ClearCertificateExceptions_pargs() noexcept {
+}
+
+
+uint32_t Server_RequestContext_ClearCertificateExceptions_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_RequestContext_ClearCertificateExceptions_pargs");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32((*(this->bid)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("completionCallback", ::apache::thrift::protocol::T_STRUCT, 2);
+  xfer += (*(this->completionCallback)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_RequestContext_CloseAllConnections_args::~Server_RequestContext_CloseAllConnections_args() noexcept {
+}
+
+
+uint32_t Server_RequestContext_CloseAllConnections_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->bid);
+          this->__isset.bid = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->completionCallback.read(iprot);
+          this->__isset.completionCallback = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_RequestContext_CloseAllConnections_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_RequestContext_CloseAllConnections_args");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32(this->bid);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("completionCallback", ::apache::thrift::protocol::T_STRUCT, 2);
+  xfer += this->completionCallback.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_RequestContext_CloseAllConnections_pargs::~Server_RequestContext_CloseAllConnections_pargs() noexcept {
+}
+
+
+uint32_t Server_RequestContext_CloseAllConnections_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_RequestContext_CloseAllConnections_pargs");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32((*(this->bid)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("completionCallback", ::apache::thrift::protocol::T_STRUCT, 2);
+  xfer += (*(this->completionCallback)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_CookieManager_Create_args::~Server_CookieManager_Create_args() noexcept {
+}
+
+
+uint32_t Server_CookieManager_Create_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    xfer += iprot->skip(ftype);
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_CookieManager_Create_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_CookieManager_Create_args");
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_CookieManager_Create_pargs::~Server_CookieManager_Create_pargs() noexcept {
+}
+
+
+uint32_t Server_CookieManager_Create_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_CookieManager_Create_pargs");
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_CookieManager_Create_result::~Server_CookieManager_Create_result() noexcept {
+}
+
+
+uint32_t Server_CookieManager_Create_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->success.read(iprot);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_CookieManager_Create_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("Server_CookieManager_Create_result");
+
+  if (this->__isset.success) {
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRUCT, 0);
+    xfer += this->success.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_CookieManager_Create_presult::~Server_CookieManager_Create_presult() noexcept {
+}
+
+
+uint32_t Server_CookieManager_Create_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += (*(this->success)).read(iprot);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
+Server_CookieManager_Dispose_args::~Server_CookieManager_Dispose_args() noexcept {
+}
+
+
+uint32_t Server_CookieManager_Dispose_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->cookieManager.read(iprot);
+          this->__isset.cookieManager = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_CookieManager_Dispose_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_CookieManager_Dispose_args");
+
+  xfer += oprot->writeFieldBegin("cookieManager", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += this->cookieManager.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_CookieManager_Dispose_pargs::~Server_CookieManager_Dispose_pargs() noexcept {
+}
+
+
+uint32_t Server_CookieManager_Dispose_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_CookieManager_Dispose_pargs");
+
+  xfer += oprot->writeFieldBegin("cookieManager", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += (*(this->cookieManager)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_CookieManager_VisitAllCookies_args::~Server_CookieManager_VisitAllCookies_args() noexcept {
+}
+
+
+uint32_t Server_CookieManager_VisitAllCookies_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->cookieManager.read(iprot);
+          this->__isset.cookieManager = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->visitor.read(iprot);
+          this->__isset.visitor = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_CookieManager_VisitAllCookies_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_CookieManager_VisitAllCookies_args");
+
+  xfer += oprot->writeFieldBegin("cookieManager", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += this->cookieManager.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("visitor", ::apache::thrift::protocol::T_STRUCT, 2);
+  xfer += this->visitor.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_CookieManager_VisitAllCookies_pargs::~Server_CookieManager_VisitAllCookies_pargs() noexcept {
+}
+
+
+uint32_t Server_CookieManager_VisitAllCookies_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_CookieManager_VisitAllCookies_pargs");
+
+  xfer += oprot->writeFieldBegin("cookieManager", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += (*(this->cookieManager)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("visitor", ::apache::thrift::protocol::T_STRUCT, 2);
+  xfer += (*(this->visitor)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_CookieManager_VisitAllCookies_result::~Server_CookieManager_VisitAllCookies_result() noexcept {
+}
+
+
+uint32_t Server_CookieManager_VisitAllCookies_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool(this->success);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_CookieManager_VisitAllCookies_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("Server_CookieManager_VisitAllCookies_result");
+
+  if (this->__isset.success) {
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_BOOL, 0);
+    xfer += oprot->writeBool(this->success);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_CookieManager_VisitAllCookies_presult::~Server_CookieManager_VisitAllCookies_presult() noexcept {
+}
+
+
+uint32_t Server_CookieManager_VisitAllCookies_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool((*(this->success)));
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
+Server_CookieManager_VisitUrlCookies_args::~Server_CookieManager_VisitUrlCookies_args() noexcept {
+}
+
+
+uint32_t Server_CookieManager_VisitUrlCookies_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->cookieManager.read(iprot);
+          this->__isset.cookieManager = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->visitor.read(iprot);
+          this->__isset.visitor = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->url);
+          this->__isset.url = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 4:
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool(this->includeHttpOnly);
+          this->__isset.includeHttpOnly = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_CookieManager_VisitUrlCookies_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_CookieManager_VisitUrlCookies_args");
+
+  xfer += oprot->writeFieldBegin("cookieManager", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += this->cookieManager.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("visitor", ::apache::thrift::protocol::T_STRUCT, 2);
+  xfer += this->visitor.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("url", ::apache::thrift::protocol::T_STRING, 3);
+  xfer += oprot->writeString(this->url);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("includeHttpOnly", ::apache::thrift::protocol::T_BOOL, 4);
+  xfer += oprot->writeBool(this->includeHttpOnly);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_CookieManager_VisitUrlCookies_pargs::~Server_CookieManager_VisitUrlCookies_pargs() noexcept {
+}
+
+
+uint32_t Server_CookieManager_VisitUrlCookies_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_CookieManager_VisitUrlCookies_pargs");
+
+  xfer += oprot->writeFieldBegin("cookieManager", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += (*(this->cookieManager)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("visitor", ::apache::thrift::protocol::T_STRUCT, 2);
+  xfer += (*(this->visitor)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("url", ::apache::thrift::protocol::T_STRING, 3);
+  xfer += oprot->writeString((*(this->url)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("includeHttpOnly", ::apache::thrift::protocol::T_BOOL, 4);
+  xfer += oprot->writeBool((*(this->includeHttpOnly)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_CookieManager_VisitUrlCookies_result::~Server_CookieManager_VisitUrlCookies_result() noexcept {
+}
+
+
+uint32_t Server_CookieManager_VisitUrlCookies_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool(this->success);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_CookieManager_VisitUrlCookies_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("Server_CookieManager_VisitUrlCookies_result");
+
+  if (this->__isset.success) {
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_BOOL, 0);
+    xfer += oprot->writeBool(this->success);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_CookieManager_VisitUrlCookies_presult::~Server_CookieManager_VisitUrlCookies_presult() noexcept {
+}
+
+
+uint32_t Server_CookieManager_VisitUrlCookies_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool((*(this->success)));
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
+Server_CookieManager_SetCookie_args::~Server_CookieManager_SetCookie_args() noexcept {
+}
+
+
+uint32_t Server_CookieManager_SetCookie_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->cookieManager.read(iprot);
+          this->__isset.cookieManager = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->url);
+          this->__isset.url = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->cookie.read(iprot);
+          this->__isset.cookie = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_CookieManager_SetCookie_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_CookieManager_SetCookie_args");
+
+  xfer += oprot->writeFieldBegin("cookieManager", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += this->cookieManager.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("url", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString(this->url);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("cookie", ::apache::thrift::protocol::T_STRUCT, 3);
+  xfer += this->cookie.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_CookieManager_SetCookie_pargs::~Server_CookieManager_SetCookie_pargs() noexcept {
+}
+
+
+uint32_t Server_CookieManager_SetCookie_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_CookieManager_SetCookie_pargs");
+
+  xfer += oprot->writeFieldBegin("cookieManager", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += (*(this->cookieManager)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("url", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString((*(this->url)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("cookie", ::apache::thrift::protocol::T_STRUCT, 3);
+  xfer += (*(this->cookie)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_CookieManager_SetCookie_result::~Server_CookieManager_SetCookie_result() noexcept {
+}
+
+
+uint32_t Server_CookieManager_SetCookie_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool(this->success);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_CookieManager_SetCookie_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("Server_CookieManager_SetCookie_result");
+
+  if (this->__isset.success) {
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_BOOL, 0);
+    xfer += oprot->writeBool(this->success);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_CookieManager_SetCookie_presult::~Server_CookieManager_SetCookie_presult() noexcept {
+}
+
+
+uint32_t Server_CookieManager_SetCookie_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool((*(this->success)));
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
+Server_CookieManager_DeleteCookies_args::~Server_CookieManager_DeleteCookies_args() noexcept {
+}
+
+
+uint32_t Server_CookieManager_DeleteCookies_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->cookieManager.read(iprot);
+          this->__isset.cookieManager = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->url);
+          this->__isset.url = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->cookieName);
+          this->__isset.cookieName = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_CookieManager_DeleteCookies_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_CookieManager_DeleteCookies_args");
+
+  xfer += oprot->writeFieldBegin("cookieManager", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += this->cookieManager.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("url", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString(this->url);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("cookieName", ::apache::thrift::protocol::T_STRING, 3);
+  xfer += oprot->writeString(this->cookieName);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_CookieManager_DeleteCookies_pargs::~Server_CookieManager_DeleteCookies_pargs() noexcept {
+}
+
+
+uint32_t Server_CookieManager_DeleteCookies_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_CookieManager_DeleteCookies_pargs");
+
+  xfer += oprot->writeFieldBegin("cookieManager", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += (*(this->cookieManager)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("url", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString((*(this->url)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("cookieName", ::apache::thrift::protocol::T_STRING, 3);
+  xfer += oprot->writeString((*(this->cookieName)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_CookieManager_DeleteCookies_result::~Server_CookieManager_DeleteCookies_result() noexcept {
+}
+
+
+uint32_t Server_CookieManager_DeleteCookies_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool(this->success);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_CookieManager_DeleteCookies_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("Server_CookieManager_DeleteCookies_result");
+
+  if (this->__isset.success) {
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_BOOL, 0);
+    xfer += oprot->writeBool(this->success);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_CookieManager_DeleteCookies_presult::~Server_CookieManager_DeleteCookies_presult() noexcept {
+}
+
+
+uint32_t Server_CookieManager_DeleteCookies_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool((*(this->success)));
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
+Server_CookieManager_FlushStore_args::~Server_CookieManager_FlushStore_args() noexcept {
+}
+
+
+uint32_t Server_CookieManager_FlushStore_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->cookieManager.read(iprot);
+          this->__isset.cookieManager = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->completionCallback.read(iprot);
+          this->__isset.completionCallback = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_CookieManager_FlushStore_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_CookieManager_FlushStore_args");
+
+  xfer += oprot->writeFieldBegin("cookieManager", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += this->cookieManager.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("completionCallback", ::apache::thrift::protocol::T_STRUCT, 2);
+  xfer += this->completionCallback.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_CookieManager_FlushStore_pargs::~Server_CookieManager_FlushStore_pargs() noexcept {
+}
+
+
+uint32_t Server_CookieManager_FlushStore_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_CookieManager_FlushStore_pargs");
+
+  xfer += oprot->writeFieldBegin("cookieManager", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += (*(this->cookieManager)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("completionCallback", ::apache::thrift::protocol::T_STRUCT, 2);
+  xfer += (*(this->completionCallback)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_CookieManager_FlushStore_result::~Server_CookieManager_FlushStore_result() noexcept {
+}
+
+
+uint32_t Server_CookieManager_FlushStore_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool(this->success);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_CookieManager_FlushStore_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("Server_CookieManager_FlushStore_result");
+
+  if (this->__isset.success) {
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_BOOL, 0);
+    xfer += oprot->writeBool(this->success);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_CookieManager_FlushStore_presult::~Server_CookieManager_FlushStore_presult() noexcept {
+}
+
+
+uint32_t Server_CookieManager_FlushStore_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool((*(this->success)));
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+int32_t ServerClient::connect(const std::string& backwardConnectionPipe, const bool isMaster)
 {
-  send_connect(backwardConnectionPort, cmdLineArgs, settings);
+  send_connect(backwardConnectionPipe, isMaster);
   return recv_connect();
 }
 
-void ServerClient::send_connect(const int32_t backwardConnectionPort, const std::vector<std::string> & cmdLineArgs, const std::map<std::string, std::string> & settings)
+void ServerClient::send_connect(const std::string& backwardConnectionPipe, const bool isMaster)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("connect", ::apache::thrift::protocol::T_CALL, cseqid);
 
   Server_connect_pargs args;
-  args.backwardConnectionPort = &backwardConnectionPort;
-  args.cmdLineArgs = &cmdLineArgs;
-  args.settings = &settings;
+  args.backwardConnectionPipe = &backwardConnectionPipe;
+  args.isMaster = &isMaster;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -6461,18 +11659,20 @@ int32_t ServerClient::recv_connect()
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "connect failed: unknown result");
 }
 
-void ServerClient::log(const std::string& msg)
+int32_t ServerClient::connectTcp(const int32_t backwardConnectionPort, const bool isMaster)
 {
-  send_log(msg);
+  send_connectTcp(backwardConnectionPort, isMaster);
+  return recv_connectTcp();
 }
 
-void ServerClient::send_log(const std::string& msg)
+void ServerClient::send_connectTcp(const int32_t backwardConnectionPort, const bool isMaster)
 {
   int32_t cseqid = 0;
-  oprot_->writeMessageBegin("log", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+  oprot_->writeMessageBegin("connectTcp", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  Server_log_pargs args;
-  args.msg = &msg;
+  Server_connectTcp_pargs args;
+  args.backwardConnectionPort = &backwardConnectionPort;
+  args.isMaster = &isMaster;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -6480,28 +11680,7 @@ void ServerClient::send_log(const std::string& msg)
   oprot_->getTransport()->flush();
 }
 
-int32_t ServerClient::createBrowser(const int32_t cid, const std::string& url)
-{
-  send_createBrowser(cid, url);
-  return recv_createBrowser();
-}
-
-void ServerClient::send_createBrowser(const int32_t cid, const std::string& url)
-{
-  int32_t cseqid = 0;
-  oprot_->writeMessageBegin("createBrowser", ::apache::thrift::protocol::T_CALL, cseqid);
-
-  Server_createBrowser_pargs args;
-  args.cid = &cid;
-  args.url = &url;
-  args.write(oprot_);
-
-  oprot_->writeMessageEnd();
-  oprot_->getTransport()->writeEnd();
-  oprot_->getTransport()->flush();
-}
-
-int32_t ServerClient::recv_createBrowser()
+int32_t ServerClient::recv_connectTcp()
 {
 
   int32_t rseqid = 0;
@@ -6521,13 +11700,13 @@ int32_t ServerClient::recv_createBrowser()
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  if (fname.compare("createBrowser") != 0) {
+  if (fname.compare("connectTcp") != 0) {
     iprot_->skip(::apache::thrift::protocol::T_STRUCT);
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
   int32_t _return;
-  Server_createBrowser_presult result;
+  Server_connectTcp_presult result;
   result.success = &_return;
   result.read(iprot_);
   iprot_->readMessageEnd();
@@ -6536,20 +11715,309 @@ int32_t ServerClient::recv_createBrowser()
   if (result.__isset.success) {
     return _return;
   }
-  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "createBrowser failed: unknown result");
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "connectTcp failed: unknown result");
 }
 
-void ServerClient::closeBrowser(const int32_t bid)
+void ServerClient::log(const std::string& msg)
 {
-  send_closeBrowser(bid);
+  send_log(msg);
 }
 
-void ServerClient::send_closeBrowser(const int32_t bid)
+void ServerClient::send_log(const std::string& msg)
 {
   int32_t cseqid = 0;
-  oprot_->writeMessageBegin("closeBrowser", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+  oprot_->writeMessageBegin("log", ::apache::thrift::protocol::T_ONEWAY, cseqid);
 
-  Server_closeBrowser_pargs args;
+  Server_log_pargs args;
+  args.msg = &msg;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void ServerClient::echo(std::string& _return, const std::string& msg)
+{
+  send_echo(msg);
+  recv_echo(_return);
+}
+
+void ServerClient::send_echo(const std::string& msg)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("echo", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  Server_echo_pargs args;
+  args.msg = &msg;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void ServerClient::recv_echo(std::string& _return)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("echo") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  Server_echo_presult result;
+  result.success = &_return;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.success) {
+    // _return pointer has now been filled
+    return;
+  }
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "echo failed: unknown result");
+}
+
+void ServerClient::version(std::string& _return)
+{
+  send_version();
+  recv_version(_return);
+}
+
+void ServerClient::send_version()
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("version", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  Server_version_pargs args;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void ServerClient::recv_version(std::string& _return)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("version") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  Server_version_presult result;
+  result.success = &_return;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.success) {
+    // _return pointer has now been filled
+    return;
+  }
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "version failed: unknown result");
+}
+
+void ServerClient::state(std::string& _return)
+{
+  send_state();
+  recv_state(_return);
+}
+
+void ServerClient::send_state()
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("state", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  Server_state_pargs args;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void ServerClient::recv_state(std::string& _return)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("state") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  Server_state_presult result;
+  result.success = &_return;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.success) {
+    // _return pointer has now been filled
+    return;
+  }
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "state failed: unknown result");
+}
+
+void ServerClient::stop()
+{
+  send_stop();
+}
+
+void ServerClient::send_stop()
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("stop", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_stop_pargs args;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+int32_t ServerClient::Browser_Create(const int32_t cid, const int32_t handlersMask, const  ::thrift_codegen::RObject& requestContextHandler)
+{
+  send_Browser_Create(cid, handlersMask, requestContextHandler);
+  return recv_Browser_Create();
+}
+
+void ServerClient::send_Browser_Create(const int32_t cid, const int32_t handlersMask, const  ::thrift_codegen::RObject& requestContextHandler)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("Browser_Create", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  Server_Browser_Create_pargs args;
+  args.cid = &cid;
+  args.handlersMask = &handlersMask;
+  args.requestContextHandler = &requestContextHandler;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+int32_t ServerClient::recv_Browser_Create()
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("Browser_Create") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  int32_t _return;
+  Server_Browser_Create_presult result;
+  result.success = &_return;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.success) {
+    return _return;
+  }
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "Browser_Create failed: unknown result");
+}
+
+void ServerClient::Browser_StartNativeCreation(const int32_t bid, const std::string& url)
+{
+  send_Browser_StartNativeCreation(bid, url);
+}
+
+void ServerClient::send_Browser_StartNativeCreation(const int32_t bid, const std::string& url)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("Browser_StartNativeCreation", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_Browser_StartNativeCreation_pargs args;
+  args.bid = &bid;
+  args.url = &url;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void ServerClient::Browser_Close(const int32_t bid)
+{
+  send_Browser_Close(bid);
+}
+
+void ServerClient::send_Browser_Close(const int32_t bid)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("Browser_Close", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_Browser_Close_pargs args;
   args.bid = &bid;
   args.write(oprot_);
 
@@ -6696,20 +12164,37 @@ void ServerClient::send_Browser_ExecuteJavaScript(const int32_t bid, const std::
   oprot_->getTransport()->flush();
 }
 
-void ServerClient::Browser_WasResized(const int32_t bid, const int32_t width, const int32_t height)
+void ServerClient::Browser_WasResized(const int32_t bid)
 {
-  send_Browser_WasResized(bid, width, height);
+  send_Browser_WasResized(bid);
 }
 
-void ServerClient::send_Browser_WasResized(const int32_t bid, const int32_t width, const int32_t height)
+void ServerClient::send_Browser_WasResized(const int32_t bid)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("Browser_WasResized", ::apache::thrift::protocol::T_ONEWAY, cseqid);
 
   Server_Browser_WasResized_pargs args;
   args.bid = &bid;
-  args.width = &width;
-  args.height = &height;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void ServerClient::Browser_NotifyScreenInfoChanged(const int32_t bid)
+{
+  send_Browser_NotifyScreenInfoChanged(bid);
+}
+
+void ServerClient::send_Browser_NotifyScreenInfoChanged(const int32_t bid)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("Browser_NotifyScreenInfoChanged", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_Browser_NotifyScreenInfoChanged_pargs args;
+  args.bid = &bid;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -6784,6 +12269,693 @@ void ServerClient::send_Browser_SendMouseWheelEvent(const int32_t bid, const int
   args.modifiers = &modifiers;
   args.delta = &delta;
   args.units_to_scroll = &units_to_scroll;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+bool ServerClient::Browser_CanGoForward(const int32_t bid)
+{
+  send_Browser_CanGoForward(bid);
+  return recv_Browser_CanGoForward();
+}
+
+void ServerClient::send_Browser_CanGoForward(const int32_t bid)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("Browser_CanGoForward", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  Server_Browser_CanGoForward_pargs args;
+  args.bid = &bid;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+bool ServerClient::recv_Browser_CanGoForward()
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("Browser_CanGoForward") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  bool _return;
+  Server_Browser_CanGoForward_presult result;
+  result.success = &_return;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.success) {
+    return _return;
+  }
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "Browser_CanGoForward failed: unknown result");
+}
+
+bool ServerClient::Browser_CanGoBack(const int32_t bid)
+{
+  send_Browser_CanGoBack(bid);
+  return recv_Browser_CanGoBack();
+}
+
+void ServerClient::send_Browser_CanGoBack(const int32_t bid)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("Browser_CanGoBack", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  Server_Browser_CanGoBack_pargs args;
+  args.bid = &bid;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+bool ServerClient::recv_Browser_CanGoBack()
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("Browser_CanGoBack") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  bool _return;
+  Server_Browser_CanGoBack_presult result;
+  result.success = &_return;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.success) {
+    return _return;
+  }
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "Browser_CanGoBack failed: unknown result");
+}
+
+void ServerClient::Browser_GoBack(const int32_t bid)
+{
+  send_Browser_GoBack(bid);
+}
+
+void ServerClient::send_Browser_GoBack(const int32_t bid)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("Browser_GoBack", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_Browser_GoBack_pargs args;
+  args.bid = &bid;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void ServerClient::Browser_GoForward(const int32_t bid)
+{
+  send_Browser_GoForward(bid);
+}
+
+void ServerClient::send_Browser_GoForward(const int32_t bid)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("Browser_GoForward", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_Browser_GoForward_pargs args;
+  args.bid = &bid;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+bool ServerClient::Browser_IsLoading(const int32_t bid)
+{
+  send_Browser_IsLoading(bid);
+  return recv_Browser_IsLoading();
+}
+
+void ServerClient::send_Browser_IsLoading(const int32_t bid)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("Browser_IsLoading", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  Server_Browser_IsLoading_pargs args;
+  args.bid = &bid;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+bool ServerClient::recv_Browser_IsLoading()
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("Browser_IsLoading") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  bool _return;
+  Server_Browser_IsLoading_presult result;
+  result.success = &_return;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.success) {
+    return _return;
+  }
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "Browser_IsLoading failed: unknown result");
+}
+
+void ServerClient::Browser_StopLoad(const int32_t bid)
+{
+  send_Browser_StopLoad(bid);
+}
+
+void ServerClient::send_Browser_StopLoad(const int32_t bid)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("Browser_StopLoad", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_Browser_StopLoad_pargs args;
+  args.bid = &bid;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+int32_t ServerClient::Browser_GetFrameCount(const int32_t bid)
+{
+  send_Browser_GetFrameCount(bid);
+  return recv_Browser_GetFrameCount();
+}
+
+void ServerClient::send_Browser_GetFrameCount(const int32_t bid)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("Browser_GetFrameCount", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  Server_Browser_GetFrameCount_pargs args;
+  args.bid = &bid;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+int32_t ServerClient::recv_Browser_GetFrameCount()
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("Browser_GetFrameCount") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  int32_t _return;
+  Server_Browser_GetFrameCount_presult result;
+  result.success = &_return;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.success) {
+    return _return;
+  }
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "Browser_GetFrameCount failed: unknown result");
+}
+
+bool ServerClient::Browser_IsPopup(const int32_t bid)
+{
+  send_Browser_IsPopup(bid);
+  return recv_Browser_IsPopup();
+}
+
+void ServerClient::send_Browser_IsPopup(const int32_t bid)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("Browser_IsPopup", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  Server_Browser_IsPopup_pargs args;
+  args.bid = &bid;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+bool ServerClient::recv_Browser_IsPopup()
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("Browser_IsPopup") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  bool _return;
+  Server_Browser_IsPopup_presult result;
+  result.success = &_return;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.success) {
+    return _return;
+  }
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "Browser_IsPopup failed: unknown result");
+}
+
+bool ServerClient::Browser_HasDocument(const int32_t bid)
+{
+  send_Browser_HasDocument(bid);
+  return recv_Browser_HasDocument();
+}
+
+void ServerClient::send_Browser_HasDocument(const int32_t bid)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("Browser_HasDocument", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  Server_Browser_HasDocument_pargs args;
+  args.bid = &bid;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+bool ServerClient::recv_Browser_HasDocument()
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("Browser_HasDocument") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  bool _return;
+  Server_Browser_HasDocument_presult result;
+  result.success = &_return;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.success) {
+    return _return;
+  }
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "Browser_HasDocument failed: unknown result");
+}
+
+void ServerClient::Browser_ViewSource(const int32_t bid)
+{
+  send_Browser_ViewSource(bid);
+}
+
+void ServerClient::send_Browser_ViewSource(const int32_t bid)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("Browser_ViewSource", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_Browser_ViewSource_pargs args;
+  args.bid = &bid;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void ServerClient::Browser_GetSource(const int32_t bid, const  ::thrift_codegen::RObject& stringVisitor)
+{
+  send_Browser_GetSource(bid, stringVisitor);
+}
+
+void ServerClient::send_Browser_GetSource(const int32_t bid, const  ::thrift_codegen::RObject& stringVisitor)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("Browser_GetSource", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_Browser_GetSource_pargs args;
+  args.bid = &bid;
+  args.stringVisitor = &stringVisitor;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void ServerClient::Browser_GetText(const int32_t bid, const  ::thrift_codegen::RObject& stringVisitor)
+{
+  send_Browser_GetText(bid, stringVisitor);
+}
+
+void ServerClient::send_Browser_GetText(const int32_t bid, const  ::thrift_codegen::RObject& stringVisitor)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("Browser_GetText", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_Browser_GetText_pargs args;
+  args.bid = &bid;
+  args.stringVisitor = &stringVisitor;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void ServerClient::Browser_SetFocus(const int32_t bid, const bool enable)
+{
+  send_Browser_SetFocus(bid, enable);
+}
+
+void ServerClient::send_Browser_SetFocus(const int32_t bid, const bool enable)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("Browser_SetFocus", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_Browser_SetFocus_pargs args;
+  args.bid = &bid;
+  args.enable = &enable;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+double ServerClient::Browser_GetZoomLevel(const int32_t bid)
+{
+  send_Browser_GetZoomLevel(bid);
+  return recv_Browser_GetZoomLevel();
+}
+
+void ServerClient::send_Browser_GetZoomLevel(const int32_t bid)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("Browser_GetZoomLevel", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  Server_Browser_GetZoomLevel_pargs args;
+  args.bid = &bid;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+double ServerClient::recv_Browser_GetZoomLevel()
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("Browser_GetZoomLevel") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  double _return;
+  Server_Browser_GetZoomLevel_presult result;
+  result.success = &_return;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.success) {
+    return _return;
+  }
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "Browser_GetZoomLevel failed: unknown result");
+}
+
+void ServerClient::Browser_SetZoomLevel(const int32_t bid, const double val)
+{
+  send_Browser_SetZoomLevel(bid, val);
+}
+
+void ServerClient::send_Browser_SetZoomLevel(const int32_t bid, const double val)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("Browser_SetZoomLevel", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_Browser_SetZoomLevel_pargs args;
+  args.bid = &bid;
+  args.val = &val;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void ServerClient::Browser_StartDownload(const int32_t bid, const std::string& url)
+{
+  send_Browser_StartDownload(bid, url);
+}
+
+void ServerClient::send_Browser_StartDownload(const int32_t bid, const std::string& url)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("Browser_StartDownload", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_Browser_StartDownload_pargs args;
+  args.bid = &bid;
+  args.url = &url;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void ServerClient::Browser_Find(const int32_t bid, const std::string& searchText, const bool forward, const bool matchCase, const bool findNext)
+{
+  send_Browser_Find(bid, searchText, forward, matchCase, findNext);
+}
+
+void ServerClient::send_Browser_Find(const int32_t bid, const std::string& searchText, const bool forward, const bool matchCase, const bool findNext)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("Browser_Find", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_Browser_Find_pargs args;
+  args.bid = &bid;
+  args.searchText = &searchText;
+  args.forward = &forward;
+  args.matchCase = &matchCase;
+  args.findNext = &findNext;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void ServerClient::Browser_StopFinding(const int32_t bid, const bool clearSelection)
+{
+  send_Browser_StopFinding(bid, clearSelection);
+}
+
+void ServerClient::send_Browser_StopFinding(const int32_t bid, const bool clearSelection)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("Browser_StopFinding", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_Browser_StopFinding_pargs args;
+  args.bid = &bid;
+  args.clearSelection = &clearSelection;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void ServerClient::Browser_ReplaceMisspelling(const int32_t bid, const std::string& word)
+{
+  send_Browser_ReplaceMisspelling(bid, word);
+}
+
+void ServerClient::send_Browser_ReplaceMisspelling(const int32_t bid, const std::string& word)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("Browser_ReplaceMisspelling", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_Browser_ReplaceMisspelling_pargs args;
+  args.bid = &bid;
+  args.word = &word;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void ServerClient::Browser_SetFrameRate(const int32_t bid, const int32_t val)
+{
+  send_Browser_SetFrameRate(bid, val);
+}
+
+void ServerClient::send_Browser_SetFrameRate(const int32_t bid, const int32_t val)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("Browser_SetFrameRate", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_Browser_SetFrameRate_pargs args;
+  args.bid = &bid;
+  args.val = &val;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void ServerClient::Frame_ExecuteJavaScript(const int32_t frameId, const std::string& code, const std::string& url, const int32_t line)
+{
+  send_Frame_ExecuteJavaScript(frameId, code, url, line);
+}
+
+void ServerClient::send_Frame_ExecuteJavaScript(const int32_t frameId, const std::string& code, const std::string& url, const int32_t line)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("Frame_ExecuteJavaScript", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_Frame_ExecuteJavaScript_pargs args;
+  args.frameId = &frameId;
+  args.code = &code;
+  args.url = &url;
+  args.line = &line;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -8046,6 +14218,460 @@ void ServerClient::send_QueryCallback_Failure(const  ::thrift_codegen::RObject& 
   oprot_->getTransport()->flush();
 }
 
+void ServerClient::SchemeHandlerFactory_Register(const std::string& schemeName, const std::string& domainName, const  ::thrift_codegen::RObject& schemeHandlerFactory)
+{
+  send_SchemeHandlerFactory_Register(schemeName, domainName, schemeHandlerFactory);
+}
+
+void ServerClient::send_SchemeHandlerFactory_Register(const std::string& schemeName, const std::string& domainName, const  ::thrift_codegen::RObject& schemeHandlerFactory)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("SchemeHandlerFactory_Register", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_SchemeHandlerFactory_Register_pargs args;
+  args.schemeName = &schemeName;
+  args.domainName = &domainName;
+  args.schemeHandlerFactory = &schemeHandlerFactory;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void ServerClient::ClearAllSchemeHandlerFactories()
+{
+  send_ClearAllSchemeHandlerFactories();
+}
+
+void ServerClient::send_ClearAllSchemeHandlerFactories()
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("ClearAllSchemeHandlerFactories", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_ClearAllSchemeHandlerFactories_pargs args;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void ServerClient::RequestContext_ClearCertificateExceptions(const int32_t bid, const  ::thrift_codegen::RObject& completionCallback)
+{
+  send_RequestContext_ClearCertificateExceptions(bid, completionCallback);
+}
+
+void ServerClient::send_RequestContext_ClearCertificateExceptions(const int32_t bid, const  ::thrift_codegen::RObject& completionCallback)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("RequestContext_ClearCertificateExceptions", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_RequestContext_ClearCertificateExceptions_pargs args;
+  args.bid = &bid;
+  args.completionCallback = &completionCallback;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void ServerClient::RequestContext_CloseAllConnections(const int32_t bid, const  ::thrift_codegen::RObject& completionCallback)
+{
+  send_RequestContext_CloseAllConnections(bid, completionCallback);
+}
+
+void ServerClient::send_RequestContext_CloseAllConnections(const int32_t bid, const  ::thrift_codegen::RObject& completionCallback)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("RequestContext_CloseAllConnections", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_RequestContext_CloseAllConnections_pargs args;
+  args.bid = &bid;
+  args.completionCallback = &completionCallback;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void ServerClient::CookieManager_Create( ::thrift_codegen::RObject& _return)
+{
+  send_CookieManager_Create();
+  recv_CookieManager_Create(_return);
+}
+
+void ServerClient::send_CookieManager_Create()
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("CookieManager_Create", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  Server_CookieManager_Create_pargs args;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void ServerClient::recv_CookieManager_Create( ::thrift_codegen::RObject& _return)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("CookieManager_Create") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  Server_CookieManager_Create_presult result;
+  result.success = &_return;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.success) {
+    // _return pointer has now been filled
+    return;
+  }
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "CookieManager_Create failed: unknown result");
+}
+
+void ServerClient::CookieManager_Dispose(const  ::thrift_codegen::RObject& cookieManager)
+{
+  send_CookieManager_Dispose(cookieManager);
+}
+
+void ServerClient::send_CookieManager_Dispose(const  ::thrift_codegen::RObject& cookieManager)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("CookieManager_Dispose", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_CookieManager_Dispose_pargs args;
+  args.cookieManager = &cookieManager;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+bool ServerClient::CookieManager_VisitAllCookies(const  ::thrift_codegen::RObject& cookieManager, const  ::thrift_codegen::RObject& visitor)
+{
+  send_CookieManager_VisitAllCookies(cookieManager, visitor);
+  return recv_CookieManager_VisitAllCookies();
+}
+
+void ServerClient::send_CookieManager_VisitAllCookies(const  ::thrift_codegen::RObject& cookieManager, const  ::thrift_codegen::RObject& visitor)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("CookieManager_VisitAllCookies", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  Server_CookieManager_VisitAllCookies_pargs args;
+  args.cookieManager = &cookieManager;
+  args.visitor = &visitor;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+bool ServerClient::recv_CookieManager_VisitAllCookies()
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("CookieManager_VisitAllCookies") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  bool _return;
+  Server_CookieManager_VisitAllCookies_presult result;
+  result.success = &_return;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.success) {
+    return _return;
+  }
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "CookieManager_VisitAllCookies failed: unknown result");
+}
+
+bool ServerClient::CookieManager_VisitUrlCookies(const  ::thrift_codegen::RObject& cookieManager, const  ::thrift_codegen::RObject& visitor, const std::string& url, const bool includeHttpOnly)
+{
+  send_CookieManager_VisitUrlCookies(cookieManager, visitor, url, includeHttpOnly);
+  return recv_CookieManager_VisitUrlCookies();
+}
+
+void ServerClient::send_CookieManager_VisitUrlCookies(const  ::thrift_codegen::RObject& cookieManager, const  ::thrift_codegen::RObject& visitor, const std::string& url, const bool includeHttpOnly)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("CookieManager_VisitUrlCookies", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  Server_CookieManager_VisitUrlCookies_pargs args;
+  args.cookieManager = &cookieManager;
+  args.visitor = &visitor;
+  args.url = &url;
+  args.includeHttpOnly = &includeHttpOnly;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+bool ServerClient::recv_CookieManager_VisitUrlCookies()
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("CookieManager_VisitUrlCookies") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  bool _return;
+  Server_CookieManager_VisitUrlCookies_presult result;
+  result.success = &_return;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.success) {
+    return _return;
+  }
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "CookieManager_VisitUrlCookies failed: unknown result");
+}
+
+bool ServerClient::CookieManager_SetCookie(const  ::thrift_codegen::RObject& cookieManager, const std::string& url, const  ::thrift_codegen::Cookie& cookie)
+{
+  send_CookieManager_SetCookie(cookieManager, url, cookie);
+  return recv_CookieManager_SetCookie();
+}
+
+void ServerClient::send_CookieManager_SetCookie(const  ::thrift_codegen::RObject& cookieManager, const std::string& url, const  ::thrift_codegen::Cookie& cookie)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("CookieManager_SetCookie", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  Server_CookieManager_SetCookie_pargs args;
+  args.cookieManager = &cookieManager;
+  args.url = &url;
+  args.cookie = &cookie;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+bool ServerClient::recv_CookieManager_SetCookie()
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("CookieManager_SetCookie") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  bool _return;
+  Server_CookieManager_SetCookie_presult result;
+  result.success = &_return;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.success) {
+    return _return;
+  }
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "CookieManager_SetCookie failed: unknown result");
+}
+
+bool ServerClient::CookieManager_DeleteCookies(const  ::thrift_codegen::RObject& cookieManager, const std::string& url, const std::string& cookieName)
+{
+  send_CookieManager_DeleteCookies(cookieManager, url, cookieName);
+  return recv_CookieManager_DeleteCookies();
+}
+
+void ServerClient::send_CookieManager_DeleteCookies(const  ::thrift_codegen::RObject& cookieManager, const std::string& url, const std::string& cookieName)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("CookieManager_DeleteCookies", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  Server_CookieManager_DeleteCookies_pargs args;
+  args.cookieManager = &cookieManager;
+  args.url = &url;
+  args.cookieName = &cookieName;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+bool ServerClient::recv_CookieManager_DeleteCookies()
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("CookieManager_DeleteCookies") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  bool _return;
+  Server_CookieManager_DeleteCookies_presult result;
+  result.success = &_return;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.success) {
+    return _return;
+  }
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "CookieManager_DeleteCookies failed: unknown result");
+}
+
+bool ServerClient::CookieManager_FlushStore(const  ::thrift_codegen::RObject& cookieManager, const  ::thrift_codegen::RObject& completionCallback)
+{
+  send_CookieManager_FlushStore(cookieManager, completionCallback);
+  return recv_CookieManager_FlushStore();
+}
+
+void ServerClient::send_CookieManager_FlushStore(const  ::thrift_codegen::RObject& cookieManager, const  ::thrift_codegen::RObject& completionCallback)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("CookieManager_FlushStore", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  Server_CookieManager_FlushStore_pargs args;
+  args.cookieManager = &cookieManager;
+  args.completionCallback = &completionCallback;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+bool ServerClient::recv_CookieManager_FlushStore()
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("CookieManager_FlushStore") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  bool _return;
+  Server_CookieManager_FlushStore_presult result;
+  result.success = &_return;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.success) {
+    return _return;
+  }
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "CookieManager_FlushStore failed: unknown result");
+}
+
 bool ServerProcessor::dispatchCall(::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, const std::string& fname, int32_t seqid, void* callContext) {
   ProcessMap::iterator pfn;
   pfn = processMap_.find(fname);
@@ -8088,7 +14714,7 @@ void ServerProcessor::process_connect(int32_t seqid, ::apache::thrift::protocol:
 
   Server_connect_result result;
   try {
-    result.success = iface_->connect(args.backwardConnectionPort, args.cmdLineArgs, args.settings);
+    result.success = iface_->connect(args.backwardConnectionPipe, args.isMaster);
     result.__isset.success = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != nullptr) {
@@ -8116,6 +14742,60 @@ void ServerProcessor::process_connect(int32_t seqid, ::apache::thrift::protocol:
 
   if (this->eventHandler_.get() != nullptr) {
     this->eventHandler_->postWrite(ctx, "Server.connect", bytes);
+  }
+}
+
+void ServerProcessor::process_connectTcp(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = nullptr;
+  if (this->eventHandler_.get() != nullptr) {
+    ctx = this->eventHandler_->getContext("Server.connectTcp", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Server.connectTcp");
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preRead(ctx, "Server.connectTcp");
+  }
+
+  Server_connectTcp_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postRead(ctx, "Server.connectTcp", bytes);
+  }
+
+  Server_connectTcp_result result;
+  try {
+    result.success = iface_->connectTcp(args.backwardConnectionPort, args.isMaster);
+    result.__isset.success = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != nullptr) {
+      this->eventHandler_->handlerError(ctx, "Server.connectTcp");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("connectTcp", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preWrite(ctx, "Server.connectTcp");
+  }
+
+  oprot->writeMessageBegin("connectTcp", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postWrite(ctx, "Server.connectTcp", bytes);
   }
 }
 
@@ -8156,38 +14836,38 @@ void ServerProcessor::process_log(int32_t, ::apache::thrift::protocol::TProtocol
   return;
 }
 
-void ServerProcessor::process_createBrowser(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+void ServerProcessor::process_echo(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = nullptr;
   if (this->eventHandler_.get() != nullptr) {
-    ctx = this->eventHandler_->getContext("Server.createBrowser", callContext);
+    ctx = this->eventHandler_->getContext("Server.echo", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Server.createBrowser");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Server.echo");
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->preRead(ctx, "Server.createBrowser");
+    this->eventHandler_->preRead(ctx, "Server.echo");
   }
 
-  Server_createBrowser_args args;
+  Server_echo_args args;
   args.read(iprot);
   iprot->readMessageEnd();
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->postRead(ctx, "Server.createBrowser", bytes);
+    this->eventHandler_->postRead(ctx, "Server.echo", bytes);
   }
 
-  Server_createBrowser_result result;
+  Server_echo_result result;
   try {
-    result.success = iface_->createBrowser(args.cid, args.url);
+    iface_->echo(result.success, args.msg);
     result.__isset.success = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != nullptr) {
-      this->eventHandler_->handlerError(ctx, "Server.createBrowser");
+      this->eventHandler_->handlerError(ctx, "Server.echo");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("createBrowser", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    oprot->writeMessageBegin("echo", ::apache::thrift::protocol::T_EXCEPTION, seqid);
     x.write(oprot);
     oprot->writeMessageEnd();
     oprot->getTransport()->writeEnd();
@@ -8196,52 +14876,288 @@ void ServerProcessor::process_createBrowser(int32_t seqid, ::apache::thrift::pro
   }
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->preWrite(ctx, "Server.createBrowser");
+    this->eventHandler_->preWrite(ctx, "Server.echo");
   }
 
-  oprot->writeMessageBegin("createBrowser", ::apache::thrift::protocol::T_REPLY, seqid);
+  oprot->writeMessageBegin("echo", ::apache::thrift::protocol::T_REPLY, seqid);
   result.write(oprot);
   oprot->writeMessageEnd();
   bytes = oprot->getTransport()->writeEnd();
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->postWrite(ctx, "Server.createBrowser", bytes);
+    this->eventHandler_->postWrite(ctx, "Server.echo", bytes);
   }
 }
 
-void ServerProcessor::process_closeBrowser(int32_t, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol*, void* callContext)
+void ServerProcessor::process_version(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = nullptr;
   if (this->eventHandler_.get() != nullptr) {
-    ctx = this->eventHandler_->getContext("Server.closeBrowser", callContext);
+    ctx = this->eventHandler_->getContext("Server.version", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Server.closeBrowser");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Server.version");
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->preRead(ctx, "Server.closeBrowser");
+    this->eventHandler_->preRead(ctx, "Server.version");
   }
 
-  Server_closeBrowser_args args;
+  Server_version_args args;
   args.read(iprot);
   iprot->readMessageEnd();
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->postRead(ctx, "Server.closeBrowser", bytes);
+    this->eventHandler_->postRead(ctx, "Server.version", bytes);
+  }
+
+  Server_version_result result;
+  try {
+    iface_->version(result.success);
+    result.__isset.success = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != nullptr) {
+      this->eventHandler_->handlerError(ctx, "Server.version");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("version", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preWrite(ctx, "Server.version");
+  }
+
+  oprot->writeMessageBegin("version", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postWrite(ctx, "Server.version", bytes);
+  }
+}
+
+void ServerProcessor::process_state(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = nullptr;
+  if (this->eventHandler_.get() != nullptr) {
+    ctx = this->eventHandler_->getContext("Server.state", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Server.state");
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preRead(ctx, "Server.state");
+  }
+
+  Server_state_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postRead(ctx, "Server.state", bytes);
+  }
+
+  Server_state_result result;
+  try {
+    iface_->state(result.success);
+    result.__isset.success = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != nullptr) {
+      this->eventHandler_->handlerError(ctx, "Server.state");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("state", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preWrite(ctx, "Server.state");
+  }
+
+  oprot->writeMessageBegin("state", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postWrite(ctx, "Server.state", bytes);
+  }
+}
+
+void ServerProcessor::process_stop(int32_t, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol*, void* callContext)
+{
+  void* ctx = nullptr;
+  if (this->eventHandler_.get() != nullptr) {
+    ctx = this->eventHandler_->getContext("Server.stop", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Server.stop");
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preRead(ctx, "Server.stop");
+  }
+
+  Server_stop_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postRead(ctx, "Server.stop", bytes);
   }
 
   try {
-    iface_->closeBrowser(args.bid);
+    iface_->stop();
   } catch (const std::exception&) {
     if (this->eventHandler_.get() != nullptr) {
-      this->eventHandler_->handlerError(ctx, "Server.closeBrowser");
+      this->eventHandler_->handlerError(ctx, "Server.stop");
     }
     return;
   }
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->asyncComplete(ctx, "Server.closeBrowser");
+    this->eventHandler_->asyncComplete(ctx, "Server.stop");
+  }
+
+  return;
+}
+
+void ServerProcessor::process_Browser_Create(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = nullptr;
+  if (this->eventHandler_.get() != nullptr) {
+    ctx = this->eventHandler_->getContext("Server.Browser_Create", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Server.Browser_Create");
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preRead(ctx, "Server.Browser_Create");
+  }
+
+  Server_Browser_Create_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postRead(ctx, "Server.Browser_Create", bytes);
+  }
+
+  Server_Browser_Create_result result;
+  try {
+    result.success = iface_->Browser_Create(args.cid, args.handlersMask, args.requestContextHandler);
+    result.__isset.success = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != nullptr) {
+      this->eventHandler_->handlerError(ctx, "Server.Browser_Create");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("Browser_Create", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preWrite(ctx, "Server.Browser_Create");
+  }
+
+  oprot->writeMessageBegin("Browser_Create", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postWrite(ctx, "Server.Browser_Create", bytes);
+  }
+}
+
+void ServerProcessor::process_Browser_StartNativeCreation(int32_t, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol*, void* callContext)
+{
+  void* ctx = nullptr;
+  if (this->eventHandler_.get() != nullptr) {
+    ctx = this->eventHandler_->getContext("Server.Browser_StartNativeCreation", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Server.Browser_StartNativeCreation");
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preRead(ctx, "Server.Browser_StartNativeCreation");
+  }
+
+  Server_Browser_StartNativeCreation_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postRead(ctx, "Server.Browser_StartNativeCreation", bytes);
+  }
+
+  try {
+    iface_->Browser_StartNativeCreation(args.bid, args.url);
+  } catch (const std::exception&) {
+    if (this->eventHandler_.get() != nullptr) {
+      this->eventHandler_->handlerError(ctx, "Server.Browser_StartNativeCreation");
+    }
+    return;
+  }
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->asyncComplete(ctx, "Server.Browser_StartNativeCreation");
+  }
+
+  return;
+}
+
+void ServerProcessor::process_Browser_Close(int32_t, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol*, void* callContext)
+{
+  void* ctx = nullptr;
+  if (this->eventHandler_.get() != nullptr) {
+    ctx = this->eventHandler_->getContext("Server.Browser_Close", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Server.Browser_Close");
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preRead(ctx, "Server.Browser_Close");
+  }
+
+  Server_Browser_Close_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postRead(ctx, "Server.Browser_Close", bytes);
+  }
+
+  try {
+    iface_->Browser_Close(args.bid);
+  } catch (const std::exception&) {
+    if (this->eventHandler_.get() != nullptr) {
+      this->eventHandler_->handlerError(ctx, "Server.Browser_Close");
+    }
+    return;
+  }
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->asyncComplete(ctx, "Server.Browser_Close");
   }
 
   return;
@@ -8471,7 +15387,7 @@ void ServerProcessor::process_Browser_WasResized(int32_t, ::apache::thrift::prot
   }
 
   try {
-    iface_->Browser_WasResized(args.bid, args.width, args.height);
+    iface_->Browser_WasResized(args.bid);
   } catch (const std::exception&) {
     if (this->eventHandler_.get() != nullptr) {
       this->eventHandler_->handlerError(ctx, "Server.Browser_WasResized");
@@ -8481,6 +15397,43 @@ void ServerProcessor::process_Browser_WasResized(int32_t, ::apache::thrift::prot
 
   if (this->eventHandler_.get() != nullptr) {
     this->eventHandler_->asyncComplete(ctx, "Server.Browser_WasResized");
+  }
+
+  return;
+}
+
+void ServerProcessor::process_Browser_NotifyScreenInfoChanged(int32_t, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol*, void* callContext)
+{
+  void* ctx = nullptr;
+  if (this->eventHandler_.get() != nullptr) {
+    ctx = this->eventHandler_->getContext("Server.Browser_NotifyScreenInfoChanged", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Server.Browser_NotifyScreenInfoChanged");
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preRead(ctx, "Server.Browser_NotifyScreenInfoChanged");
+  }
+
+  Server_Browser_NotifyScreenInfoChanged_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postRead(ctx, "Server.Browser_NotifyScreenInfoChanged", bytes);
+  }
+
+  try {
+    iface_->Browser_NotifyScreenInfoChanged(args.bid);
+  } catch (const std::exception&) {
+    if (this->eventHandler_.get() != nullptr) {
+      this->eventHandler_->handlerError(ctx, "Server.Browser_NotifyScreenInfoChanged");
+    }
+    return;
+  }
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->asyncComplete(ctx, "Server.Browser_NotifyScreenInfoChanged");
   }
 
   return;
@@ -8592,6 +15545,902 @@ void ServerProcessor::process_Browser_SendMouseWheelEvent(int32_t, ::apache::thr
 
   if (this->eventHandler_.get() != nullptr) {
     this->eventHandler_->asyncComplete(ctx, "Server.Browser_SendMouseWheelEvent");
+  }
+
+  return;
+}
+
+void ServerProcessor::process_Browser_CanGoForward(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = nullptr;
+  if (this->eventHandler_.get() != nullptr) {
+    ctx = this->eventHandler_->getContext("Server.Browser_CanGoForward", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Server.Browser_CanGoForward");
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preRead(ctx, "Server.Browser_CanGoForward");
+  }
+
+  Server_Browser_CanGoForward_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postRead(ctx, "Server.Browser_CanGoForward", bytes);
+  }
+
+  Server_Browser_CanGoForward_result result;
+  try {
+    result.success = iface_->Browser_CanGoForward(args.bid);
+    result.__isset.success = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != nullptr) {
+      this->eventHandler_->handlerError(ctx, "Server.Browser_CanGoForward");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("Browser_CanGoForward", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preWrite(ctx, "Server.Browser_CanGoForward");
+  }
+
+  oprot->writeMessageBegin("Browser_CanGoForward", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postWrite(ctx, "Server.Browser_CanGoForward", bytes);
+  }
+}
+
+void ServerProcessor::process_Browser_CanGoBack(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = nullptr;
+  if (this->eventHandler_.get() != nullptr) {
+    ctx = this->eventHandler_->getContext("Server.Browser_CanGoBack", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Server.Browser_CanGoBack");
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preRead(ctx, "Server.Browser_CanGoBack");
+  }
+
+  Server_Browser_CanGoBack_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postRead(ctx, "Server.Browser_CanGoBack", bytes);
+  }
+
+  Server_Browser_CanGoBack_result result;
+  try {
+    result.success = iface_->Browser_CanGoBack(args.bid);
+    result.__isset.success = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != nullptr) {
+      this->eventHandler_->handlerError(ctx, "Server.Browser_CanGoBack");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("Browser_CanGoBack", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preWrite(ctx, "Server.Browser_CanGoBack");
+  }
+
+  oprot->writeMessageBegin("Browser_CanGoBack", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postWrite(ctx, "Server.Browser_CanGoBack", bytes);
+  }
+}
+
+void ServerProcessor::process_Browser_GoBack(int32_t, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol*, void* callContext)
+{
+  void* ctx = nullptr;
+  if (this->eventHandler_.get() != nullptr) {
+    ctx = this->eventHandler_->getContext("Server.Browser_GoBack", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Server.Browser_GoBack");
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preRead(ctx, "Server.Browser_GoBack");
+  }
+
+  Server_Browser_GoBack_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postRead(ctx, "Server.Browser_GoBack", bytes);
+  }
+
+  try {
+    iface_->Browser_GoBack(args.bid);
+  } catch (const std::exception&) {
+    if (this->eventHandler_.get() != nullptr) {
+      this->eventHandler_->handlerError(ctx, "Server.Browser_GoBack");
+    }
+    return;
+  }
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->asyncComplete(ctx, "Server.Browser_GoBack");
+  }
+
+  return;
+}
+
+void ServerProcessor::process_Browser_GoForward(int32_t, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol*, void* callContext)
+{
+  void* ctx = nullptr;
+  if (this->eventHandler_.get() != nullptr) {
+    ctx = this->eventHandler_->getContext("Server.Browser_GoForward", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Server.Browser_GoForward");
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preRead(ctx, "Server.Browser_GoForward");
+  }
+
+  Server_Browser_GoForward_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postRead(ctx, "Server.Browser_GoForward", bytes);
+  }
+
+  try {
+    iface_->Browser_GoForward(args.bid);
+  } catch (const std::exception&) {
+    if (this->eventHandler_.get() != nullptr) {
+      this->eventHandler_->handlerError(ctx, "Server.Browser_GoForward");
+    }
+    return;
+  }
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->asyncComplete(ctx, "Server.Browser_GoForward");
+  }
+
+  return;
+}
+
+void ServerProcessor::process_Browser_IsLoading(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = nullptr;
+  if (this->eventHandler_.get() != nullptr) {
+    ctx = this->eventHandler_->getContext("Server.Browser_IsLoading", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Server.Browser_IsLoading");
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preRead(ctx, "Server.Browser_IsLoading");
+  }
+
+  Server_Browser_IsLoading_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postRead(ctx, "Server.Browser_IsLoading", bytes);
+  }
+
+  Server_Browser_IsLoading_result result;
+  try {
+    result.success = iface_->Browser_IsLoading(args.bid);
+    result.__isset.success = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != nullptr) {
+      this->eventHandler_->handlerError(ctx, "Server.Browser_IsLoading");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("Browser_IsLoading", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preWrite(ctx, "Server.Browser_IsLoading");
+  }
+
+  oprot->writeMessageBegin("Browser_IsLoading", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postWrite(ctx, "Server.Browser_IsLoading", bytes);
+  }
+}
+
+void ServerProcessor::process_Browser_StopLoad(int32_t, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol*, void* callContext)
+{
+  void* ctx = nullptr;
+  if (this->eventHandler_.get() != nullptr) {
+    ctx = this->eventHandler_->getContext("Server.Browser_StopLoad", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Server.Browser_StopLoad");
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preRead(ctx, "Server.Browser_StopLoad");
+  }
+
+  Server_Browser_StopLoad_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postRead(ctx, "Server.Browser_StopLoad", bytes);
+  }
+
+  try {
+    iface_->Browser_StopLoad(args.bid);
+  } catch (const std::exception&) {
+    if (this->eventHandler_.get() != nullptr) {
+      this->eventHandler_->handlerError(ctx, "Server.Browser_StopLoad");
+    }
+    return;
+  }
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->asyncComplete(ctx, "Server.Browser_StopLoad");
+  }
+
+  return;
+}
+
+void ServerProcessor::process_Browser_GetFrameCount(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = nullptr;
+  if (this->eventHandler_.get() != nullptr) {
+    ctx = this->eventHandler_->getContext("Server.Browser_GetFrameCount", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Server.Browser_GetFrameCount");
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preRead(ctx, "Server.Browser_GetFrameCount");
+  }
+
+  Server_Browser_GetFrameCount_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postRead(ctx, "Server.Browser_GetFrameCount", bytes);
+  }
+
+  Server_Browser_GetFrameCount_result result;
+  try {
+    result.success = iface_->Browser_GetFrameCount(args.bid);
+    result.__isset.success = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != nullptr) {
+      this->eventHandler_->handlerError(ctx, "Server.Browser_GetFrameCount");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("Browser_GetFrameCount", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preWrite(ctx, "Server.Browser_GetFrameCount");
+  }
+
+  oprot->writeMessageBegin("Browser_GetFrameCount", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postWrite(ctx, "Server.Browser_GetFrameCount", bytes);
+  }
+}
+
+void ServerProcessor::process_Browser_IsPopup(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = nullptr;
+  if (this->eventHandler_.get() != nullptr) {
+    ctx = this->eventHandler_->getContext("Server.Browser_IsPopup", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Server.Browser_IsPopup");
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preRead(ctx, "Server.Browser_IsPopup");
+  }
+
+  Server_Browser_IsPopup_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postRead(ctx, "Server.Browser_IsPopup", bytes);
+  }
+
+  Server_Browser_IsPopup_result result;
+  try {
+    result.success = iface_->Browser_IsPopup(args.bid);
+    result.__isset.success = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != nullptr) {
+      this->eventHandler_->handlerError(ctx, "Server.Browser_IsPopup");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("Browser_IsPopup", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preWrite(ctx, "Server.Browser_IsPopup");
+  }
+
+  oprot->writeMessageBegin("Browser_IsPopup", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postWrite(ctx, "Server.Browser_IsPopup", bytes);
+  }
+}
+
+void ServerProcessor::process_Browser_HasDocument(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = nullptr;
+  if (this->eventHandler_.get() != nullptr) {
+    ctx = this->eventHandler_->getContext("Server.Browser_HasDocument", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Server.Browser_HasDocument");
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preRead(ctx, "Server.Browser_HasDocument");
+  }
+
+  Server_Browser_HasDocument_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postRead(ctx, "Server.Browser_HasDocument", bytes);
+  }
+
+  Server_Browser_HasDocument_result result;
+  try {
+    result.success = iface_->Browser_HasDocument(args.bid);
+    result.__isset.success = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != nullptr) {
+      this->eventHandler_->handlerError(ctx, "Server.Browser_HasDocument");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("Browser_HasDocument", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preWrite(ctx, "Server.Browser_HasDocument");
+  }
+
+  oprot->writeMessageBegin("Browser_HasDocument", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postWrite(ctx, "Server.Browser_HasDocument", bytes);
+  }
+}
+
+void ServerProcessor::process_Browser_ViewSource(int32_t, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol*, void* callContext)
+{
+  void* ctx = nullptr;
+  if (this->eventHandler_.get() != nullptr) {
+    ctx = this->eventHandler_->getContext("Server.Browser_ViewSource", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Server.Browser_ViewSource");
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preRead(ctx, "Server.Browser_ViewSource");
+  }
+
+  Server_Browser_ViewSource_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postRead(ctx, "Server.Browser_ViewSource", bytes);
+  }
+
+  try {
+    iface_->Browser_ViewSource(args.bid);
+  } catch (const std::exception&) {
+    if (this->eventHandler_.get() != nullptr) {
+      this->eventHandler_->handlerError(ctx, "Server.Browser_ViewSource");
+    }
+    return;
+  }
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->asyncComplete(ctx, "Server.Browser_ViewSource");
+  }
+
+  return;
+}
+
+void ServerProcessor::process_Browser_GetSource(int32_t, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol*, void* callContext)
+{
+  void* ctx = nullptr;
+  if (this->eventHandler_.get() != nullptr) {
+    ctx = this->eventHandler_->getContext("Server.Browser_GetSource", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Server.Browser_GetSource");
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preRead(ctx, "Server.Browser_GetSource");
+  }
+
+  Server_Browser_GetSource_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postRead(ctx, "Server.Browser_GetSource", bytes);
+  }
+
+  try {
+    iface_->Browser_GetSource(args.bid, args.stringVisitor);
+  } catch (const std::exception&) {
+    if (this->eventHandler_.get() != nullptr) {
+      this->eventHandler_->handlerError(ctx, "Server.Browser_GetSource");
+    }
+    return;
+  }
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->asyncComplete(ctx, "Server.Browser_GetSource");
+  }
+
+  return;
+}
+
+void ServerProcessor::process_Browser_GetText(int32_t, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol*, void* callContext)
+{
+  void* ctx = nullptr;
+  if (this->eventHandler_.get() != nullptr) {
+    ctx = this->eventHandler_->getContext("Server.Browser_GetText", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Server.Browser_GetText");
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preRead(ctx, "Server.Browser_GetText");
+  }
+
+  Server_Browser_GetText_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postRead(ctx, "Server.Browser_GetText", bytes);
+  }
+
+  try {
+    iface_->Browser_GetText(args.bid, args.stringVisitor);
+  } catch (const std::exception&) {
+    if (this->eventHandler_.get() != nullptr) {
+      this->eventHandler_->handlerError(ctx, "Server.Browser_GetText");
+    }
+    return;
+  }
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->asyncComplete(ctx, "Server.Browser_GetText");
+  }
+
+  return;
+}
+
+void ServerProcessor::process_Browser_SetFocus(int32_t, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol*, void* callContext)
+{
+  void* ctx = nullptr;
+  if (this->eventHandler_.get() != nullptr) {
+    ctx = this->eventHandler_->getContext("Server.Browser_SetFocus", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Server.Browser_SetFocus");
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preRead(ctx, "Server.Browser_SetFocus");
+  }
+
+  Server_Browser_SetFocus_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postRead(ctx, "Server.Browser_SetFocus", bytes);
+  }
+
+  try {
+    iface_->Browser_SetFocus(args.bid, args.enable);
+  } catch (const std::exception&) {
+    if (this->eventHandler_.get() != nullptr) {
+      this->eventHandler_->handlerError(ctx, "Server.Browser_SetFocus");
+    }
+    return;
+  }
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->asyncComplete(ctx, "Server.Browser_SetFocus");
+  }
+
+  return;
+}
+
+void ServerProcessor::process_Browser_GetZoomLevel(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = nullptr;
+  if (this->eventHandler_.get() != nullptr) {
+    ctx = this->eventHandler_->getContext("Server.Browser_GetZoomLevel", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Server.Browser_GetZoomLevel");
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preRead(ctx, "Server.Browser_GetZoomLevel");
+  }
+
+  Server_Browser_GetZoomLevel_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postRead(ctx, "Server.Browser_GetZoomLevel", bytes);
+  }
+
+  Server_Browser_GetZoomLevel_result result;
+  try {
+    result.success = iface_->Browser_GetZoomLevel(args.bid);
+    result.__isset.success = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != nullptr) {
+      this->eventHandler_->handlerError(ctx, "Server.Browser_GetZoomLevel");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("Browser_GetZoomLevel", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preWrite(ctx, "Server.Browser_GetZoomLevel");
+  }
+
+  oprot->writeMessageBegin("Browser_GetZoomLevel", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postWrite(ctx, "Server.Browser_GetZoomLevel", bytes);
+  }
+}
+
+void ServerProcessor::process_Browser_SetZoomLevel(int32_t, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol*, void* callContext)
+{
+  void* ctx = nullptr;
+  if (this->eventHandler_.get() != nullptr) {
+    ctx = this->eventHandler_->getContext("Server.Browser_SetZoomLevel", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Server.Browser_SetZoomLevel");
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preRead(ctx, "Server.Browser_SetZoomLevel");
+  }
+
+  Server_Browser_SetZoomLevel_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postRead(ctx, "Server.Browser_SetZoomLevel", bytes);
+  }
+
+  try {
+    iface_->Browser_SetZoomLevel(args.bid, args.val);
+  } catch (const std::exception&) {
+    if (this->eventHandler_.get() != nullptr) {
+      this->eventHandler_->handlerError(ctx, "Server.Browser_SetZoomLevel");
+    }
+    return;
+  }
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->asyncComplete(ctx, "Server.Browser_SetZoomLevel");
+  }
+
+  return;
+}
+
+void ServerProcessor::process_Browser_StartDownload(int32_t, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol*, void* callContext)
+{
+  void* ctx = nullptr;
+  if (this->eventHandler_.get() != nullptr) {
+    ctx = this->eventHandler_->getContext("Server.Browser_StartDownload", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Server.Browser_StartDownload");
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preRead(ctx, "Server.Browser_StartDownload");
+  }
+
+  Server_Browser_StartDownload_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postRead(ctx, "Server.Browser_StartDownload", bytes);
+  }
+
+  try {
+    iface_->Browser_StartDownload(args.bid, args.url);
+  } catch (const std::exception&) {
+    if (this->eventHandler_.get() != nullptr) {
+      this->eventHandler_->handlerError(ctx, "Server.Browser_StartDownload");
+    }
+    return;
+  }
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->asyncComplete(ctx, "Server.Browser_StartDownload");
+  }
+
+  return;
+}
+
+void ServerProcessor::process_Browser_Find(int32_t, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol*, void* callContext)
+{
+  void* ctx = nullptr;
+  if (this->eventHandler_.get() != nullptr) {
+    ctx = this->eventHandler_->getContext("Server.Browser_Find", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Server.Browser_Find");
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preRead(ctx, "Server.Browser_Find");
+  }
+
+  Server_Browser_Find_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postRead(ctx, "Server.Browser_Find", bytes);
+  }
+
+  try {
+    iface_->Browser_Find(args.bid, args.searchText, args.forward, args.matchCase, args.findNext);
+  } catch (const std::exception&) {
+    if (this->eventHandler_.get() != nullptr) {
+      this->eventHandler_->handlerError(ctx, "Server.Browser_Find");
+    }
+    return;
+  }
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->asyncComplete(ctx, "Server.Browser_Find");
+  }
+
+  return;
+}
+
+void ServerProcessor::process_Browser_StopFinding(int32_t, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol*, void* callContext)
+{
+  void* ctx = nullptr;
+  if (this->eventHandler_.get() != nullptr) {
+    ctx = this->eventHandler_->getContext("Server.Browser_StopFinding", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Server.Browser_StopFinding");
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preRead(ctx, "Server.Browser_StopFinding");
+  }
+
+  Server_Browser_StopFinding_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postRead(ctx, "Server.Browser_StopFinding", bytes);
+  }
+
+  try {
+    iface_->Browser_StopFinding(args.bid, args.clearSelection);
+  } catch (const std::exception&) {
+    if (this->eventHandler_.get() != nullptr) {
+      this->eventHandler_->handlerError(ctx, "Server.Browser_StopFinding");
+    }
+    return;
+  }
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->asyncComplete(ctx, "Server.Browser_StopFinding");
+  }
+
+  return;
+}
+
+void ServerProcessor::process_Browser_ReplaceMisspelling(int32_t, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol*, void* callContext)
+{
+  void* ctx = nullptr;
+  if (this->eventHandler_.get() != nullptr) {
+    ctx = this->eventHandler_->getContext("Server.Browser_ReplaceMisspelling", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Server.Browser_ReplaceMisspelling");
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preRead(ctx, "Server.Browser_ReplaceMisspelling");
+  }
+
+  Server_Browser_ReplaceMisspelling_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postRead(ctx, "Server.Browser_ReplaceMisspelling", bytes);
+  }
+
+  try {
+    iface_->Browser_ReplaceMisspelling(args.bid, args.word);
+  } catch (const std::exception&) {
+    if (this->eventHandler_.get() != nullptr) {
+      this->eventHandler_->handlerError(ctx, "Server.Browser_ReplaceMisspelling");
+    }
+    return;
+  }
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->asyncComplete(ctx, "Server.Browser_ReplaceMisspelling");
+  }
+
+  return;
+}
+
+void ServerProcessor::process_Browser_SetFrameRate(int32_t, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol*, void* callContext)
+{
+  void* ctx = nullptr;
+  if (this->eventHandler_.get() != nullptr) {
+    ctx = this->eventHandler_->getContext("Server.Browser_SetFrameRate", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Server.Browser_SetFrameRate");
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preRead(ctx, "Server.Browser_SetFrameRate");
+  }
+
+  Server_Browser_SetFrameRate_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postRead(ctx, "Server.Browser_SetFrameRate", bytes);
+  }
+
+  try {
+    iface_->Browser_SetFrameRate(args.bid, args.val);
+  } catch (const std::exception&) {
+    if (this->eventHandler_.get() != nullptr) {
+      this->eventHandler_->handlerError(ctx, "Server.Browser_SetFrameRate");
+    }
+    return;
+  }
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->asyncComplete(ctx, "Server.Browser_SetFrameRate");
+  }
+
+  return;
+}
+
+void ServerProcessor::process_Frame_ExecuteJavaScript(int32_t, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol*, void* callContext)
+{
+  void* ctx = nullptr;
+  if (this->eventHandler_.get() != nullptr) {
+    ctx = this->eventHandler_->getContext("Server.Frame_ExecuteJavaScript", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Server.Frame_ExecuteJavaScript");
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preRead(ctx, "Server.Frame_ExecuteJavaScript");
+  }
+
+  Server_Frame_ExecuteJavaScript_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postRead(ctx, "Server.Frame_ExecuteJavaScript", bytes);
+  }
+
+  try {
+    iface_->Frame_ExecuteJavaScript(args.frameId, args.code, args.url, args.line);
+  } catch (const std::exception&) {
+    if (this->eventHandler_.get() != nullptr) {
+      this->eventHandler_->handlerError(ctx, "Server.Frame_ExecuteJavaScript");
+    }
+    return;
+  }
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->asyncComplete(ctx, "Server.Frame_ExecuteJavaScript");
   }
 
   return;
@@ -9980,6 +17829,515 @@ void ServerProcessor::process_QueryCallback_Failure(int32_t, ::apache::thrift::p
   return;
 }
 
+void ServerProcessor::process_SchemeHandlerFactory_Register(int32_t, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol*, void* callContext)
+{
+  void* ctx = nullptr;
+  if (this->eventHandler_.get() != nullptr) {
+    ctx = this->eventHandler_->getContext("Server.SchemeHandlerFactory_Register", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Server.SchemeHandlerFactory_Register");
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preRead(ctx, "Server.SchemeHandlerFactory_Register");
+  }
+
+  Server_SchemeHandlerFactory_Register_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postRead(ctx, "Server.SchemeHandlerFactory_Register", bytes);
+  }
+
+  try {
+    iface_->SchemeHandlerFactory_Register(args.schemeName, args.domainName, args.schemeHandlerFactory);
+  } catch (const std::exception&) {
+    if (this->eventHandler_.get() != nullptr) {
+      this->eventHandler_->handlerError(ctx, "Server.SchemeHandlerFactory_Register");
+    }
+    return;
+  }
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->asyncComplete(ctx, "Server.SchemeHandlerFactory_Register");
+  }
+
+  return;
+}
+
+void ServerProcessor::process_ClearAllSchemeHandlerFactories(int32_t, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol*, void* callContext)
+{
+  void* ctx = nullptr;
+  if (this->eventHandler_.get() != nullptr) {
+    ctx = this->eventHandler_->getContext("Server.ClearAllSchemeHandlerFactories", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Server.ClearAllSchemeHandlerFactories");
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preRead(ctx, "Server.ClearAllSchemeHandlerFactories");
+  }
+
+  Server_ClearAllSchemeHandlerFactories_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postRead(ctx, "Server.ClearAllSchemeHandlerFactories", bytes);
+  }
+
+  try {
+    iface_->ClearAllSchemeHandlerFactories();
+  } catch (const std::exception&) {
+    if (this->eventHandler_.get() != nullptr) {
+      this->eventHandler_->handlerError(ctx, "Server.ClearAllSchemeHandlerFactories");
+    }
+    return;
+  }
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->asyncComplete(ctx, "Server.ClearAllSchemeHandlerFactories");
+  }
+
+  return;
+}
+
+void ServerProcessor::process_RequestContext_ClearCertificateExceptions(int32_t, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol*, void* callContext)
+{
+  void* ctx = nullptr;
+  if (this->eventHandler_.get() != nullptr) {
+    ctx = this->eventHandler_->getContext("Server.RequestContext_ClearCertificateExceptions", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Server.RequestContext_ClearCertificateExceptions");
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preRead(ctx, "Server.RequestContext_ClearCertificateExceptions");
+  }
+
+  Server_RequestContext_ClearCertificateExceptions_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postRead(ctx, "Server.RequestContext_ClearCertificateExceptions", bytes);
+  }
+
+  try {
+    iface_->RequestContext_ClearCertificateExceptions(args.bid, args.completionCallback);
+  } catch (const std::exception&) {
+    if (this->eventHandler_.get() != nullptr) {
+      this->eventHandler_->handlerError(ctx, "Server.RequestContext_ClearCertificateExceptions");
+    }
+    return;
+  }
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->asyncComplete(ctx, "Server.RequestContext_ClearCertificateExceptions");
+  }
+
+  return;
+}
+
+void ServerProcessor::process_RequestContext_CloseAllConnections(int32_t, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol*, void* callContext)
+{
+  void* ctx = nullptr;
+  if (this->eventHandler_.get() != nullptr) {
+    ctx = this->eventHandler_->getContext("Server.RequestContext_CloseAllConnections", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Server.RequestContext_CloseAllConnections");
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preRead(ctx, "Server.RequestContext_CloseAllConnections");
+  }
+
+  Server_RequestContext_CloseAllConnections_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postRead(ctx, "Server.RequestContext_CloseAllConnections", bytes);
+  }
+
+  try {
+    iface_->RequestContext_CloseAllConnections(args.bid, args.completionCallback);
+  } catch (const std::exception&) {
+    if (this->eventHandler_.get() != nullptr) {
+      this->eventHandler_->handlerError(ctx, "Server.RequestContext_CloseAllConnections");
+    }
+    return;
+  }
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->asyncComplete(ctx, "Server.RequestContext_CloseAllConnections");
+  }
+
+  return;
+}
+
+void ServerProcessor::process_CookieManager_Create(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = nullptr;
+  if (this->eventHandler_.get() != nullptr) {
+    ctx = this->eventHandler_->getContext("Server.CookieManager_Create", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Server.CookieManager_Create");
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preRead(ctx, "Server.CookieManager_Create");
+  }
+
+  Server_CookieManager_Create_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postRead(ctx, "Server.CookieManager_Create", bytes);
+  }
+
+  Server_CookieManager_Create_result result;
+  try {
+    iface_->CookieManager_Create(result.success);
+    result.__isset.success = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != nullptr) {
+      this->eventHandler_->handlerError(ctx, "Server.CookieManager_Create");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("CookieManager_Create", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preWrite(ctx, "Server.CookieManager_Create");
+  }
+
+  oprot->writeMessageBegin("CookieManager_Create", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postWrite(ctx, "Server.CookieManager_Create", bytes);
+  }
+}
+
+void ServerProcessor::process_CookieManager_Dispose(int32_t, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol*, void* callContext)
+{
+  void* ctx = nullptr;
+  if (this->eventHandler_.get() != nullptr) {
+    ctx = this->eventHandler_->getContext("Server.CookieManager_Dispose", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Server.CookieManager_Dispose");
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preRead(ctx, "Server.CookieManager_Dispose");
+  }
+
+  Server_CookieManager_Dispose_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postRead(ctx, "Server.CookieManager_Dispose", bytes);
+  }
+
+  try {
+    iface_->CookieManager_Dispose(args.cookieManager);
+  } catch (const std::exception&) {
+    if (this->eventHandler_.get() != nullptr) {
+      this->eventHandler_->handlerError(ctx, "Server.CookieManager_Dispose");
+    }
+    return;
+  }
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->asyncComplete(ctx, "Server.CookieManager_Dispose");
+  }
+
+  return;
+}
+
+void ServerProcessor::process_CookieManager_VisitAllCookies(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = nullptr;
+  if (this->eventHandler_.get() != nullptr) {
+    ctx = this->eventHandler_->getContext("Server.CookieManager_VisitAllCookies", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Server.CookieManager_VisitAllCookies");
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preRead(ctx, "Server.CookieManager_VisitAllCookies");
+  }
+
+  Server_CookieManager_VisitAllCookies_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postRead(ctx, "Server.CookieManager_VisitAllCookies", bytes);
+  }
+
+  Server_CookieManager_VisitAllCookies_result result;
+  try {
+    result.success = iface_->CookieManager_VisitAllCookies(args.cookieManager, args.visitor);
+    result.__isset.success = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != nullptr) {
+      this->eventHandler_->handlerError(ctx, "Server.CookieManager_VisitAllCookies");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("CookieManager_VisitAllCookies", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preWrite(ctx, "Server.CookieManager_VisitAllCookies");
+  }
+
+  oprot->writeMessageBegin("CookieManager_VisitAllCookies", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postWrite(ctx, "Server.CookieManager_VisitAllCookies", bytes);
+  }
+}
+
+void ServerProcessor::process_CookieManager_VisitUrlCookies(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = nullptr;
+  if (this->eventHandler_.get() != nullptr) {
+    ctx = this->eventHandler_->getContext("Server.CookieManager_VisitUrlCookies", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Server.CookieManager_VisitUrlCookies");
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preRead(ctx, "Server.CookieManager_VisitUrlCookies");
+  }
+
+  Server_CookieManager_VisitUrlCookies_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postRead(ctx, "Server.CookieManager_VisitUrlCookies", bytes);
+  }
+
+  Server_CookieManager_VisitUrlCookies_result result;
+  try {
+    result.success = iface_->CookieManager_VisitUrlCookies(args.cookieManager, args.visitor, args.url, args.includeHttpOnly);
+    result.__isset.success = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != nullptr) {
+      this->eventHandler_->handlerError(ctx, "Server.CookieManager_VisitUrlCookies");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("CookieManager_VisitUrlCookies", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preWrite(ctx, "Server.CookieManager_VisitUrlCookies");
+  }
+
+  oprot->writeMessageBegin("CookieManager_VisitUrlCookies", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postWrite(ctx, "Server.CookieManager_VisitUrlCookies", bytes);
+  }
+}
+
+void ServerProcessor::process_CookieManager_SetCookie(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = nullptr;
+  if (this->eventHandler_.get() != nullptr) {
+    ctx = this->eventHandler_->getContext("Server.CookieManager_SetCookie", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Server.CookieManager_SetCookie");
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preRead(ctx, "Server.CookieManager_SetCookie");
+  }
+
+  Server_CookieManager_SetCookie_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postRead(ctx, "Server.CookieManager_SetCookie", bytes);
+  }
+
+  Server_CookieManager_SetCookie_result result;
+  try {
+    result.success = iface_->CookieManager_SetCookie(args.cookieManager, args.url, args.cookie);
+    result.__isset.success = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != nullptr) {
+      this->eventHandler_->handlerError(ctx, "Server.CookieManager_SetCookie");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("CookieManager_SetCookie", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preWrite(ctx, "Server.CookieManager_SetCookie");
+  }
+
+  oprot->writeMessageBegin("CookieManager_SetCookie", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postWrite(ctx, "Server.CookieManager_SetCookie", bytes);
+  }
+}
+
+void ServerProcessor::process_CookieManager_DeleteCookies(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = nullptr;
+  if (this->eventHandler_.get() != nullptr) {
+    ctx = this->eventHandler_->getContext("Server.CookieManager_DeleteCookies", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Server.CookieManager_DeleteCookies");
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preRead(ctx, "Server.CookieManager_DeleteCookies");
+  }
+
+  Server_CookieManager_DeleteCookies_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postRead(ctx, "Server.CookieManager_DeleteCookies", bytes);
+  }
+
+  Server_CookieManager_DeleteCookies_result result;
+  try {
+    result.success = iface_->CookieManager_DeleteCookies(args.cookieManager, args.url, args.cookieName);
+    result.__isset.success = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != nullptr) {
+      this->eventHandler_->handlerError(ctx, "Server.CookieManager_DeleteCookies");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("CookieManager_DeleteCookies", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preWrite(ctx, "Server.CookieManager_DeleteCookies");
+  }
+
+  oprot->writeMessageBegin("CookieManager_DeleteCookies", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postWrite(ctx, "Server.CookieManager_DeleteCookies", bytes);
+  }
+}
+
+void ServerProcessor::process_CookieManager_FlushStore(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = nullptr;
+  if (this->eventHandler_.get() != nullptr) {
+    ctx = this->eventHandler_->getContext("Server.CookieManager_FlushStore", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Server.CookieManager_FlushStore");
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preRead(ctx, "Server.CookieManager_FlushStore");
+  }
+
+  Server_CookieManager_FlushStore_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postRead(ctx, "Server.CookieManager_FlushStore", bytes);
+  }
+
+  Server_CookieManager_FlushStore_result result;
+  try {
+    result.success = iface_->CookieManager_FlushStore(args.cookieManager, args.completionCallback);
+    result.__isset.success = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != nullptr) {
+      this->eventHandler_->handlerError(ctx, "Server.CookieManager_FlushStore");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("CookieManager_FlushStore", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preWrite(ctx, "Server.CookieManager_FlushStore");
+  }
+
+  oprot->writeMessageBegin("CookieManager_FlushStore", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postWrite(ctx, "Server.CookieManager_FlushStore", bytes);
+  }
+}
+
 ::std::shared_ptr< ::apache::thrift::TProcessor > ServerProcessorFactory::getProcessor(const ::apache::thrift::TConnectionInfo& connInfo) {
   ::apache::thrift::ReleaseHandler< ServerIfFactory > cleanup(handlerFactory_);
   ::std::shared_ptr< ServerIf > handler(handlerFactory_->getHandler(connInfo), cleanup);
@@ -9987,22 +18345,21 @@ void ServerProcessor::process_QueryCallback_Failure(int32_t, ::apache::thrift::p
   return processor;
 }
 
-int32_t ServerConcurrentClient::connect(const int32_t backwardConnectionPort, const std::vector<std::string> & cmdLineArgs, const std::map<std::string, std::string> & settings)
+int32_t ServerConcurrentClient::connect(const std::string& backwardConnectionPipe, const bool isMaster)
 {
-  int32_t seqid = send_connect(backwardConnectionPort, cmdLineArgs, settings);
+  int32_t seqid = send_connect(backwardConnectionPipe, isMaster);
   return recv_connect(seqid);
 }
 
-int32_t ServerConcurrentClient::send_connect(const int32_t backwardConnectionPort, const std::vector<std::string> & cmdLineArgs, const std::map<std::string, std::string> & settings)
+int32_t ServerConcurrentClient::send_connect(const std::string& backwardConnectionPipe, const bool isMaster)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("connect", ::apache::thrift::protocol::T_CALL, cseqid);
 
   Server_connect_pargs args;
-  args.backwardConnectionPort = &backwardConnectionPort;
-  args.cmdLineArgs = &cmdLineArgs;
-  args.settings = &settings;
+  args.backwardConnectionPipe = &backwardConnectionPipe;
+  args.isMaster = &isMaster;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -10073,43 +18430,21 @@ int32_t ServerConcurrentClient::recv_connect(const int32_t seqid)
   } // end while(true)
 }
 
-void ServerConcurrentClient::log(const std::string& msg)
+int32_t ServerConcurrentClient::connectTcp(const int32_t backwardConnectionPort, const bool isMaster)
 {
-  send_log(msg);
+  int32_t seqid = send_connectTcp(backwardConnectionPort, isMaster);
+  return recv_connectTcp(seqid);
 }
 
-void ServerConcurrentClient::send_log(const std::string& msg)
-{
-  int32_t cseqid = 0;
-  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
-  oprot_->writeMessageBegin("log", ::apache::thrift::protocol::T_ONEWAY, cseqid);
-
-  Server_log_pargs args;
-  args.msg = &msg;
-  args.write(oprot_);
-
-  oprot_->writeMessageEnd();
-  oprot_->getTransport()->writeEnd();
-  oprot_->getTransport()->flush();
-
-  sentry.commit();
-}
-
-int32_t ServerConcurrentClient::createBrowser(const int32_t cid, const std::string& url)
-{
-  int32_t seqid = send_createBrowser(cid, url);
-  return recv_createBrowser(seqid);
-}
-
-int32_t ServerConcurrentClient::send_createBrowser(const int32_t cid, const std::string& url)
+int32_t ServerConcurrentClient::send_connectTcp(const int32_t backwardConnectionPort, const bool isMaster)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
-  oprot_->writeMessageBegin("createBrowser", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("connectTcp", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  Server_createBrowser_pargs args;
-  args.cid = &cid;
-  args.url = &url;
+  Server_connectTcp_pargs args;
+  args.backwardConnectionPort = &backwardConnectionPort;
+  args.isMaster = &isMaster;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -10120,7 +18455,7 @@ int32_t ServerConcurrentClient::send_createBrowser(const int32_t cid, const std:
   return cseqid;
 }
 
-int32_t ServerConcurrentClient::recv_createBrowser(const int32_t seqid)
+int32_t ServerConcurrentClient::recv_connectTcp(const int32_t seqid)
 {
 
   int32_t rseqid = 0;
@@ -10149,7 +18484,7 @@ int32_t ServerConcurrentClient::recv_createBrowser(const int32_t seqid)
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
       }
-      if (fname.compare("createBrowser") != 0) {
+      if (fname.compare("connectTcp") != 0) {
         iprot_->skip(::apache::thrift::protocol::T_STRUCT);
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
@@ -10159,7 +18494,7 @@ int32_t ServerConcurrentClient::recv_createBrowser(const int32_t seqid)
         throw TProtocolException(TProtocolException::INVALID_DATA);
       }
       int32_t _return;
-      Server_createBrowser_presult result;
+      Server_connectTcp_presult result;
       result.success = &_return;
       result.read(iprot_);
       iprot_->readMessageEnd();
@@ -10170,7 +18505,7 @@ int32_t ServerConcurrentClient::recv_createBrowser(const int32_t seqid)
         return _return;
       }
       // in a bad state, don't commit
-      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "createBrowser failed: unknown result");
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "connectTcp failed: unknown result");
     }
     // seqid != rseqid
     this->sync_->updatePending(fname, mtype, rseqid);
@@ -10180,18 +18515,420 @@ int32_t ServerConcurrentClient::recv_createBrowser(const int32_t seqid)
   } // end while(true)
 }
 
-void ServerConcurrentClient::closeBrowser(const int32_t bid)
+void ServerConcurrentClient::log(const std::string& msg)
 {
-  send_closeBrowser(bid);
+  send_log(msg);
 }
 
-void ServerConcurrentClient::send_closeBrowser(const int32_t bid)
+void ServerConcurrentClient::send_log(const std::string& msg)
 {
   int32_t cseqid = 0;
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
-  oprot_->writeMessageBegin("closeBrowser", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+  oprot_->writeMessageBegin("log", ::apache::thrift::protocol::T_ONEWAY, cseqid);
 
-  Server_closeBrowser_pargs args;
+  Server_log_pargs args;
+  args.msg = &msg;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+}
+
+void ServerConcurrentClient::echo(std::string& _return, const std::string& msg)
+{
+  int32_t seqid = send_echo(msg);
+  recv_echo(_return, seqid);
+}
+
+int32_t ServerConcurrentClient::send_echo(const std::string& msg)
+{
+  int32_t cseqid = this->sync_->generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("echo", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  Server_echo_pargs args;
+  args.msg = &msg;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+void ServerConcurrentClient::recv_echo(std::string& _return, const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(this->sync_.get(), seqid);
+
+  while(true) {
+    if(!this->sync_->getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("echo") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      Server_echo_presult result;
+      result.success = &_return;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.success) {
+        // _return pointer has now been filled
+        sentry.commit();
+        return;
+      }
+      // in a bad state, don't commit
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "echo failed: unknown result");
+    }
+    // seqid != rseqid
+    this->sync_->updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_->waitForWork(seqid);
+  } // end while(true)
+}
+
+void ServerConcurrentClient::version(std::string& _return)
+{
+  int32_t seqid = send_version();
+  recv_version(_return, seqid);
+}
+
+int32_t ServerConcurrentClient::send_version()
+{
+  int32_t cseqid = this->sync_->generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("version", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  Server_version_pargs args;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+void ServerConcurrentClient::recv_version(std::string& _return, const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(this->sync_.get(), seqid);
+
+  while(true) {
+    if(!this->sync_->getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("version") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      Server_version_presult result;
+      result.success = &_return;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.success) {
+        // _return pointer has now been filled
+        sentry.commit();
+        return;
+      }
+      // in a bad state, don't commit
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "version failed: unknown result");
+    }
+    // seqid != rseqid
+    this->sync_->updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_->waitForWork(seqid);
+  } // end while(true)
+}
+
+void ServerConcurrentClient::state(std::string& _return)
+{
+  int32_t seqid = send_state();
+  recv_state(_return, seqid);
+}
+
+int32_t ServerConcurrentClient::send_state()
+{
+  int32_t cseqid = this->sync_->generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("state", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  Server_state_pargs args;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+void ServerConcurrentClient::recv_state(std::string& _return, const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(this->sync_.get(), seqid);
+
+  while(true) {
+    if(!this->sync_->getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("state") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      Server_state_presult result;
+      result.success = &_return;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.success) {
+        // _return pointer has now been filled
+        sentry.commit();
+        return;
+      }
+      // in a bad state, don't commit
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "state failed: unknown result");
+    }
+    // seqid != rseqid
+    this->sync_->updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_->waitForWork(seqid);
+  } // end while(true)
+}
+
+void ServerConcurrentClient::stop()
+{
+  send_stop();
+}
+
+void ServerConcurrentClient::send_stop()
+{
+  int32_t cseqid = 0;
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("stop", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_stop_pargs args;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+}
+
+int32_t ServerConcurrentClient::Browser_Create(const int32_t cid, const int32_t handlersMask, const  ::thrift_codegen::RObject& requestContextHandler)
+{
+  int32_t seqid = send_Browser_Create(cid, handlersMask, requestContextHandler);
+  return recv_Browser_Create(seqid);
+}
+
+int32_t ServerConcurrentClient::send_Browser_Create(const int32_t cid, const int32_t handlersMask, const  ::thrift_codegen::RObject& requestContextHandler)
+{
+  int32_t cseqid = this->sync_->generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("Browser_Create", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  Server_Browser_Create_pargs args;
+  args.cid = &cid;
+  args.handlersMask = &handlersMask;
+  args.requestContextHandler = &requestContextHandler;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+int32_t ServerConcurrentClient::recv_Browser_Create(const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(this->sync_.get(), seqid);
+
+  while(true) {
+    if(!this->sync_->getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("Browser_Create") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      int32_t _return;
+      Server_Browser_Create_presult result;
+      result.success = &_return;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.success) {
+        sentry.commit();
+        return _return;
+      }
+      // in a bad state, don't commit
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "Browser_Create failed: unknown result");
+    }
+    // seqid != rseqid
+    this->sync_->updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_->waitForWork(seqid);
+  } // end while(true)
+}
+
+void ServerConcurrentClient::Browser_StartNativeCreation(const int32_t bid, const std::string& url)
+{
+  send_Browser_StartNativeCreation(bid, url);
+}
+
+void ServerConcurrentClient::send_Browser_StartNativeCreation(const int32_t bid, const std::string& url)
+{
+  int32_t cseqid = 0;
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("Browser_StartNativeCreation", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_Browser_StartNativeCreation_pargs args;
+  args.bid = &bid;
+  args.url = &url;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+}
+
+void ServerConcurrentClient::Browser_Close(const int32_t bid)
+{
+  send_Browser_Close(bid);
+}
+
+void ServerConcurrentClient::send_Browser_Close(const int32_t bid)
+{
+  int32_t cseqid = 0;
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("Browser_Close", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_Browser_Close_pargs args;
   args.bid = &bid;
   args.write(oprot_);
 
@@ -10378,12 +19115,12 @@ void ServerConcurrentClient::send_Browser_ExecuteJavaScript(const int32_t bid, c
   sentry.commit();
 }
 
-void ServerConcurrentClient::Browser_WasResized(const int32_t bid, const int32_t width, const int32_t height)
+void ServerConcurrentClient::Browser_WasResized(const int32_t bid)
 {
-  send_Browser_WasResized(bid, width, height);
+  send_Browser_WasResized(bid);
 }
 
-void ServerConcurrentClient::send_Browser_WasResized(const int32_t bid, const int32_t width, const int32_t height)
+void ServerConcurrentClient::send_Browser_WasResized(const int32_t bid)
 {
   int32_t cseqid = 0;
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
@@ -10391,8 +19128,28 @@ void ServerConcurrentClient::send_Browser_WasResized(const int32_t bid, const in
 
   Server_Browser_WasResized_pargs args;
   args.bid = &bid;
-  args.width = &width;
-  args.height = &height;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+}
+
+void ServerConcurrentClient::Browser_NotifyScreenInfoChanged(const int32_t bid)
+{
+  send_Browser_NotifyScreenInfoChanged(bid);
+}
+
+void ServerConcurrentClient::send_Browser_NotifyScreenInfoChanged(const int32_t bid)
+{
+  int32_t cseqid = 0;
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("Browser_NotifyScreenInfoChanged", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_Browser_NotifyScreenInfoChanged_pargs args;
+  args.bid = &bid;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -10476,6 +19233,917 @@ void ServerConcurrentClient::send_Browser_SendMouseWheelEvent(const int32_t bid,
   args.modifiers = &modifiers;
   args.delta = &delta;
   args.units_to_scroll = &units_to_scroll;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+}
+
+bool ServerConcurrentClient::Browser_CanGoForward(const int32_t bid)
+{
+  int32_t seqid = send_Browser_CanGoForward(bid);
+  return recv_Browser_CanGoForward(seqid);
+}
+
+int32_t ServerConcurrentClient::send_Browser_CanGoForward(const int32_t bid)
+{
+  int32_t cseqid = this->sync_->generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("Browser_CanGoForward", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  Server_Browser_CanGoForward_pargs args;
+  args.bid = &bid;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+bool ServerConcurrentClient::recv_Browser_CanGoForward(const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(this->sync_.get(), seqid);
+
+  while(true) {
+    if(!this->sync_->getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("Browser_CanGoForward") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      bool _return;
+      Server_Browser_CanGoForward_presult result;
+      result.success = &_return;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.success) {
+        sentry.commit();
+        return _return;
+      }
+      // in a bad state, don't commit
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "Browser_CanGoForward failed: unknown result");
+    }
+    // seqid != rseqid
+    this->sync_->updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_->waitForWork(seqid);
+  } // end while(true)
+}
+
+bool ServerConcurrentClient::Browser_CanGoBack(const int32_t bid)
+{
+  int32_t seqid = send_Browser_CanGoBack(bid);
+  return recv_Browser_CanGoBack(seqid);
+}
+
+int32_t ServerConcurrentClient::send_Browser_CanGoBack(const int32_t bid)
+{
+  int32_t cseqid = this->sync_->generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("Browser_CanGoBack", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  Server_Browser_CanGoBack_pargs args;
+  args.bid = &bid;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+bool ServerConcurrentClient::recv_Browser_CanGoBack(const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(this->sync_.get(), seqid);
+
+  while(true) {
+    if(!this->sync_->getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("Browser_CanGoBack") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      bool _return;
+      Server_Browser_CanGoBack_presult result;
+      result.success = &_return;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.success) {
+        sentry.commit();
+        return _return;
+      }
+      // in a bad state, don't commit
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "Browser_CanGoBack failed: unknown result");
+    }
+    // seqid != rseqid
+    this->sync_->updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_->waitForWork(seqid);
+  } // end while(true)
+}
+
+void ServerConcurrentClient::Browser_GoBack(const int32_t bid)
+{
+  send_Browser_GoBack(bid);
+}
+
+void ServerConcurrentClient::send_Browser_GoBack(const int32_t bid)
+{
+  int32_t cseqid = 0;
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("Browser_GoBack", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_Browser_GoBack_pargs args;
+  args.bid = &bid;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+}
+
+void ServerConcurrentClient::Browser_GoForward(const int32_t bid)
+{
+  send_Browser_GoForward(bid);
+}
+
+void ServerConcurrentClient::send_Browser_GoForward(const int32_t bid)
+{
+  int32_t cseqid = 0;
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("Browser_GoForward", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_Browser_GoForward_pargs args;
+  args.bid = &bid;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+}
+
+bool ServerConcurrentClient::Browser_IsLoading(const int32_t bid)
+{
+  int32_t seqid = send_Browser_IsLoading(bid);
+  return recv_Browser_IsLoading(seqid);
+}
+
+int32_t ServerConcurrentClient::send_Browser_IsLoading(const int32_t bid)
+{
+  int32_t cseqid = this->sync_->generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("Browser_IsLoading", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  Server_Browser_IsLoading_pargs args;
+  args.bid = &bid;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+bool ServerConcurrentClient::recv_Browser_IsLoading(const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(this->sync_.get(), seqid);
+
+  while(true) {
+    if(!this->sync_->getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("Browser_IsLoading") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      bool _return;
+      Server_Browser_IsLoading_presult result;
+      result.success = &_return;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.success) {
+        sentry.commit();
+        return _return;
+      }
+      // in a bad state, don't commit
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "Browser_IsLoading failed: unknown result");
+    }
+    // seqid != rseqid
+    this->sync_->updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_->waitForWork(seqid);
+  } // end while(true)
+}
+
+void ServerConcurrentClient::Browser_StopLoad(const int32_t bid)
+{
+  send_Browser_StopLoad(bid);
+}
+
+void ServerConcurrentClient::send_Browser_StopLoad(const int32_t bid)
+{
+  int32_t cseqid = 0;
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("Browser_StopLoad", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_Browser_StopLoad_pargs args;
+  args.bid = &bid;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+}
+
+int32_t ServerConcurrentClient::Browser_GetFrameCount(const int32_t bid)
+{
+  int32_t seqid = send_Browser_GetFrameCount(bid);
+  return recv_Browser_GetFrameCount(seqid);
+}
+
+int32_t ServerConcurrentClient::send_Browser_GetFrameCount(const int32_t bid)
+{
+  int32_t cseqid = this->sync_->generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("Browser_GetFrameCount", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  Server_Browser_GetFrameCount_pargs args;
+  args.bid = &bid;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+int32_t ServerConcurrentClient::recv_Browser_GetFrameCount(const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(this->sync_.get(), seqid);
+
+  while(true) {
+    if(!this->sync_->getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("Browser_GetFrameCount") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      int32_t _return;
+      Server_Browser_GetFrameCount_presult result;
+      result.success = &_return;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.success) {
+        sentry.commit();
+        return _return;
+      }
+      // in a bad state, don't commit
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "Browser_GetFrameCount failed: unknown result");
+    }
+    // seqid != rseqid
+    this->sync_->updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_->waitForWork(seqid);
+  } // end while(true)
+}
+
+bool ServerConcurrentClient::Browser_IsPopup(const int32_t bid)
+{
+  int32_t seqid = send_Browser_IsPopup(bid);
+  return recv_Browser_IsPopup(seqid);
+}
+
+int32_t ServerConcurrentClient::send_Browser_IsPopup(const int32_t bid)
+{
+  int32_t cseqid = this->sync_->generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("Browser_IsPopup", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  Server_Browser_IsPopup_pargs args;
+  args.bid = &bid;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+bool ServerConcurrentClient::recv_Browser_IsPopup(const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(this->sync_.get(), seqid);
+
+  while(true) {
+    if(!this->sync_->getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("Browser_IsPopup") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      bool _return;
+      Server_Browser_IsPopup_presult result;
+      result.success = &_return;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.success) {
+        sentry.commit();
+        return _return;
+      }
+      // in a bad state, don't commit
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "Browser_IsPopup failed: unknown result");
+    }
+    // seqid != rseqid
+    this->sync_->updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_->waitForWork(seqid);
+  } // end while(true)
+}
+
+bool ServerConcurrentClient::Browser_HasDocument(const int32_t bid)
+{
+  int32_t seqid = send_Browser_HasDocument(bid);
+  return recv_Browser_HasDocument(seqid);
+}
+
+int32_t ServerConcurrentClient::send_Browser_HasDocument(const int32_t bid)
+{
+  int32_t cseqid = this->sync_->generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("Browser_HasDocument", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  Server_Browser_HasDocument_pargs args;
+  args.bid = &bid;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+bool ServerConcurrentClient::recv_Browser_HasDocument(const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(this->sync_.get(), seqid);
+
+  while(true) {
+    if(!this->sync_->getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("Browser_HasDocument") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      bool _return;
+      Server_Browser_HasDocument_presult result;
+      result.success = &_return;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.success) {
+        sentry.commit();
+        return _return;
+      }
+      // in a bad state, don't commit
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "Browser_HasDocument failed: unknown result");
+    }
+    // seqid != rseqid
+    this->sync_->updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_->waitForWork(seqid);
+  } // end while(true)
+}
+
+void ServerConcurrentClient::Browser_ViewSource(const int32_t bid)
+{
+  send_Browser_ViewSource(bid);
+}
+
+void ServerConcurrentClient::send_Browser_ViewSource(const int32_t bid)
+{
+  int32_t cseqid = 0;
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("Browser_ViewSource", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_Browser_ViewSource_pargs args;
+  args.bid = &bid;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+}
+
+void ServerConcurrentClient::Browser_GetSource(const int32_t bid, const  ::thrift_codegen::RObject& stringVisitor)
+{
+  send_Browser_GetSource(bid, stringVisitor);
+}
+
+void ServerConcurrentClient::send_Browser_GetSource(const int32_t bid, const  ::thrift_codegen::RObject& stringVisitor)
+{
+  int32_t cseqid = 0;
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("Browser_GetSource", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_Browser_GetSource_pargs args;
+  args.bid = &bid;
+  args.stringVisitor = &stringVisitor;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+}
+
+void ServerConcurrentClient::Browser_GetText(const int32_t bid, const  ::thrift_codegen::RObject& stringVisitor)
+{
+  send_Browser_GetText(bid, stringVisitor);
+}
+
+void ServerConcurrentClient::send_Browser_GetText(const int32_t bid, const  ::thrift_codegen::RObject& stringVisitor)
+{
+  int32_t cseqid = 0;
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("Browser_GetText", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_Browser_GetText_pargs args;
+  args.bid = &bid;
+  args.stringVisitor = &stringVisitor;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+}
+
+void ServerConcurrentClient::Browser_SetFocus(const int32_t bid, const bool enable)
+{
+  send_Browser_SetFocus(bid, enable);
+}
+
+void ServerConcurrentClient::send_Browser_SetFocus(const int32_t bid, const bool enable)
+{
+  int32_t cseqid = 0;
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("Browser_SetFocus", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_Browser_SetFocus_pargs args;
+  args.bid = &bid;
+  args.enable = &enable;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+}
+
+double ServerConcurrentClient::Browser_GetZoomLevel(const int32_t bid)
+{
+  int32_t seqid = send_Browser_GetZoomLevel(bid);
+  return recv_Browser_GetZoomLevel(seqid);
+}
+
+int32_t ServerConcurrentClient::send_Browser_GetZoomLevel(const int32_t bid)
+{
+  int32_t cseqid = this->sync_->generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("Browser_GetZoomLevel", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  Server_Browser_GetZoomLevel_pargs args;
+  args.bid = &bid;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+double ServerConcurrentClient::recv_Browser_GetZoomLevel(const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(this->sync_.get(), seqid);
+
+  while(true) {
+    if(!this->sync_->getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("Browser_GetZoomLevel") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      double _return;
+      Server_Browser_GetZoomLevel_presult result;
+      result.success = &_return;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.success) {
+        sentry.commit();
+        return _return;
+      }
+      // in a bad state, don't commit
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "Browser_GetZoomLevel failed: unknown result");
+    }
+    // seqid != rseqid
+    this->sync_->updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_->waitForWork(seqid);
+  } // end while(true)
+}
+
+void ServerConcurrentClient::Browser_SetZoomLevel(const int32_t bid, const double val)
+{
+  send_Browser_SetZoomLevel(bid, val);
+}
+
+void ServerConcurrentClient::send_Browser_SetZoomLevel(const int32_t bid, const double val)
+{
+  int32_t cseqid = 0;
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("Browser_SetZoomLevel", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_Browser_SetZoomLevel_pargs args;
+  args.bid = &bid;
+  args.val = &val;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+}
+
+void ServerConcurrentClient::Browser_StartDownload(const int32_t bid, const std::string& url)
+{
+  send_Browser_StartDownload(bid, url);
+}
+
+void ServerConcurrentClient::send_Browser_StartDownload(const int32_t bid, const std::string& url)
+{
+  int32_t cseqid = 0;
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("Browser_StartDownload", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_Browser_StartDownload_pargs args;
+  args.bid = &bid;
+  args.url = &url;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+}
+
+void ServerConcurrentClient::Browser_Find(const int32_t bid, const std::string& searchText, const bool forward, const bool matchCase, const bool findNext)
+{
+  send_Browser_Find(bid, searchText, forward, matchCase, findNext);
+}
+
+void ServerConcurrentClient::send_Browser_Find(const int32_t bid, const std::string& searchText, const bool forward, const bool matchCase, const bool findNext)
+{
+  int32_t cseqid = 0;
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("Browser_Find", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_Browser_Find_pargs args;
+  args.bid = &bid;
+  args.searchText = &searchText;
+  args.forward = &forward;
+  args.matchCase = &matchCase;
+  args.findNext = &findNext;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+}
+
+void ServerConcurrentClient::Browser_StopFinding(const int32_t bid, const bool clearSelection)
+{
+  send_Browser_StopFinding(bid, clearSelection);
+}
+
+void ServerConcurrentClient::send_Browser_StopFinding(const int32_t bid, const bool clearSelection)
+{
+  int32_t cseqid = 0;
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("Browser_StopFinding", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_Browser_StopFinding_pargs args;
+  args.bid = &bid;
+  args.clearSelection = &clearSelection;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+}
+
+void ServerConcurrentClient::Browser_ReplaceMisspelling(const int32_t bid, const std::string& word)
+{
+  send_Browser_ReplaceMisspelling(bid, word);
+}
+
+void ServerConcurrentClient::send_Browser_ReplaceMisspelling(const int32_t bid, const std::string& word)
+{
+  int32_t cseqid = 0;
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("Browser_ReplaceMisspelling", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_Browser_ReplaceMisspelling_pargs args;
+  args.bid = &bid;
+  args.word = &word;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+}
+
+void ServerConcurrentClient::Browser_SetFrameRate(const int32_t bid, const int32_t val)
+{
+  send_Browser_SetFrameRate(bid, val);
+}
+
+void ServerConcurrentClient::send_Browser_SetFrameRate(const int32_t bid, const int32_t val)
+{
+  int32_t cseqid = 0;
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("Browser_SetFrameRate", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_Browser_SetFrameRate_pargs args;
+  args.bid = &bid;
+  args.val = &val;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+}
+
+void ServerConcurrentClient::Frame_ExecuteJavaScript(const int32_t frameId, const std::string& code, const std::string& url, const int32_t line)
+{
+  send_Frame_ExecuteJavaScript(frameId, code, url, line);
+}
+
+void ServerConcurrentClient::send_Frame_ExecuteJavaScript(const int32_t frameId, const std::string& code, const std::string& url, const int32_t line)
+{
+  int32_t cseqid = 0;
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("Frame_ExecuteJavaScript", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_Frame_ExecuteJavaScript_pargs args;
+  args.frameId = &frameId;
+  args.code = &code;
+  args.url = &url;
+  args.line = &line;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -12249,6 +21917,631 @@ void ServerConcurrentClient::send_QueryCallback_Failure(const  ::thrift_codegen:
   oprot_->getTransport()->flush();
 
   sentry.commit();
+}
+
+void ServerConcurrentClient::SchemeHandlerFactory_Register(const std::string& schemeName, const std::string& domainName, const  ::thrift_codegen::RObject& schemeHandlerFactory)
+{
+  send_SchemeHandlerFactory_Register(schemeName, domainName, schemeHandlerFactory);
+}
+
+void ServerConcurrentClient::send_SchemeHandlerFactory_Register(const std::string& schemeName, const std::string& domainName, const  ::thrift_codegen::RObject& schemeHandlerFactory)
+{
+  int32_t cseqid = 0;
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("SchemeHandlerFactory_Register", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_SchemeHandlerFactory_Register_pargs args;
+  args.schemeName = &schemeName;
+  args.domainName = &domainName;
+  args.schemeHandlerFactory = &schemeHandlerFactory;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+}
+
+void ServerConcurrentClient::ClearAllSchemeHandlerFactories()
+{
+  send_ClearAllSchemeHandlerFactories();
+}
+
+void ServerConcurrentClient::send_ClearAllSchemeHandlerFactories()
+{
+  int32_t cseqid = 0;
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("ClearAllSchemeHandlerFactories", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_ClearAllSchemeHandlerFactories_pargs args;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+}
+
+void ServerConcurrentClient::RequestContext_ClearCertificateExceptions(const int32_t bid, const  ::thrift_codegen::RObject& completionCallback)
+{
+  send_RequestContext_ClearCertificateExceptions(bid, completionCallback);
+}
+
+void ServerConcurrentClient::send_RequestContext_ClearCertificateExceptions(const int32_t bid, const  ::thrift_codegen::RObject& completionCallback)
+{
+  int32_t cseqid = 0;
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("RequestContext_ClearCertificateExceptions", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_RequestContext_ClearCertificateExceptions_pargs args;
+  args.bid = &bid;
+  args.completionCallback = &completionCallback;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+}
+
+void ServerConcurrentClient::RequestContext_CloseAllConnections(const int32_t bid, const  ::thrift_codegen::RObject& completionCallback)
+{
+  send_RequestContext_CloseAllConnections(bid, completionCallback);
+}
+
+void ServerConcurrentClient::send_RequestContext_CloseAllConnections(const int32_t bid, const  ::thrift_codegen::RObject& completionCallback)
+{
+  int32_t cseqid = 0;
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("RequestContext_CloseAllConnections", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_RequestContext_CloseAllConnections_pargs args;
+  args.bid = &bid;
+  args.completionCallback = &completionCallback;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+}
+
+void ServerConcurrentClient::CookieManager_Create( ::thrift_codegen::RObject& _return)
+{
+  int32_t seqid = send_CookieManager_Create();
+  recv_CookieManager_Create(_return, seqid);
+}
+
+int32_t ServerConcurrentClient::send_CookieManager_Create()
+{
+  int32_t cseqid = this->sync_->generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("CookieManager_Create", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  Server_CookieManager_Create_pargs args;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+void ServerConcurrentClient::recv_CookieManager_Create( ::thrift_codegen::RObject& _return, const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(this->sync_.get(), seqid);
+
+  while(true) {
+    if(!this->sync_->getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("CookieManager_Create") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      Server_CookieManager_Create_presult result;
+      result.success = &_return;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.success) {
+        // _return pointer has now been filled
+        sentry.commit();
+        return;
+      }
+      // in a bad state, don't commit
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "CookieManager_Create failed: unknown result");
+    }
+    // seqid != rseqid
+    this->sync_->updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_->waitForWork(seqid);
+  } // end while(true)
+}
+
+void ServerConcurrentClient::CookieManager_Dispose(const  ::thrift_codegen::RObject& cookieManager)
+{
+  send_CookieManager_Dispose(cookieManager);
+}
+
+void ServerConcurrentClient::send_CookieManager_Dispose(const  ::thrift_codegen::RObject& cookieManager)
+{
+  int32_t cseqid = 0;
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("CookieManager_Dispose", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_CookieManager_Dispose_pargs args;
+  args.cookieManager = &cookieManager;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+}
+
+bool ServerConcurrentClient::CookieManager_VisitAllCookies(const  ::thrift_codegen::RObject& cookieManager, const  ::thrift_codegen::RObject& visitor)
+{
+  int32_t seqid = send_CookieManager_VisitAllCookies(cookieManager, visitor);
+  return recv_CookieManager_VisitAllCookies(seqid);
+}
+
+int32_t ServerConcurrentClient::send_CookieManager_VisitAllCookies(const  ::thrift_codegen::RObject& cookieManager, const  ::thrift_codegen::RObject& visitor)
+{
+  int32_t cseqid = this->sync_->generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("CookieManager_VisitAllCookies", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  Server_CookieManager_VisitAllCookies_pargs args;
+  args.cookieManager = &cookieManager;
+  args.visitor = &visitor;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+bool ServerConcurrentClient::recv_CookieManager_VisitAllCookies(const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(this->sync_.get(), seqid);
+
+  while(true) {
+    if(!this->sync_->getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("CookieManager_VisitAllCookies") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      bool _return;
+      Server_CookieManager_VisitAllCookies_presult result;
+      result.success = &_return;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.success) {
+        sentry.commit();
+        return _return;
+      }
+      // in a bad state, don't commit
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "CookieManager_VisitAllCookies failed: unknown result");
+    }
+    // seqid != rseqid
+    this->sync_->updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_->waitForWork(seqid);
+  } // end while(true)
+}
+
+bool ServerConcurrentClient::CookieManager_VisitUrlCookies(const  ::thrift_codegen::RObject& cookieManager, const  ::thrift_codegen::RObject& visitor, const std::string& url, const bool includeHttpOnly)
+{
+  int32_t seqid = send_CookieManager_VisitUrlCookies(cookieManager, visitor, url, includeHttpOnly);
+  return recv_CookieManager_VisitUrlCookies(seqid);
+}
+
+int32_t ServerConcurrentClient::send_CookieManager_VisitUrlCookies(const  ::thrift_codegen::RObject& cookieManager, const  ::thrift_codegen::RObject& visitor, const std::string& url, const bool includeHttpOnly)
+{
+  int32_t cseqid = this->sync_->generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("CookieManager_VisitUrlCookies", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  Server_CookieManager_VisitUrlCookies_pargs args;
+  args.cookieManager = &cookieManager;
+  args.visitor = &visitor;
+  args.url = &url;
+  args.includeHttpOnly = &includeHttpOnly;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+bool ServerConcurrentClient::recv_CookieManager_VisitUrlCookies(const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(this->sync_.get(), seqid);
+
+  while(true) {
+    if(!this->sync_->getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("CookieManager_VisitUrlCookies") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      bool _return;
+      Server_CookieManager_VisitUrlCookies_presult result;
+      result.success = &_return;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.success) {
+        sentry.commit();
+        return _return;
+      }
+      // in a bad state, don't commit
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "CookieManager_VisitUrlCookies failed: unknown result");
+    }
+    // seqid != rseqid
+    this->sync_->updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_->waitForWork(seqid);
+  } // end while(true)
+}
+
+bool ServerConcurrentClient::CookieManager_SetCookie(const  ::thrift_codegen::RObject& cookieManager, const std::string& url, const  ::thrift_codegen::Cookie& cookie)
+{
+  int32_t seqid = send_CookieManager_SetCookie(cookieManager, url, cookie);
+  return recv_CookieManager_SetCookie(seqid);
+}
+
+int32_t ServerConcurrentClient::send_CookieManager_SetCookie(const  ::thrift_codegen::RObject& cookieManager, const std::string& url, const  ::thrift_codegen::Cookie& cookie)
+{
+  int32_t cseqid = this->sync_->generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("CookieManager_SetCookie", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  Server_CookieManager_SetCookie_pargs args;
+  args.cookieManager = &cookieManager;
+  args.url = &url;
+  args.cookie = &cookie;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+bool ServerConcurrentClient::recv_CookieManager_SetCookie(const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(this->sync_.get(), seqid);
+
+  while(true) {
+    if(!this->sync_->getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("CookieManager_SetCookie") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      bool _return;
+      Server_CookieManager_SetCookie_presult result;
+      result.success = &_return;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.success) {
+        sentry.commit();
+        return _return;
+      }
+      // in a bad state, don't commit
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "CookieManager_SetCookie failed: unknown result");
+    }
+    // seqid != rseqid
+    this->sync_->updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_->waitForWork(seqid);
+  } // end while(true)
+}
+
+bool ServerConcurrentClient::CookieManager_DeleteCookies(const  ::thrift_codegen::RObject& cookieManager, const std::string& url, const std::string& cookieName)
+{
+  int32_t seqid = send_CookieManager_DeleteCookies(cookieManager, url, cookieName);
+  return recv_CookieManager_DeleteCookies(seqid);
+}
+
+int32_t ServerConcurrentClient::send_CookieManager_DeleteCookies(const  ::thrift_codegen::RObject& cookieManager, const std::string& url, const std::string& cookieName)
+{
+  int32_t cseqid = this->sync_->generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("CookieManager_DeleteCookies", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  Server_CookieManager_DeleteCookies_pargs args;
+  args.cookieManager = &cookieManager;
+  args.url = &url;
+  args.cookieName = &cookieName;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+bool ServerConcurrentClient::recv_CookieManager_DeleteCookies(const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(this->sync_.get(), seqid);
+
+  while(true) {
+    if(!this->sync_->getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("CookieManager_DeleteCookies") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      bool _return;
+      Server_CookieManager_DeleteCookies_presult result;
+      result.success = &_return;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.success) {
+        sentry.commit();
+        return _return;
+      }
+      // in a bad state, don't commit
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "CookieManager_DeleteCookies failed: unknown result");
+    }
+    // seqid != rseqid
+    this->sync_->updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_->waitForWork(seqid);
+  } // end while(true)
+}
+
+bool ServerConcurrentClient::CookieManager_FlushStore(const  ::thrift_codegen::RObject& cookieManager, const  ::thrift_codegen::RObject& completionCallback)
+{
+  int32_t seqid = send_CookieManager_FlushStore(cookieManager, completionCallback);
+  return recv_CookieManager_FlushStore(seqid);
+}
+
+int32_t ServerConcurrentClient::send_CookieManager_FlushStore(const  ::thrift_codegen::RObject& cookieManager, const  ::thrift_codegen::RObject& completionCallback)
+{
+  int32_t cseqid = this->sync_->generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("CookieManager_FlushStore", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  Server_CookieManager_FlushStore_pargs args;
+  args.cookieManager = &cookieManager;
+  args.completionCallback = &completionCallback;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+bool ServerConcurrentClient::recv_CookieManager_FlushStore(const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(this->sync_.get(), seqid);
+
+  while(true) {
+    if(!this->sync_->getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("CookieManager_FlushStore") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      bool _return;
+      Server_CookieManager_FlushStore_presult result;
+      result.success = &_return;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.success) {
+        sentry.commit();
+        return _return;
+      }
+      // in a bad state, don't commit
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "CookieManager_FlushStore failed: unknown result");
+    }
+    // seqid != rseqid
+    this->sync_->updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_->waitForWork(seqid);
+  } // end while(true)
 }
 
 } // namespace

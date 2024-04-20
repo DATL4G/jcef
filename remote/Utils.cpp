@@ -1,48 +1,79 @@
 #include "Utils.h"
 
-#include <thrift/transport/TSocket.h>
-#include <thrift/protocol/TBinaryProtocol.h>
-#include <thrift/transport/TTransportUtils.h>
+#include "include/cef_path_util.h"
 
-#include "log/Log.h"
+#if defined(OS_WIN)
 
-using namespace apache::thrift;
-using namespace apache::thrift::protocol;
-using namespace apache::thrift::transport;
+#include <tlhelp32.h>
+#include <windows.h>
 
-using namespace thrift_codegen;
+namespace utils {
 
-RpcExecutor::RpcExecutor() {
-  myTransport = std::make_shared<TBufferedTransport>(std::make_shared<TSocket>("localhost", 9091));
-  myService = std::make_shared<ClientHandlersClient>(std::make_shared<TBinaryProtocol>(myTransport));
-
-  myTransport->open();
-  const int32_t backwardCid = myService->connect();
-  Log::debug("backward connection to client established, backwardCid=%d", backwardCid);
+int GetPid() {
+  return (int)GetCurrentProcessId();
 }
 
-void RpcExecutor::close() {
-  Lock lock(myMutex);
+int GetParentPid() {
+  DWORD pid = GetCurrentProcessId();
+  int ppid = 0;
+  HANDLE hProcess;
+  PROCESSENTRY32 pe32;
 
-  if (myService != nullptr) {
-    myService = nullptr;
-    myTransport->close();
-    myTransport = nullptr;
+  hProcess = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+  if (hProcess == INVALID_HANDLE_VALUE)
+    return ppid;
+
+  pe32.dwSize = sizeof(PROCESSENTRY32);
+  if (!Process32First(hProcess, &pe32)) {
+    CloseHandle(hProcess);
+    return ppid;
   }
+
+  do {
+    if (pe32.th32ProcessID == pid) {
+      ppid = (int)pe32.th32ParentProcessID;
+      break;
+    }
+  } while (Process32Next(hProcess, &pe32));
+
+  CloseHandle(hProcess);
+  return ppid;
 }
 
-void RpcExecutor::exec(std::function<void(Service)> rpc) {
-  Lock lock(myMutex);
-
-  if (myService == nullptr) {
-    //Log::debug("null remote service");
-    return;
+std::string GetTempFile(const std::string& identifer, bool useParentId) {
+  std::stringstream tmpName;
+  CefString tmpPath;
+  if (!CefGetPath(PK_DIR_TEMP, tmpPath)) {
+    TCHAR lpPathBuffer[MAX_PATH];
+    GetTempPath(MAX_PATH, lpPathBuffer);
+    tmpPath.FromWString(lpPathBuffer);
   }
-
-  try {
-    rpc(myService);
-  } catch (apache::thrift::TException& tx) {
-    Log::debug("thrift exception occured: %s", tx.what());
-    // TODO: should we call close now ?
-  }
+  tmpName << tmpPath.ToString().c_str() << "\\";
+  tmpName << "jcef-p" << (useParentId ? GetParentPid() : GetPid());
+  tmpName << (identifer.empty() ? "" : "_") << identifer.c_str() << ".tmp";
+  return tmpName.str();
 }
+
+} // namespace utils
+#else
+namespace utils {
+int GetPid() {
+  return getpid();
+}
+
+int GetParentPid() {
+  return getppid();
+}
+
+std::string GetTempFile(const std::string& identifer, bool useParentId) {
+  std::stringstream tmpName;
+  CefString tmpPath;
+  if (!CefGetPath(PK_DIR_TEMP, tmpPath))
+    tmpPath = "/tmp/";
+  tmpName << tmpPath.ToString().c_str();
+  tmpName << "jcef-p" << (useParentId ? GetParentPid() : GetPid());
+  tmpName << (identifer.empty() ? "" : "_") << identifer.c_str() << ".tmp";
+  return tmpName.str();
+}
+} // namespace utils
+#endif

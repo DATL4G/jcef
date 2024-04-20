@@ -1,5 +1,5 @@
 #include "Log.h"
-#include "../CefUtils.h"
+#include "../Utils.h"
 
 #include <stdio.h>
 #include <cstdarg>
@@ -14,6 +14,8 @@ namespace {
   thread_local std::string ourThreadName;
   const std::string ourNdcSeparator = " | ";
   int ourLogLevel = LEVEL_INFO;
+  FILE * ourLogFile = nullptr;
+  bool ourDoFlush = false;
   bool ourAddNewLine = true;
   bool ourPureMsg = false;
   const std::string ourFinishedMsg = "Finished.";
@@ -23,7 +25,41 @@ void setThreadName(std::string name) {
   ourThreadName.assign(name);
 }
 
-void Log::init(int level) { ourLogLevel = level; }
+void Log::init(int level, std::string logfile) {
+  if (level < 0) level = 0; // max verbose
+  if (level > LEVEL_DISABLED) level = LEVEL_DISABLED;
+
+  fprintf(stderr, "Initialize logger: level=%d file='%s'\n", level, logfile.c_str());
+  if (!logfile.empty()) {
+    FILE* flog = fopen(logfile.c_str(), "a");
+    if (flog != nullptr) {
+      initImpl(level, flog);
+    } else {
+      fprintf(stderr,
+              "Can't open log file '%s', will be used default (stderr)\n",
+              logfile.c_str());
+      initImpl(level);
+    }
+  } else
+    initImpl(level);
+}
+
+void Log::initImpl(int level, FILE* logFile) {
+  ourLogLevel = level;
+  if (logFile != nullptr) {
+    ourDoFlush = true;
+    ourLogFile = logFile;
+  } else
+    ourLogFile = stderr;
+}
+
+bool Log::isDebugEnabled() {
+  return ourLogLevel <= LEVEL_DEBUG;
+}
+
+bool Log::isTraceEnabled() {
+  return ourLogLevel <= LEVEL_TRACE;
+}
 
 void Log::log(int level, const char *const format, ...) {
   if (level < ourLogLevel)
@@ -71,11 +107,13 @@ void Log::log(int level, const char *const format, ...) {
 
   const char * end = ourAddNewLine ? "\n" : "";
   if (ourPureMsg)
-    fprintf(stderr, "%s%s", msg.c_str(), end);
+    fprintf(ourLogFile, "%s%s", msg.c_str(), end);
   else if (ndc.empty())
-    fprintf(stderr, "%s [%s] %s%s", timeBuf, ourThreadName.c_str(), msg.c_str(), end);
+    fprintf(ourLogFile, "%s [%s] %s%s", timeBuf, ourThreadName.c_str(), msg.c_str(), end);
   else
-    fprintf(stderr, "%s [%s %s] %s%s", timeBuf, ourThreadName.c_str(), ndc.c_str(), msg.c_str(), end);
+    fprintf(ourLogFile, "%s [%s %s] %s%s", timeBuf, ourThreadName.c_str(), ndc.c_str(), msg.c_str(), end);
+  if (ourDoFlush)
+    fflush(ourLogFile);
 }
 
 Measurer::Measurer(const std::string & msg):
@@ -137,8 +175,8 @@ LogNdc::LogNdc(std::string file, std::string func, int thresholdMcs, bool logSta
 LogNdc::~LogNdc() {
   bool logged = false;
   if (thresholdMcs >= 0) {
-    Duration elapsed = Clock::now() - startTime;
-    const long spentMcs = (long)elapsed.count();
+    Duration elapsedMcs = std::chrono::duration_cast<std::chrono::microseconds>(Clock::now() - startTime);
+    const long spentMcs = (long)elapsedMcs.count();
     if (spentMcs >= thresholdMcs) {
       Log::debug("Finished, spent %d msc.", spentMcs);
       logged = true;
