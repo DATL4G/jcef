@@ -1,7 +1,9 @@
 package com.jetbrains.cef.remote;
 
+import com.jetbrains.cef.remote.network.RemoteRequest;
 import com.jetbrains.cef.remote.network.RemoteRequestContext;
 import com.jetbrains.cef.remote.network.RemoteRequestContextHandler;
+import com.jetbrains.cef.remote.network.RemoteRequestImpl;
 import com.jetbrains.cef.remote.thrift_codegen.RObject;
 import org.cef.CefClient;
 import org.cef.browser.CefBrowser;
@@ -29,6 +31,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.CompletableFuture;
@@ -232,38 +235,80 @@ public class RemoteBrowser implements CefBrowser {
 
     @Override
     public CefFrame getMainFrame() {
-        CefLog.Error("TODO: implement getMainFrame.");
-        return null;
+        if (myIsClosing)
+            return null;
+        if (myBid < 0) {
+            CefLog.Debug("bid wasn't received yet and getMainFrame will return null.");
+            return null;
+        }
+
+        RObject rf = myService.execObj(s-> s.Browser_GetMainFrame(myBid));
+        return rf == null || rf.objId < 0 ? null : new RemoteFrame(myService, rf);
     }
 
     @Override
     public CefFrame getFocusedFrame() {
-        CefLog.Error("TODO: implement getFocusedFrame.");
-        return null;
+        if (myIsClosing)
+            return null;
+        if (myBid < 0) {
+            CefLog.Debug("bid wasn't received yet and getFocusedFrame will return null.");
+            return null;
+        }
+
+        RObject rf = myService.execObj(s-> s.Browser_GetFocusedFrame(myBid));
+        return rf == null || rf.objId < 0 ? null : new RemoteFrame(myService, rf);
     }
 
     @Override
     public CefFrame getFrameByIdentifier(String identifier) {
-        CefLog.Error("TODO: implement getFrame.");
-        return null;
+        if (myIsClosing)
+            return null;
+        if (myBid < 0) {
+            CefLog.Debug("bid wasn't received yet and getFrameByIdentifier will return null.");
+            return null;
+        }
+
+        RObject rf = myService.execObj(s-> s.Browser_GetFrameByIdentifier(myBid, identifier));
+        return rf == null || rf.objId < 0 ? null : new RemoteFrame(myService, rf);
     }
 
     @Override
     public CefFrame getFrameByName(String name) {
-        CefLog.Error("TODO: implement getFrame.");
-        return null;
+        if (myIsClosing)
+            return null;
+        if (myBid < 0) {
+            CefLog.Debug("bid wasn't received yet and getFrameByName will return null.");
+            return null;
+        }
+
+        RObject rf = myService.execObj(s-> s.Browser_GetFrameByName(myBid, name));
+        return rf == null || rf.objId < 0 ? null : new RemoteFrame(myService, rf);
     }
 
     @Override
     public Vector<String> getFrameIdentifiers() {
-        CefLog.Error("TODO: implement getFrameIdentifiers.");
-        return null;
+        if (myIsClosing)
+            return null;
+        if (myBid < 0) {
+            CefLog.Debug("bid wasn't received yet and getFrameIdentifiers will return null.");
+            return null;
+        }
+
+        List<String> ids = myService.execObj(s-> s.Browser_GetFrameIdentifiers(myBid));
+        return ids == null || ids.isEmpty() ? null : new Vector<>(ids);
     }
 
     @Override
     public Vector<String> getFrameNames() {
-        CefLog.Error("TODO: implement getFrameNames.");
-        return null;
+        if (myIsClosing)
+            return null;
+        if (myBid < 0) {
+            CefLog.Debug("bid wasn't received yet and getFrameNames will return null.");
+            return null;
+        }
+
+        List<String> ids = myService.execObj(s-> s.Browser_GetFrameNames(myBid));
+        return ids == null || ids.isEmpty() ? null : new Vector<>(ids);
     }
 
     @Override
@@ -337,7 +382,22 @@ public class RemoteBrowser implements CefBrowser {
 
     @Override
     public void loadRequest(CefRequest request) {
-        CefLog.Error("TODO: implement loadRequest.");
+        if (myIsClosing)
+            return;
+
+        if (!(request instanceof RemoteRequest)) {
+            CefLog.Error("Unsupported CefRequest: %s", request);
+            return;
+        }
+
+        execWhenCreated(() -> {
+            RemoteRequestImpl rr = ((RemoteRequest)request).getImpl();
+            if (rr != null) {
+                rr.flush(); // just for insurance
+                myService.exec((s) -> s.Browser_LoadRequest(myBid, rr.thriftIdWithCache()));
+            } else
+                CefLog.Error("RemoteRequestImpl is null [bid=%d]", myBid);
+        }, "loadRequest");
     }
 
     @Override
